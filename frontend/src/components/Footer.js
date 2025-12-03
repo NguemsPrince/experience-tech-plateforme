@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
   MapPinIcon, 
@@ -8,9 +8,11 @@ import {
   ClockIcon
 } from '@heroicons/react/24/outline';
 import { IMAGES } from '../config/images';
+import '../styles/mobile-fixes.css';
 
 const Footer = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const quickLinks = [
     { name: t('navigation.home'), href: '/' },
@@ -72,8 +74,15 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors duration-200"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
+                  }}
+                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary-600 active:bg-primary-700 transition-colors duration-200 min-w-[44px] min-h-[44px]"
                   aria-label={social.name}
+                  style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
                 >
                   <span className="text-lg">{social.icon}</span>
                 </a>
@@ -89,7 +98,15 @@ const Footer = () => {
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    className="text-gray-300 hover:text-primary-400 transition-colors duration-200"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(link.href);
+                    }}
+                    onTouchStart={(e) => {
+                      e.stopPropagation();
+                    }}
+                    className="text-gray-300 hover:text-primary-400 active:text-primary-300 transition-colors duration-200 block py-2 min-h-[44px] flex items-center"
+                    style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
                   >
                     {link.name}
                   </Link>
@@ -106,7 +123,15 @@ const Footer = () => {
                 <li key={service.name}>
                   <Link
                     to={service.href}
-                    className="text-gray-300 hover:text-primary-400 transition-colors duration-200"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(service.href);
+                    }}
+                    onTouchStart={(e) => {
+                      e.stopPropagation();
+                    }}
+                    className="text-gray-300 hover:text-primary-400 active:text-primary-300 transition-colors duration-200 block py-2 min-h-[44px] flex items-center"
+                    style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
                   >
                     {service.name}
                   </Link>
@@ -132,7 +157,13 @@ const Footer = () => {
               <div className="flex items-center space-x-3">
                 <PhoneIcon className="w-5 h-5 text-primary-400 flex-shrink-0" />
                 <div>
-                  <a href="tel:+23560290510" className="text-gray-300 hover:text-primary-400 transition-colors duration-200">
+                  <a 
+                    href="tel:+23560290510" 
+                    onClick={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
+                    className="text-gray-300 hover:text-primary-400 active:text-primary-300 transition-colors duration-200 block py-1 min-h-[44px] flex items-center"
+                    style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+                  >
                     +235 60 29 05 10
                   </a>
                 </div>
@@ -141,7 +172,13 @@ const Footer = () => {
               <div className="flex items-center space-x-3">
                 <EnvelopeIcon className="w-5 h-5 text-primary-400 flex-shrink-0" />
                 <div>
-                  <a href="mailto:Contact@experiencetech-tchad.com" className="text-gray-300 hover:text-primary-400 transition-colors duration-200">
+                  <a 
+                    href="mailto:Contact@experiencetech-tchad.com" 
+                    onClick={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
+                    className="text-gray-300 hover:text-primary-400 active:text-primary-300 transition-colors duration-200 block py-1 min-h-[44px] flex items-center break-all"
+                    style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+                  >
                     Contact@experiencetech-tchad.com
                   </a>
                 </div>
@@ -173,7 +210,18 @@ const Footer = () => {
                 placeholder={t('forms.placeholders.email')}
                 className="flex-1 px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-white placeholder-gray-400"
               />
-              <button className="btn-primary px-6">
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  // TODO: Implémenter la logique d'abonnement
+                  console.log('Newsletter subscription');
+                }}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                }}
+                className="btn-primary px-6 min-h-[48px] flex items-center justify-center"
+                style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+              >
                 {t('footer.subscribe')}
               </button>
             </div>
@@ -191,13 +239,29 @@ const Footer = () => {
             <div className="flex items-center space-x-6 text-sm">
               <Link
                 to="/privacy"
-                className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/privacy');
+                }}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                }}
+                className="text-gray-400 hover:text-primary-400 active:text-primary-300 transition-colors duration-200 py-2 min-h-[44px] flex items-center"
+                style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
               >
                 {t('footer.privacyPolicy')}
               </Link>
               <Link
                 to="/terms"
-                className="text-gray-400 hover:text-primary-400 transition-colors duration-200"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/terms');
+                }}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                }}
+                className="text-gray-400 hover:text-primary-400 active:text-primary-300 transition-colors duration-200 py-2 min-h-[44px] flex items-center"
+                style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
               >
                 {t('footer.termsOfService')}
               </Link>

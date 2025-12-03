@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +22,7 @@ import { isAdmin, getAllowedPages } from '../utils/permissions';
 import '../styles/view-modes.css';
 import '../styles/header.css';
 import '../styles/dropdown.css';
+import '../styles/mobile-fixes.css';
 
 const Header = () => {
   const location = useLocation();
@@ -144,7 +146,7 @@ const Header = () => {
           top: 0,
           left: 0,
           right: 0,
-          zIndex: 9999,
+          zIndex: 10000,
           width: '100%',
           backgroundColor: 'rgba(255, 255, 255, 0.95)',
           backdropFilter: 'blur(10px)',
@@ -427,12 +429,12 @@ const Header = () => {
               <>
                 {/* Langue - Caché sur mobile pour faire de la place */}
                 <div className="hidden sm:block">
-                  <LanguageSelector />
+                <LanguageSelector />
                 </div>
                 
                 {/* Theme Toggle - Caché sur mobile pour faire de la place */}
                 <div className="hidden sm:block">
-                  <ThemeToggle />
+                <ThemeToggle />
                 </div>
                 
                 {/* Bouton de connexion - Icône - Caché sur mobile très petit */}
@@ -543,15 +545,16 @@ const Header = () => {
           )}
         </AnimatePresence>
 
-        {/* Overlay pour menu mobile */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              className="md:hidden fixed inset-0 bg-black/50 z-[9998]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+        {/* Overlay et Navigation Mobile - Rendu via Portal pour éviter les conflits de z-index */}
+        {isMenuOpen && createPortal(
+          <>
+            {/* Overlay */}
+            <div
+              className="md:hidden fixed inset-0 bg-black/50"
+              style={{ 
+                zIndex: 10001,
+                touchAction: 'manipulation'
+              }}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -562,28 +565,22 @@ const Header = () => {
                 e.stopPropagation();
                 setIsMenuOpen(false);
               }}
-              style={{ touchAction: 'manipulation' }}
             />
-          )}
-        </AnimatePresence>
-
-        {/* Navigation Mobile */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div 
-              className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-white border-t border-gray-200 z-[9999] overflow-y-auto"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              onClick={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
+            {/* Navigation Mobile */}
+            <div 
+              className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-white border-t border-gray-200 overflow-y-auto"
               style={{ 
+                zIndex: 10002,
                 maxHeight: 'calc(100vh - 4rem)',
                 WebkitOverflowScrolling: 'touch',
                 touchAction: 'pan-y',
-                overscrollBehavior: 'contain'
+                overscrollBehavior: 'contain',
+                display: 'block',
+                visibility: 'visible',
+                opacity: 1
               }}
+              onClick={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
             >
               <div className="p-4 space-y-1">
                 {/* Navigation principale */}
@@ -790,9 +787,10 @@ const Header = () => {
                   )}
                   </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </>,
+          document.body
+        )}
       </nav>
     </header>
     </>
