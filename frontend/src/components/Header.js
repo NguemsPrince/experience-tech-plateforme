@@ -194,16 +194,7 @@ const Header = () => {
           </div>
 
           {/* Actions droite */}
-          <div className="flex items-center space-x-1 flex-shrink-0 relative" style={{ minWidth: 0 }}>
-            {/* Menu mobile - Recherche */}
-            <button
-              onClick={() => setShowSearchBar(!showSearchBar)}
-              className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 z-[10001] relative flex-shrink-0"
-              aria-label="Rechercher"
-            >
-              <MagnifyingGlassIcon className="w-5 h-5 text-gray-600" />
-            </button>
-
+          <div className="flex items-center space-x-1 flex-shrink-0 relative" style={{ minWidth: 0, overflow: 'visible' }}>
             {/* Navigation Desktop */}
             <div className="hidden lg:flex items-center space-x-3 flex-shrink-0">
               {/* Navigation principale */}
@@ -457,10 +448,46 @@ const Header = () => {
               </>
             )}
 
-            {/* Menu mobile - Toujours visible sur mobile */}
+            {/* Menu mobile - Recherche - Visible uniquement sur mobile */}
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 z-[10002] relative flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center shadow-sm"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowSearchBar(!showSearchBar);
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowSearchBar(!showSearchBar);
+              }}
+              className="md:hidden p-2.5 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 z-[10001] relative flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center shadow-sm"
+              aria-label="Rechercher"
+              style={{ 
+                zIndex: 10001,
+                position: 'relative',
+                display: 'flex',
+                visibility: 'visible',
+                opacity: 1,
+                touchAction: 'manipulation',
+                WebkitTapHighlightColor: 'transparent'
+              }}
+            >
+              <MagnifyingGlassIcon className="w-6 h-6 text-gray-700" />
+            </button>
+
+            {/* Menu mobile - Toujours visible sur mobile - DERNIER ÉLÉMENT */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsMenuOpen(!isMenuOpen);
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsMenuOpen(!isMenuOpen);
+              }}
+              className="md:hidden p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white transition-all duration-200 z-[10002] relative flex-shrink-0 min-w-[48px] min-h-[48px] flex items-center justify-center shadow-lg ml-1"
               aria-label="Menu mobile"
               aria-expanded={isMenuOpen}
               style={{ 
@@ -468,13 +495,17 @@ const Header = () => {
                 position: 'relative',
                 display: 'flex',
                 visibility: 'visible',
-                opacity: 1
+                opacity: 1,
+                touchAction: 'manipulation',
+                WebkitTapHighlightColor: 'transparent',
+                cursor: 'pointer',
+                pointerEvents: 'auto'
               }}
             >
               {isMenuOpen ? (
-                <XMarkIcon className="w-7 h-7 text-gray-800" />
+                <XMarkIcon className="w-7 h-7 text-white" />
               ) : (
-                <Bars3Icon className="w-7 h-7 text-gray-800" />
+                <Bars3Icon className="w-7 h-7 text-white" />
               )}
             </button>
           </div>
@@ -521,7 +552,17 @@ const Header = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              onClick={() => setIsMenuOpen(false)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsMenuOpen(false);
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsMenuOpen(false);
+              }}
+              style={{ touchAction: 'manipulation' }}
             />
           )}
         </AnimatePresence>
@@ -535,9 +576,13 @@ const Header = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
               style={{ 
                 maxHeight: 'calc(100vh - 4rem)',
-                WebkitOverflowScrolling: 'touch'
+                WebkitOverflowScrolling: 'touch',
+                touchAction: 'pan-y',
+                overscrollBehavior: 'contain'
               }}
             >
               <div className="p-4 space-y-1">
@@ -546,12 +591,20 @@ const Header = () => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsMenuOpen(false);
+                      setTimeout(() => navigate(item.href), 100);
+                    }}
+                    onTouchStart={(e) => {
+                      e.stopPropagation();
+                    }}
+                    className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
                       location.pathname === item.href
                         ? 'text-gray-900 bg-gray-100'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                        : 'text-gray-600 active:bg-gray-50'
                     }`}
+                    style={{ touchAction: 'manipulation' }}
                   >
                     {item.name}
                   </Link>
@@ -566,12 +619,18 @@ const Header = () => {
                     <Link
                       key={item.name}
                       to={item.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsMenuOpen(false);
+                        setTimeout(() => navigate(item.href), 100);
+                      }}
+                      onTouchStart={(e) => e.stopPropagation()}
+                      className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
                         location.pathname === item.href
                           ? 'text-gray-900 bg-gray-100'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          : 'text-gray-600 active:bg-gray-50'
                       }`}
+                      style={{ touchAction: 'manipulation' }}
                     >
                       {item.name}
                     </Link>
@@ -587,12 +646,18 @@ const Header = () => {
                     <Link
                       key={item.name}
                       to={item.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsMenuOpen(false);
+                        setTimeout(() => navigate(item.href), 100);
+                      }}
+                      onTouchStart={(e) => e.stopPropagation()}
+                      className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
                         location.pathname === item.href
                           ? 'text-gray-900 bg-gray-100'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          : 'text-gray-600 active:bg-gray-50'
                       }`}
+                      style={{ touchAction: 'manipulation' }}
                     >
                       {item.name}
                     </Link>
@@ -608,12 +673,18 @@ const Header = () => {
                     <Link
                       key={item.name}
                       to={item.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsMenuOpen(false);
+                        setTimeout(() => navigate(item.href), 100);
+                      }}
+                      onTouchStart={(e) => e.stopPropagation()}
+                      className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
                         location.pathname === item.href
                           ? 'text-gray-900 bg-gray-100'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          : 'text-gray-600 active:bg-gray-50'
                       }`}
+                      style={{ touchAction: 'manipulation' }}
                     >
                       {item.name}
                     </Link>
@@ -629,40 +700,73 @@ const Header = () => {
                       </div>
                       <Link
                         to="/profile"
-                        onClick={() => setIsMenuOpen(false)}
-                        className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsMenuOpen(false);
+                          setTimeout(() => navigate('/profile'), 100);
+                        }}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        className="block px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
+                        style={{ touchAction: 'manipulation' }}
                       >
                         Mon profil
                       </Link>
                       <Link
                         to="/my-courses"
-                        onClick={() => setIsMenuOpen(false)}
-                        className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsMenuOpen(false);
+                          setTimeout(() => navigate('/my-courses'), 100);
+                        }}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        className="block px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
+                        style={{ touchAction: 'manipulation' }}
                       >
                         Mes formations
                       </Link>
                       <Link
                         to="/cart"
-                        onClick={() => setIsMenuOpen(false)}
-                        className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsMenuOpen(false);
+                          setTimeout(() => navigate('/cart'), 100);
+                        }}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        className="block px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
+                        style={{ touchAction: 'manipulation' }}
                       >
                         Mon panier
                       </Link>
                       {isAdmin(user?.role) && (
                         <Link
                           to="/admin"
-                          onClick={() => setIsMenuOpen(false)}
-                          className="block px-3 py-2 text-base font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setIsMenuOpen(false);
+                            setTimeout(() => navigate('/admin'), 100);
+                          }}
+                          onTouchStart={(e) => e.stopPropagation()}
+                          className="block px-4 py-3 text-base font-medium text-blue-600 active:bg-blue-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
+                          style={{ touchAction: 'manipulation' }}
                         >
                           Dashboard Admin
                         </Link>
                       )}
                       <button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
                           handleLogout();
                           setIsMenuOpen(false);
                         }}
-                        className="block w-full text-left px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                        onTouchStart={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleLogout();
+                          setIsMenuOpen(false);
+                        }}
+                        className="block w-full text-left px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
+                        style={{ touchAction: 'manipulation' }}
                       >
                         Se déconnecter
                       </button>
@@ -671,8 +775,14 @@ const Header = () => {
                     <div className="space-y-2">
                       <Link
                         to="/login"
-                        onClick={() => setIsMenuOpen(false)}
-                        className="block px-3 py-2 text-base font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 text-center"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsMenuOpen(false);
+                          setTimeout(() => navigate('/login'), 100);
+                        }}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        className="block px-4 py-3 text-base font-medium bg-blue-600 active:bg-blue-700 text-white rounded-lg transition-colors duration-200 text-center min-h-[48px] flex items-center justify-center"
+                        style={{ touchAction: 'manipulation' }}
                       >
                         {t('common.seConnecter')}
                       </Link>
