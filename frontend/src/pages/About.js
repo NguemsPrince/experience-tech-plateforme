@@ -594,8 +594,8 @@ const About = () => {
                 <div className="p-6">
                   <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-3 border-primary-300 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                     <img 
-                      src="/images/team/Viviane.png" 
-                      alt="Chantal - Cafetière"
+                      src="/images/team/NOUDJIADJIM-PATRICIA.jpeg" 
+                      alt="NOUDJIADJIM PATRICIA - Cafetière"
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                       loading="lazy"
                       onError={(e) => {
@@ -608,7 +608,7 @@ const About = () => {
                       <UserGroupIcon className="w-10 h-10 text-primary-600" />
                     </div>
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">DENEMADJI CHANTAL</h4>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">NOUDJIADJIM PATRICIA</h4>
                   <p className="text-primary-600 font-semibold mb-2">Cafetière</p>
                   <p className="text-sm text-gray-600">Service de restauration et boissons</p>
                 </div>
@@ -624,8 +624,8 @@ const About = () => {
                 <div className="p-6">
                   <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-3 border-primary-300 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                     <img 
-                      src="/images/team/Hassan.jpeg" 
-                      alt="Arnaud - Gardien"
+                      src="/images/team/PIANO-BOURDANNE.jpeg" 
+                      alt="PIANO BOURDANNE - Gardien"
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                       loading="lazy"
                       onError={(e) => {
@@ -638,7 +638,7 @@ const About = () => {
                       <UserGroupIcon className="w-10 h-10 text-primary-600" />
                     </div>
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">ARNAUD APS</h4>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">PIANO BOURDANNE</h4>
                   <p className="text-primary-600 font-semibold mb-2">Gardien</p>
                   <p className="text-sm text-gray-600">Sécurité et surveillance des locaux</p>
                 </div>

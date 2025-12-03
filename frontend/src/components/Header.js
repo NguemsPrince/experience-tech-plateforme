@@ -455,12 +455,14 @@ const Header = () => {
             {/* Menu mobile */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+              className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 z-[10000] relative"
+              aria-label="Menu mobile"
+              aria-expanded={isMenuOpen}
             >
               {isMenuOpen ? (
-                <XMarkIcon className="w-5 h-5 text-gray-600" />
+                <XMarkIcon className="w-6 h-6 text-gray-700" />
               ) : (
-                <Bars3Icon className="w-5 h-5 text-gray-600" />
+                <Bars3Icon className="w-6 h-6 text-gray-700" />
               )}
             </button>
           </div>
@@ -498,18 +500,36 @@ const Header = () => {
           )}
         </AnimatePresence>
 
+        {/* Overlay pour menu mobile */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              className="md:hidden fixed inset-0 bg-black/50 z-[9998]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsMenuOpen(false)}
+            />
+          )}
+        </AnimatePresence>
+
         {/* Navigation Mobile */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div 
-              className="md:hidden border-t border-gray-200 bg-white"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-white border-t border-gray-200 z-[9999] overflow-y-auto"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
+              style={{ 
+                maxHeight: 'calc(100vh - 4rem)',
+                WebkitOverflowScrolling: 'touch'
+              }}
             >
               <div className="p-4 space-y-1">
-                {/* Navigation */}
+                {/* Navigation principale */}
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
@@ -524,6 +544,69 @@ const Header = () => {
                     {item.name}
                   </Link>
                 ))}
+
+                {/* Menu Actualités & Témoignages Mobile */}
+                <div className="pt-2">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Actualités & Blog
+                  </div>
+                  {newsMenu.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
+                        location.pathname === item.href
+                          ? 'text-gray-900 bg-gray-100'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Menu Communauté Mobile */}
+                <div className="pt-2">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Communauté
+                  </div>
+                  {communityMenu.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
+                        location.pathname === item.href
+                          ? 'text-gray-900 bg-gray-100'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Menu Contact & Info Mobile */}
+                <div className="pt-2">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Contact & Info
+                  </div>
+                  {infoMenu.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`block px-3 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
+                        location.pathname === item.href
+                          ? 'text-gray-900 bg-gray-100'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
               
                 {/* Section utilisateur mobile */}
                 <div className="pt-4 border-t border-gray-200 mt-4">
