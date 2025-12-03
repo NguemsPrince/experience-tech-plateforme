@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -45,6 +44,20 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Empêcher le scroll du body quand le menu mobile est ouvert
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      console.log('Menu ouvert, scroll body désactivé');
+    } else {
+      document.body.style.overflow = '';
+      console.log('Menu fermé, scroll body activé');
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
 
   // Fermer les menus déroulants quand on clique ailleurs
   useEffect(() => {
@@ -482,18 +495,27 @@ const Header = () => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setIsMenuOpen(!isMenuOpen);
+                console.log('Menu button clicked, current state:', isMenuOpen);
+                setIsMenuOpen(prev => {
+                  console.log('Setting menu to:', !prev);
+                  return !prev;
+                });
               }}
               onTouchStart={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setIsMenuOpen(!isMenuOpen);
+                console.log('Menu button touched, current state:', isMenuOpen);
+                setIsMenuOpen(prev => {
+                  console.log('Setting menu to:', !prev);
+                  return !prev;
+                });
               }}
-              className="md:hidden p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white transition-all duration-200 z-[10002] relative flex-shrink-0 min-w-[48px] min-h-[48px] flex items-center justify-center shadow-lg ml-1"
+              className="md:hidden p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white transition-all duration-200 relative flex-shrink-0 min-w-[48px] min-h-[48px] flex items-center justify-center shadow-lg ml-1"
               aria-label="Menu mobile"
               aria-expanded={isMenuOpen}
+              id="mobile-menu-button"
               style={{ 
-                zIndex: 10002,
+                zIndex: 10003,
                 position: 'relative',
                 display: 'flex',
                 visibility: 'visible',
@@ -545,39 +567,57 @@ const Header = () => {
           )}
         </AnimatePresence>
 
-        {/* Overlay et Navigation Mobile - Rendu via Portal pour éviter les conflits de z-index */}
-        {isMenuOpen && createPortal(
+        {/* Overlay et Navigation Mobile */}
+        {isMenuOpen && (
           <>
             {/* Overlay */}
             <div
               className="md:hidden fixed inset-0 bg-black/50"
+              id="mobile-menu-overlay"
               style={{ 
                 zIndex: 10001,
-                touchAction: 'manipulation'
+                touchAction: 'manipulation',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: 'block',
+                visibility: 'visible',
+                opacity: 0.5
               }}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                console.log('Overlay clicked, closing menu');
                 setIsMenuOpen(false);
               }}
               onTouchStart={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                console.log('Overlay touched, closing menu');
                 setIsMenuOpen(false);
               }}
             />
             {/* Navigation Mobile */}
             <div 
               className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-white border-t border-gray-200 overflow-y-auto"
+              id="mobile-menu-panel"
               style={{ 
                 zIndex: 10002,
+                position: 'fixed',
+                top: '4rem',
+                left: 0,
+                right: 0,
+                bottom: 0,
                 maxHeight: 'calc(100vh - 4rem)',
                 WebkitOverflowScrolling: 'touch',
                 touchAction: 'pan-y',
                 overscrollBehavior: 'contain',
                 display: 'block',
                 visibility: 'visible',
-                opacity: 1
+                opacity: 1,
+                backgroundColor: 'white'
               }}
               onClick={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
@@ -788,8 +828,7 @@ const Header = () => {
                   </div>
               </div>
             </div>
-          </>,
-          document.body
+          </>
         )}
       </nav>
     </header>
