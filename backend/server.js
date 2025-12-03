@@ -31,6 +31,8 @@ const ticketRoutes = require('./routes/tickets');
 const prepaidCardRoutes = require('./routes/prepaidCards');
 const adminRoutes = require('./routes/admin');
 const settingsRoutes = require('./routes/settings');
+const auditLogRoutes = require('./routes/auditLogs');
+const rolesRoutes = require('./routes/roles');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -224,6 +226,8 @@ app.use('/api/tickets', ticketRoutes);
 app.use('/api/prepaid-cards', prepaidCardRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/admin/audit-logs', auditLogRoutes);
+app.use('/api/admin/roles', rolesRoutes);
 
 // Error handling middleware
 app.use(notFound);

@@ -1,6 +1,7 @@
 const express = require('express');
 const { query, param, body, validationResult } = require('express-validator');
 const { protect, authorize } = require('../middleware/auth');
+const { logAction } = require('../middleware/auditLog');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/response');
 const { sanitizeSearchQuery, validatePagination, isValidObjectId } = require('../utils/security');
 
@@ -21,9 +22,10 @@ const router = express.Router();
 const handleValidationErrors = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return sendErrorResponse(res, 400, 'Données invalides', errors.array());
+    sendErrorResponse(res, 400, 'Données invalides', errors.array());
+    return true; // Retourner true pour indiquer qu'une erreur a été envoyée
   }
-  return null;
+  return false; // Retourner false si pas d'erreurs
 };
 
 // @desc    Get dashboard statistics
@@ -169,6 +171,200 @@ router.get('/dashboard/stats', protect, authorize('admin', 'super_admin'), [
       console.error('Get dashboard stats error:', error);
       sendErrorResponse(res, 500, 'Erreur serveur');
     }
+});
+
+// ==================== ORDERS MANAGEMENT ====================
+
+// @desc    Get all orders (admin only)
+// @route   GET /api/admin/orders
+// @access  Private/Admin
+router.get('/orders', protect, authorize('admin', 'super_admin'), [
+  query('page').optional().isInt({ min: 1 }),
+  query('limit').optional().isInt({ min: 1, max: 100 }),
+  query('status').optional().isIn(['pending', 'processing', 'shipped', 'completed', 'cancelled']),
+  query('search').optional().isString(),
+  query('startDate').optional().isISO8601(),
+  query('endDate').optional().isISO8601(),
+], async (req, res) => {
+  if (handleValidationErrors(req, res)) return;
+
+  try {
+    const { page, limit: validatedLimit } = validatePagination(req.query.page, req.query.limit, 100);
+    const limit = validatedLimit || 20;
+    const skip = (page - 1) * limit;
+
+    // Build filter
+    const filter = {};
+    if (req.query.status) filter.status = req.query.status;
+    
+    // Date range filter
+    if (req.query.startDate || req.query.endDate) {
+      filter.createdAt = {};
+      if (req.query.startDate) filter.createdAt.$gte = new Date(req.query.startDate);
+      if (req.query.endDate) filter.createdAt.$lte = new Date(req.query.endDate);
+    }
+
+    // Search filter
+    if (req.query.search) {
+      const sanitizedSearch = sanitizeSearchQuery(req.query.search);
+      if (sanitizedSearch) {
+        filter.$or = [
+          { reference: { $regex: sanitizedSearch, $options: 'i' } },
+          { 'customer.fullName': { $regex: sanitizedSearch, $options: 'i' } },
+          { 'customer.email': { $regex: sanitizedSearch, $options: 'i' } },
+          { 'customer.phone': { $regex: sanitizedSearch, $options: 'i' } },
+        ];
+      }
+    }
+
+    const [orders, total] = await Promise.all([
+      Order.find(filter)
+        .populate('user', 'firstName lastName email')
+        .populate('items.product', 'name price brand images')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Order.countDocuments(filter),
+    ]);
+
+    sendSuccessResponse(res, 200, 'Commandes récupérées', {
+      orders: orders.map(order => ({
+        id: order._id,
+        reference: order.reference,
+        customer: order.customer,
+        items: order.items.map(item => ({
+          product: item.product,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          subtotal: item.subtotal,
+        })),
+        total: order.total,
+        status: order.status,
+        payment: order.payment,
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt,
+      })),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
+
+  } catch (error) {
+    console.error('Get orders error:', error);
+    sendErrorResponse(res, 500, 'Erreur serveur');
+  }
+});
+
+// @desc    Get order statistics (admin only)
+// @route   GET /api/admin/orders/stats
+// @access  Private/Admin
+router.get('/orders/stats', protect, authorize('admin', 'super_admin'), async (req, res) => {
+  try {
+    const [
+      totalOrders,
+      pendingOrders,
+      processingOrders,
+      shippedOrders,
+      completedOrders,
+      cancelledOrders,
+      totalRevenue,
+      todayRevenue,
+      thisMonthRevenue,
+    ] = await Promise.all([
+      Order.countDocuments(),
+      Order.countDocuments({ status: 'pending' }),
+      Order.countDocuments({ status: 'processing' }),
+      Order.countDocuments({ status: 'shipped' }),
+      Order.countDocuments({ status: 'completed' }),
+      Order.countDocuments({ status: 'cancelled' }),
+      Order.aggregate([
+        { $match: { status: { $in: ['completed', 'shipped'] } } },
+        { $group: { _id: null, total: { $sum: '$total' } } },
+      ]),
+      Order.aggregate([
+        {
+          $match: {
+            status: { $in: ['completed', 'shipped'] },
+            createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) },
+          },
+        },
+        { $group: { _id: null, total: { $sum: '$total' } } },
+      ]),
+      Order.aggregate([
+        {
+          $match: {
+            status: { $in: ['completed', 'shipped'] },
+            createdAt: {
+              $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+            },
+          },
+        },
+        { $group: { _id: null, total: { $sum: '$total' } } },
+      ]),
+    ]);
+
+    sendSuccessResponse(res, 200, 'Statistiques des commandes récupérées', {
+      total: totalOrders,
+      byStatus: {
+        pending: pendingOrders,
+        processing: processingOrders,
+        shipped: shippedOrders,
+        completed: completedOrders,
+        cancelled: cancelledOrders,
+      },
+      revenue: {
+        total: totalRevenue[0]?.total || 0,
+        today: todayRevenue[0]?.total || 0,
+        thisMonth: thisMonthRevenue[0]?.total || 0,
+      },
+    });
+
+  } catch (error) {
+    console.error('Get order stats error:', error);
+    sendErrorResponse(res, 500, 'Erreur serveur');
+  }
+});
+
+// @desc    Update order status (admin only)
+// @route   PUT /api/admin/orders/:id/status
+// @access  Private/Admin
+router.put('/orders/:id/status', protect, authorize('admin', 'super_admin'), [
+  param('id').isMongoId().withMessage('ID invalide'),
+  body('status').isIn(['pending', 'processing', 'shipped', 'completed', 'cancelled']).withMessage('Statut invalide'),
+], async (req, res) => {
+  if (handleValidationErrors(req, res)) return;
+
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!isValidObjectId(id)) {
+      return sendErrorResponse(res, 400, 'ID invalide');
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      id,
+      { status, updatedAt: new Date() },
+      { new: true, runValidators: true }
+    )
+      .populate('user', 'firstName lastName email')
+      .populate('items.product', 'name price brand images')
+      .lean();
+
+    if (!order) {
+      return sendErrorResponse(res, 404, 'Commande non trouvée');
+    }
+
+    sendSuccessResponse(res, 200, 'Statut de la commande mis à jour', order);
+
+  } catch (error) {
+    console.error('Update order status error:', error);
+    sendErrorResponse(res, 500, 'Erreur serveur');
+  }
 });
 
 // ==================== QUOTE REQUESTS ====================

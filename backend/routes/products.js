@@ -8,6 +8,7 @@ const {
 const Product = require('../models/Product');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/response');
 const { protect, authorize } = require('../middleware/auth');
+const { logAction } = require('../middleware/auditLog');
 const { sanitizeSearchQuery, validatePagination, isValidObjectId } = require('../utils/security');
 
 const router = express.Router();
@@ -363,6 +364,14 @@ router.post(
 
       const product = await Product.create(payload);
 
+      // Logger l'action
+      await logAction(req, 'CREATE', 'PRODUCT', {
+        resourceId: product._id,
+        beforeState: null,
+        afterState: serializeProduct(product),
+        description: `Création du produit ${product.name}`
+      });
+
       sendSuccessResponse(res, 201, 'Produit créé avec succès', serializeProduct(product));
   } catch (error) {
     console.error('Create product error:', error);
@@ -433,6 +442,12 @@ router.put(
         return sendErrorResponse(res, 400, 'ID produit invalide');
       }
       
+      // Récupérer l'état avant modification
+      const beforeProduct = await Product.findById(productId).lean();
+      if (!beforeProduct) {
+        return sendErrorResponse(res, 404, 'Produit non trouvé');
+      }
+      
       const updates = { ...req.body };
       if (updates.category) {
         updates.category = mapCategory(updates.category);
@@ -447,6 +462,14 @@ router.put(
       if (!product) {
         return sendErrorResponse(res, 404, 'Produit non trouvé');
       }
+
+      // Logger l'action
+      await logAction(req, 'UPDATE', 'PRODUCT', {
+        resourceId: productId,
+        beforeState: serializeProduct(beforeProduct),
+        afterState: serializeProduct(product),
+        description: `Modification du produit ${product.name}`
+      });
 
       sendSuccessResponse(res, 200, 'Produit mis à jour', serializeProduct(product));
   } catch (error) {
@@ -484,6 +507,12 @@ router.delete(
         return sendErrorResponse(res, 400, 'ID produit invalide');
       }
       
+      // Récupérer l'état avant suppression
+      const beforeProduct = await Product.findById(productId).lean();
+      if (!beforeProduct) {
+        return sendErrorResponse(res, 404, 'Produit non trouvé');
+      }
+      
       const product = await Product.findOneAndUpdate(
         { _id: productId },
         { isActive: false },
@@ -493,6 +522,14 @@ router.delete(
       if (!product) {
         return sendErrorResponse(res, 404, 'Produit non trouvé');
       }
+
+      // Logger l'action
+      await logAction(req, 'DELETE', 'PRODUCT', {
+        resourceId: productId,
+        beforeState: serializeProduct(beforeProduct),
+        afterState: { isActive: false },
+        description: `Suppression (archivage) du produit ${beforeProduct.name}`
+      });
 
       sendSuccessResponse(res, 200, 'Produit archivé avec succès');
   } catch (error) {

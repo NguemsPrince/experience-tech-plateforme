@@ -167,10 +167,78 @@ router.get('/projects', async (req, res) => {
 // @access  Private
 router.get('/invoices', async (req, res) => {
   try {
+    // Pour l'instant, retourner un tableau vide
+    // TODO: Implémenter la récupération des factures depuis la base de données
     const invoices = [];
     sendSuccessResponse(res, 200, 'Factures récupérées', invoices);
   } catch (error) {
     console.error('Get invoices error:', error);
+    sendErrorResponse(res, 500, 'Erreur serveur');
+  }
+});
+
+// @desc    Get single invoice
+// @route   GET /api/client/invoices/:id
+// @access  Private
+router.get('/invoices/:id', async (req, res) => {
+  try {
+    // TODO: Implémenter la récupération d'une facture spécifique
+    sendErrorResponse(res, 404, 'Facture non trouvée');
+  } catch (error) {
+    console.error('Get invoice error:', error);
+    sendErrorResponse(res, 500, 'Erreur serveur');
+  }
+});
+
+// @desc    Request new invoice
+// @route   POST /api/client/invoices/request
+// @access  Private
+router.post('/invoices/request', [
+  body('description').optional().isString().trim(),
+  body('amount').optional().isNumeric(),
+  body('type').optional().isString(),
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return sendErrorResponse(res, 400, 'Données invalides', errors.array());
+    }
+
+    // TODO: Implémenter la création d'une demande de facture
+    sendSuccessResponse(res, 201, 'Demande de facture créée avec succès', {
+      id: Date.now(),
+      ...req.body,
+      status: 'pending',
+      createdAt: new Date()
+    });
+  } catch (error) {
+    console.error('Request invoice error:', error);
+    sendErrorResponse(res, 500, 'Erreur serveur');
+  }
+});
+
+// @desc    Download invoice PDF
+// @route   GET /api/client/invoices/:id/download
+// @access  Private
+router.get('/invoices/:id/download', async (req, res) => {
+  try {
+    // TODO: Implémenter le téléchargement du PDF de facture
+    sendErrorResponse(res, 404, 'Facture non trouvée');
+  } catch (error) {
+    console.error('Download invoice error:', error);
+    sendErrorResponse(res, 500, 'Erreur serveur');
+  }
+});
+
+// @desc    Get invoice status
+// @route   GET /api/client/invoices/:id/status
+// @access  Private
+router.get('/invoices/:id/status', async (req, res) => {
+  try {
+    // TODO: Implémenter la récupération du statut d'une facture
+    sendErrorResponse(res, 404, 'Facture non trouvée');
+  } catch (error) {
+    console.error('Get invoice status error:', error);
     sendErrorResponse(res, 500, 'Erreur serveur');
   }
 });

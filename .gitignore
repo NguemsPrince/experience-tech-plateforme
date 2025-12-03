@@ -123,20 +123,36 @@ storybook-static/
 tmp/
 temp/
 
-# MongoDB local data
+# MongoDB local data and installations
 mongodb-local/
 mongodb-data/
 data/
 mongodb-macos-x86_64-*/
+mongodb.tgz
+
+# MongoDB log files
 *.log
 mongodb.log*
+mongodb.log.*
+
+# MongoDB database files (WiredTiger storage engine)
+*.wt
+*.ns
+*.bson
+WiredTiger*
+journal/
+**/journal/
+**/WiredTigerLog.*
+**/WiredTigerPreplog.*
+
+# MongoDB binaries (if accidentally included)
+**/bin/mongod
+**/bin/mongos
+**/bin/mongo
 
 # Node.js versions
 node-v*/
 node.tar.gz
-
-# MongoDB archives
-mongodb.tgz
 
 # Large image files (if needed, uncomment)
 # *.jpg

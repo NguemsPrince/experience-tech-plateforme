@@ -1,6 +1,8 @@
 const express = require('express');
 const { body, param, query, validationResult } = require('express-validator');
 const { protect, authorize } = require('../middleware/auth');
+const { checkPermission, checkUserModificationAccess, PERMISSIONS } = require('../middleware/permissions');
+const { logAction } = require('../middleware/auditLog');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/response');
 const { sanitizeSearchQuery, validatePagination, isValidObjectId } = require('../utils/security');
 const User = require('../models/User');
@@ -24,11 +26,11 @@ const handleValidationErrors = (req, res) => {
 router.get(
   '/',
   protect,
-  authorize('admin', 'super_admin'),
+  checkPermission(PERMISSIONS.USERS.VIEW),
   [
     query('page').optional().isInt({ min: 1 }),
     query('limit').optional().isInt({ min: 1, max: 10000 }), // Augmenté pour permettre les exports
-    query('role').optional().isIn(['client', 'student', 'admin', 'super_admin']),
+    query('role').optional().isIn(['client', 'student', 'moderator', 'admin', 'super_admin']),
     query('isActive').optional().isBoolean(),
     query('search').optional().isString(),
   ],
@@ -81,10 +83,85 @@ router.get(
   }
 );
 
+// @desc    Create new user (admin only)
+// @route   POST /api/users
+// @access  Private/Admin
+router.post(
+  '/',
+  protect,
+  checkPermission(PERMISSIONS.USERS.CREATE),
+  [
+    body('firstName').trim().notEmpty().isLength({ min: 2, max: 50 }),
+    body('lastName').trim().notEmpty().isLength({ min: 2, max: 50 }),
+    body('email').isEmail().normalizeEmail(),
+    body('password').isLength({ min: 6 }),
+    body('phone').optional().isString(),
+    body('role').optional().isIn(['client', 'student', 'moderator', 'admin', 'super_admin']),
+  ],
+  async (req, res) => {
+    if (handleValidationErrors(req, res)) return;
+
+    try {
+      const { firstName, lastName, email, password, phone, role = 'client' } = req.body;
+
+      // Vérifications de sécurité pour le rôle
+      if (role === 'super_admin' && req.user.role !== 'super_admin') {
+        return sendErrorResponse(res, 403, 'Seul un super administrateur peut créer un super administrateur');
+      }
+      
+      if (role === 'admin' && req.user.role !== 'super_admin') {
+        return sendErrorResponse(res, 403, 'Seul un super administrateur peut créer un administrateur');
+      }
+      
+      if ((role === 'admin' || role === 'super_admin') && req.user.role === 'moderator') {
+        return sendErrorResponse(res, 403, 'Un modérateur ne peut pas créer un administrateur');
+      }
+
+      // Vérifier si l'email existe déjà
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return sendErrorResponse(res, 400, 'Cet email est déjà utilisé');
+      }
+
+      // Créer l'utilisateur
+      const user = await User.create({
+        firstName,
+        lastName,
+        email,
+        password,
+        phone,
+        role,
+        isActive: true
+      });
+
+      const userResponse = user.toObject();
+      delete userResponse.password;
+      delete userResponse.emailVerificationToken;
+      delete userResponse.passwordResetToken;
+
+      // Logger l'action
+      await logAction(req, 'CREATE', 'USER', {
+        resourceId: user._id,
+        beforeState: null,
+        afterState: userResponse,
+        description: `Création de l'utilisateur ${user.firstName} ${user.lastName} (${user.email}) avec le rôle ${user.role}`
+      });
+
+      sendSuccessResponse(res, 201, 'Utilisateur créé avec succès', userResponse);
+    } catch (error) {
+      console.error('Create user error:', error);
+      if (error.code === 11000) {
+        return sendErrorResponse(res, 400, 'Cet email est déjà utilisé');
+      }
+      sendErrorResponse(res, 500, 'Erreur serveur');
+    }
+  }
+);
+
 // @desc    Get user statistics (admin only)
 // @route   GET /api/users/stats
 // @access  Private/Admin
-router.get('/stats', protect, authorize('admin', 'super_admin'), async (req, res) => {
+router.get('/stats', protect, checkPermission(PERMISSIONS.USERS.VIEW), async (req, res) => {
   try {
     const [
       totalUsers,
@@ -148,7 +225,7 @@ router.get('/stats', protect, authorize('admin', 'super_admin'), async (req, res
 router.get(
   '/:userId',
   protect,
-  authorize('admin', 'super_admin'),
+  checkPermission(PERMISSIONS.USERS.VIEW),
   [
     param('userId')
       .isMongoId()
@@ -212,25 +289,68 @@ router.get(
 router.put(
   '/:userId',
   protect,
-  authorize('admin', 'super_admin'),
+  checkPermission(PERMISSIONS.USERS.EDIT),
+  checkUserModificationAccess,
   [
     param('userId').isMongoId(),
     body('firstName').optional().isString().isLength({ min: 2, max: 50 }),
     body('lastName').optional().isString().isLength({ min: 2, max: 50 }),
     body('email').optional().isEmail(),
     body('phone').optional().isString(),
-    body('role').optional().isIn(['client', 'student', 'admin', 'super_admin']),
+    body('role').optional().isIn(['client', 'student', 'moderator', 'admin', 'super_admin']),
     body('isActive').optional().isBoolean(),
   ],
   async (req, res) => {
     if (handleValidationErrors(req, res)) return;
 
     try {
+      const targetUserId = req.params.userId;
+      
+      // Vérifier si l'utilisateur cible existe et son rôle
+      const targetUser = await User.findById(targetUserId);
+      if (!targetUser) {
+        return sendErrorResponse(res, 404, 'Utilisateur non trouvé');
+      }
+
+      // Vérifications supplémentaires de sécurité
+      if (req.body.role) {
+        // Seul super_admin peut créer/modifier un super_admin
+        if (req.body.role === 'super_admin' && req.user.role !== 'super_admin') {
+          return sendErrorResponse(res, 403, 'Seul un super administrateur peut créer ou modifier un super administrateur');
+        }
+        
+        // Seul super_admin peut créer/modifier un admin
+        if (req.body.role === 'admin' && req.user.role !== 'super_admin') {
+          return sendErrorResponse(res, 403, 'Seul un super administrateur peut créer ou modifier un administrateur');
+        }
+        
+        // Modérateur ne peut pas créer/modifier un admin ou super_admin
+        if ((req.body.role === 'admin' || req.body.role === 'super_admin') && req.user.role === 'moderator') {
+          return sendErrorResponse(res, 403, 'Un modérateur ne peut pas créer ou modifier un administrateur');
+        }
+        
+        // Admin ne peut pas modifier un super_admin
+        if (targetUser.role === 'super_admin' && req.user.role !== 'super_admin') {
+          return sendErrorResponse(res, 403, 'Vous ne pouvez pas modifier un super administrateur');
+        }
+        
+        // Modérateur ne peut pas modifier un admin ou super_admin
+        if ((targetUser.role === 'admin' || targetUser.role === 'super_admin') && req.user.role === 'moderator') {
+          return sendErrorResponse(res, 403, 'Vous ne pouvez pas modifier un administrateur');
+        }
+      }
+
+      // Sauvegarder l'état avant modification pour l'audit
+      const beforeState = { ...targetUser.toObject() };
+      delete beforeState.password;
+      delete beforeState.emailVerificationToken;
+      delete beforeState.passwordResetToken;
+
       const updates = { ...req.body };
       delete updates.password; // Don't allow password update here
 
       const user = await User.findByIdAndUpdate(
-        req.params.userId,
+        targetUserId,
         updates,
         { new: true, runValidators: true }
       )
@@ -240,6 +360,14 @@ router.put(
       if (!user) {
         return sendErrorResponse(res, 404, 'Utilisateur non trouvé');
       }
+
+      // Logger l'action
+      await logAction(req, 'UPDATE', 'USER', {
+        resourceId: targetUserId,
+        beforeState,
+        afterState: user,
+        description: `Modification de l'utilisateur ${user.firstName} ${user.lastName} (${user.email})`
+      });
 
       sendSuccessResponse(res, 200, 'Utilisateur mis à jour', user);
     } catch (error) {
@@ -258,12 +386,29 @@ router.put(
 router.patch(
   '/:userId/suspend',
   protect,
-  authorize('admin', 'super_admin'),
+  checkPermission(PERMISSIONS.USERS.ACTIVATE_DEACTIVATE),
+  checkUserModificationAccess,
   [param('userId').isMongoId(), body('isActive').isBoolean()],
   async (req, res) => {
     if (handleValidationErrors(req, res)) return;
 
     try {
+      const targetUser = await User.findById(req.params.userId);
+      if (!targetUser) {
+        return sendErrorResponse(res, 404, 'Utilisateur non trouvé');
+      }
+
+      // Vérifications de sécurité
+      if (targetUser.role === 'super_admin' && req.user.role !== 'super_admin') {
+        return sendErrorResponse(res, 403, 'Vous ne pouvez pas suspendre un super administrateur');
+      }
+      
+      if ((targetUser.role === 'admin' || targetUser.role === 'super_admin') && req.user.role === 'moderator') {
+        return sendErrorResponse(res, 403, 'Vous ne pouvez pas suspendre un administrateur');
+      }
+
+      const beforeState = { isActive: targetUser.isActive };
+
       const user = await User.findByIdAndUpdate(
         req.params.userId,
         { isActive: req.body.isActive },
@@ -275,6 +420,14 @@ router.patch(
       if (!user) {
         return sendErrorResponse(res, 404, 'Utilisateur non trouvé');
       }
+
+      // Logger l'action
+      await logAction(req, 'UPDATE', 'USER', {
+        resourceId: req.params.userId,
+        beforeState,
+        afterState: { isActive: user.isActive },
+        description: `Utilisateur ${req.body.isActive ? 'activé' : 'suspendu'}: ${user.firstName} ${user.lastName} (${user.email})`
+      });
 
       sendSuccessResponse(res, 200, `Utilisateur ${req.body.isActive ? 'activé' : 'suspendu'}`, user);
     } catch (error) {
@@ -290,12 +443,33 @@ router.patch(
 router.delete(
   '/:userId',
   protect,
-  authorize('admin', 'super_admin'),
+  checkPermission(PERMISSIONS.USERS.DELETE),
+  checkUserModificationAccess,
   [param('userId').isMongoId()],
   async (req, res) => {
     if (handleValidationErrors(req, res)) return;
 
     try {
+      const targetUser = await User.findById(req.params.userId);
+      if (!targetUser) {
+        return sendErrorResponse(res, 404, 'Utilisateur non trouvé');
+      }
+
+      // Vérifications de sécurité
+      if (targetUser.role === 'super_admin' && req.user.role !== 'super_admin') {
+        return sendErrorResponse(res, 403, 'Vous ne pouvez pas supprimer un super administrateur');
+      }
+      
+      if ((targetUser.role === 'admin' || targetUser.role === 'super_admin') && req.user.role === 'moderator') {
+        return sendErrorResponse(res, 403, 'Vous ne pouvez pas supprimer un administrateur');
+      }
+
+      // Sauvegarder l'état avant suppression pour l'audit
+      const beforeState = { ...targetUser.toObject() };
+      delete beforeState.password;
+      delete beforeState.emailVerificationToken;
+      delete beforeState.passwordResetToken;
+
       // Soft delete - just deactivate
       const user = await User.findByIdAndUpdate(
         req.params.userId,
@@ -308,6 +482,14 @@ router.delete(
       if (!user) {
         return sendErrorResponse(res, 404, 'Utilisateur non trouvé');
       }
+
+      // Logger l'action
+      await logAction(req, 'DELETE', 'USER', {
+        resourceId: req.params.userId,
+        beforeState,
+        afterState: { isActive: false },
+        description: `Suppression (désactivation) de l'utilisateur ${user.firstName} ${user.lastName} (${user.email})`
+      });
 
       sendSuccessResponse(res, 200, 'Utilisateur supprimé', user);
     } catch (error) {
