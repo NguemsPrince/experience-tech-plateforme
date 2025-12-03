@@ -194,17 +194,18 @@ const Header = () => {
           </div>
 
           {/* Actions droite */}
-          <div className="flex items-center space-x-1 flex-shrink-0">
+          <div className="flex items-center space-x-1 flex-shrink-0 relative" style={{ minWidth: 0 }}>
             {/* Menu mobile - Recherche */}
             <button
               onClick={() => setShowSearchBar(!showSearchBar)}
-              className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+              className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 z-[10001] relative flex-shrink-0"
+              aria-label="Rechercher"
             >
               <MagnifyingGlassIcon className="w-5 h-5 text-gray-600" />
             </button>
 
             {/* Navigation Desktop */}
-            <div className="hidden lg:flex items-center space-x-3">
+            <div className="hidden lg:flex items-center space-x-3 flex-shrink-0">
               {/* Navigation principale */}
               {navigation.map((item) => (
                 <Link
@@ -325,7 +326,7 @@ const Header = () => {
 
             {/* Menu utilisateur ou bouton de connexion */}
             {isAuthenticated ? (
-              <div className="flex items-center space-x-2">
+              <div className="hidden md:flex items-center space-x-2 flex-shrink-0">
                 {/* Notifications */}
                 <NotificationCenter />
                 
@@ -433,16 +434,20 @@ const Header = () => {
               </div>
             ) : (
               <>
-                {/* Langue */}
-                <LanguageSelector />
+                {/* Langue - Caché sur mobile pour faire de la place */}
+                <div className="hidden sm:block">
+                  <LanguageSelector />
+                </div>
                 
-                {/* Theme Toggle */}
-                <ThemeToggle />
+                {/* Theme Toggle - Caché sur mobile pour faire de la place */}
+                <div className="hidden sm:block">
+                  <ThemeToggle />
+                </div>
                 
-                {/* Bouton de connexion - Icône */}
+                {/* Bouton de connexion - Icône - Caché sur mobile très petit */}
                 <Link
                   to="/login"
-                  className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors duration-200 flex-shrink-0 cursor-pointer relative z-[60] flex items-center justify-center pointer-events-auto"
+                  className="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors duration-200 flex-shrink-0 cursor-pointer relative z-[60] items-center justify-center pointer-events-auto"
                   style={{ pointerEvents: 'auto', zIndex: 60 }}
                   title="Se connecter"
                   aria-label="Se connecter"
@@ -452,17 +457,24 @@ const Header = () => {
               </>
             )}
 
-            {/* Menu mobile */}
+            {/* Menu mobile - Toujours visible sur mobile */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 z-[10000] relative"
+              className="md:hidden p-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-all duration-200 z-[10002] relative flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center shadow-sm"
               aria-label="Menu mobile"
               aria-expanded={isMenuOpen}
+              style={{ 
+                zIndex: 10002,
+                position: 'relative',
+                display: 'flex',
+                visibility: 'visible',
+                opacity: 1
+              }}
             >
               {isMenuOpen ? (
-                <XMarkIcon className="w-6 h-6 text-gray-700" />
+                <XMarkIcon className="w-7 h-7 text-gray-800" />
               ) : (
-                <Bars3Icon className="w-6 h-6 text-gray-700" />
+                <Bars3Icon className="w-7 h-7 text-gray-800" />
               )}
             </button>
           </div>
