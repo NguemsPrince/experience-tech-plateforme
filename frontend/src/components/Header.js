@@ -22,6 +22,8 @@ import '../styles/view-modes.css';
 import '../styles/header.css';
 import '../styles/dropdown.css';
 import '../styles/mobile-fixes.css';
+import '../styles/mobile-menu.css';
+import '../styles/mobile-menu-fixes.css';
 
 const Header = () => {
   const location = useLocation();
@@ -48,14 +50,29 @@ const Header = () => {
   // Empêcher le scroll du body quand le menu mobile est ouvert
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-      console.log('Menu ouvert, scroll body désactivé');
+      // Sauvegarder la position du scroll
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.classList.add('menu-open');
     } else {
-      document.body.style.overflow = '';
-      console.log('Menu fermé, scroll body activé');
+      // Restaurer la position du scroll
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.classList.remove('menu-open');
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     }
     return () => {
-      document.body.style.overflow = '';
+      // Nettoyage au démontage
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.classList.remove('menu-open');
     };
   }, [isMenuOpen]);
 
@@ -105,7 +122,19 @@ const Header = () => {
   // Fermer tous les menus quand on change de page
   useEffect(() => {
     closeAllMenus();
+    setIsMenuOpen(false); // Fermer aussi le menu mobile
   }, [location.pathname]);
+  
+  // Fermer le menu mobile avec la touche Escape
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isMenuOpen]);
 
   // Navigation de base pour tous les utilisateurs (non connectés)
   const baseNavigation = [
@@ -491,47 +520,65 @@ const Header = () => {
             </button>
 
             {/* Menu mobile - Toujours visible sur mobile - DERNIER ÉLÉMENT */}
-            <button
+            <motion.button
+              whileTap={{ scale: 0.95 }}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Menu button clicked, current state:', isMenuOpen);
-                setIsMenuOpen(prev => {
-                  console.log('Setting menu to:', !prev);
-                  return !prev;
-                });
+                const newState = !isMenuOpen;
+                setIsMenuOpen(newState);
+                // Forcer la mise à jour immédiate
+                if (newState) {
+                  document.body.classList.add('menu-open');
+                } else {
+                  document.body.classList.remove('menu-open');
+                }
               }}
               onTouchStart={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Menu button touched, current state:', isMenuOpen);
-                setIsMenuOpen(prev => {
-                  console.log('Setting menu to:', !prev);
-                  return !prev;
-                });
+                const newState = !isMenuOpen;
+                setIsMenuOpen(newState);
+                if (newState) {
+                  document.body.classList.add('menu-open');
+                } else {
+                  document.body.classList.remove('menu-open');
+                }
               }}
-              className="md:hidden p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white transition-all duration-200 relative flex-shrink-0 min-w-[48px] min-h-[48px] flex items-center justify-center shadow-lg ml-1"
+              className="mobile-menu-btn p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white transition-all duration-200 relative flex-shrink-0 min-w-[48px] min-h-[48px] flex items-center justify-center shadow-lg ml-1"
               aria-label="Menu mobile"
               aria-expanded={isMenuOpen}
               id="mobile-menu-button"
+              type="button"
               style={{ 
-                zIndex: 10003,
                 position: 'relative',
+                zIndex: 10003,
                 display: 'flex',
                 visibility: 'visible',
                 opacity: 1,
                 touchAction: 'manipulation',
                 WebkitTapHighlightColor: 'transparent',
                 cursor: 'pointer',
-                pointerEvents: 'auto'
+                pointerEvents: 'auto',
+                // Force la visibilité sur mobile
+                '@media (min-width: 768px)': {
+                  display: 'none'
+                }
               }}
             >
-              {isMenuOpen ? (
-                <XMarkIcon className="w-7 h-7 text-white" />
-              ) : (
-                <Bars3Icon className="w-7 h-7 text-white" />
-              )}
-            </button>
+              <motion.div
+                initial={false}
+                animate={{ rotate: isMenuOpen ? 90 : 0 }}
+                transition={{ duration: 0.2 }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                {isMenuOpen ? (
+                  <XMarkIcon className="w-7 h-7 text-white" />
+                ) : (
+                  <Bars3Icon className="w-7 h-7 text-white" />
+                )}
+              </motion.div>
+            </motion.button>
           </div>
         </div>
 
@@ -567,166 +614,228 @@ const Header = () => {
           )}
         </AnimatePresence>
 
-        {/* Overlay et Navigation Mobile */}
-        {isMenuOpen && (
-          <>
-            {/* Overlay */}
-            <div
-              className="md:hidden fixed inset-0 bg-black/50"
-              id="mobile-menu-overlay"
-              style={{ 
-                zIndex: 10001,
-                touchAction: 'manipulation',
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: 'block',
-                visibility: 'visible',
-                opacity: 0.5
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Overlay clicked, closing menu');
-                setIsMenuOpen(false);
-              }}
-              onTouchStart={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Overlay touched, closing menu');
-                setIsMenuOpen(false);
-              }}
-            />
-            {/* Navigation Mobile */}
-            <div 
-              className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-white border-t border-gray-200 overflow-y-auto"
-              id="mobile-menu-panel"
-              style={{ 
-                zIndex: 10002,
-                position: 'fixed',
-                top: '4rem',
-                left: 0,
-                right: 0,
-                bottom: 0,
-                maxHeight: 'calc(100vh - 4rem)',
-                WebkitOverflowScrolling: 'touch',
-                touchAction: 'pan-y',
-                overscrollBehavior: 'contain',
-                display: 'block',
-                visibility: 'visible',
-                opacity: 1,
-                backgroundColor: 'white'
-              }}
-              onClick={(e) => e.stopPropagation()}
-              onTouchStart={(e) => e.stopPropagation()}
-            >
+        {/* Overlay et Navigation Mobile avec animations fluides */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <>
+              {/* Overlay avec animation */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="mobile-menu-overlay fixed inset-0 bg-black/50"
+                id="mobile-menu-overlay"
+                style={{ 
+                  zIndex: 10001,
+                  touchAction: 'manipulation',
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  display: 'block',
+                  visibility: 'visible'
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsMenuOpen(false);
+                  document.body.classList.remove('menu-open');
+                }}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsMenuOpen(false);
+                  document.body.classList.remove('menu-open');
+                }}
+              />
+              {/* Navigation Mobile avec animation slide */}
+              <motion.div 
+                initial={{ x: '-100%', opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: '-100%', opacity: 0 }}
+                transition={{ 
+                  type: 'spring',
+                  damping: 25,
+                  stiffness: 200,
+                  duration: 0.3
+                }}
+                className="mobile-menu-panel fixed top-16 left-0 right-0 bottom-0 bg-white border-t border-gray-200 overflow-y-auto"
+                id="mobile-menu-panel"
+                style={{ 
+                  zIndex: 10002,
+                  position: 'fixed',
+                  top: '4rem',
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  maxHeight: 'calc(100vh - 4rem)',
+                  WebkitOverflowScrolling: 'touch',
+                  touchAction: 'pan-y',
+                  overscrollBehavior: 'contain',
+                  backgroundColor: 'white',
+                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+                  display: 'block',
+                  visibility: 'visible'
+                }}
+                onClick={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+              >
               <div className="p-4 space-y-1">
                 {/* Navigation principale */}
-                {navigation.map((item) => (
-                  <Link
+                {navigation.map((item, index) => (
+                  <motion.div
                     key={item.name}
-                    to={item.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setIsMenuOpen(false);
-                      setTimeout(() => navigate(item.href), 100);
-                    }}
-                    onTouchStart={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
-                      location.pathname === item.href
-                        ? 'text-gray-900 bg-gray-100'
-                        : 'text-gray-600 active:bg-gray-50'
-                    }`}
-                    style={{ touchAction: 'manipulation' }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05, duration: 0.2 }}
                   >
-                    {item.name}
-                  </Link>
+                    <Link
+                      to={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsMenuOpen(false);
+                        document.body.classList.remove('menu-open');
+                        setTimeout(() => {
+                          navigate(item.href);
+                        }, 150);
+                      }}
+                      onTouchStart={(e) => {
+                        e.stopPropagation();
+                      }}
+                      className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
+                        location.pathname === item.href
+                          ? 'text-gray-900 bg-gray-100'
+                          : 'text-gray-600 active:bg-gray-50'
+                      }`}
+                      style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
                 ))}
 
                 {/* Menu Actualités & Témoignages Mobile */}
-                <div className="pt-2">
+                <motion.div 
+                  className="pt-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: navigation.length * 0.05 + 0.1, duration: 0.2 }}
+                >
                   <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Actualités & Blog
                   </div>
-                  {newsMenu.map((item) => (
-                    <Link
+                  {newsMenu.map((item, index) => (
+                    <motion.div
                       key={item.name}
-                      to={item.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsMenuOpen(false);
-                        setTimeout(() => navigate(item.href), 100);
-                      }}
-                      onTouchStart={(e) => e.stopPropagation()}
-                      className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
-                        location.pathname === item.href
-                          ? 'text-gray-900 bg-gray-100'
-                          : 'text-gray-600 active:bg-gray-50'
-                      }`}
-                      style={{ touchAction: 'manipulation' }}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: (navigation.length + index) * 0.05 + 0.15, duration: 0.2 }}
                     >
-                      {item.name}
-                    </Link>
+                      <Link
+                        to={item.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsMenuOpen(false);
+                          document.body.classList.remove('menu-open');
+                          setTimeout(() => navigate(item.href), 150);
+                        }}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
+                          location.pathname === item.href
+                            ? 'text-gray-900 bg-gray-100'
+                            : 'text-gray-600 active:bg-gray-50'
+                        }`}
+                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
 
                 {/* Menu Communauté Mobile */}
-                <div className="pt-2">
+                <motion.div 
+                  className="pt-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: (navigation.length + newsMenu.length) * 0.05 + 0.2, duration: 0.2 }}
+                >
                   <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Communauté
                   </div>
-                  {communityMenu.map((item) => (
-                    <Link
+                  {communityMenu.map((item, index) => (
+                    <motion.div
                       key={item.name}
-                      to={item.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsMenuOpen(false);
-                        setTimeout(() => navigate(item.href), 100);
-                      }}
-                      onTouchStart={(e) => e.stopPropagation()}
-                      className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
-                        location.pathname === item.href
-                          ? 'text-gray-900 bg-gray-100'
-                          : 'text-gray-600 active:bg-gray-50'
-                      }`}
-                      style={{ touchAction: 'manipulation' }}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: (navigation.length + newsMenu.length + index) * 0.05 + 0.25, duration: 0.2 }}
                     >
-                      {item.name}
-                    </Link>
+                      <Link
+                        to={item.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsMenuOpen(false);
+                          document.body.classList.remove('menu-open');
+                          setTimeout(() => navigate(item.href), 150);
+                        }}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
+                          location.pathname === item.href
+                            ? 'text-gray-900 bg-gray-100'
+                            : 'text-gray-600 active:bg-gray-50'
+                        }`}
+                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
 
                 {/* Menu Contact & Info Mobile */}
-                <div className="pt-2">
+                <motion.div 
+                  className="pt-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: (navigation.length + newsMenu.length + communityMenu.length) * 0.05 + 0.3, duration: 0.2 }}
+                >
                   <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Contact & Info
                   </div>
-                  {infoMenu.map((item) => (
-                    <Link
+                  {infoMenu.map((item, index) => (
+                    <motion.div
                       key={item.name}
-                      to={item.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsMenuOpen(false);
-                        setTimeout(() => navigate(item.href), 100);
-                      }}
-                      onTouchStart={(e) => e.stopPropagation()}
-                      className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
-                        location.pathname === item.href
-                          ? 'text-gray-900 bg-gray-100'
-                          : 'text-gray-600 active:bg-gray-50'
-                      }`}
-                      style={{ touchAction: 'manipulation' }}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: (navigation.length + newsMenu.length + communityMenu.length + index) * 0.05 + 0.35, duration: 0.2 }}
                     >
-                      {item.name}
-                    </Link>
+                      <Link
+                        to={item.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsMenuOpen(false);
+                          document.body.classList.remove('menu-open');
+                          setTimeout(() => navigate(item.href), 150);
+                        }}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
+                          location.pathname === item.href
+                            ? 'text-gray-900 bg-gray-100'
+                            : 'text-gray-600 active:bg-gray-50'
+                        }`}
+                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
               
                 {/* Section utilisateur mobile */}
                 <div className="pt-4 border-t border-gray-200 mt-4">
@@ -739,12 +848,14 @@ const Header = () => {
                         to="/profile"
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           setIsMenuOpen(false);
-                          setTimeout(() => navigate('/profile'), 100);
+                          document.body.classList.remove('menu-open');
+                          setTimeout(() => navigate('/profile'), 150);
                         }}
                         onTouchStart={(e) => e.stopPropagation()}
                         className="block px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                        style={{ touchAction: 'manipulation' }}
+                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
                       >
                         Mon profil
                       </Link>
@@ -752,12 +863,14 @@ const Header = () => {
                         to="/my-courses"
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           setIsMenuOpen(false);
-                          setTimeout(() => navigate('/my-courses'), 100);
+                          document.body.classList.remove('menu-open');
+                          setTimeout(() => navigate('/my-courses'), 150);
                         }}
                         onTouchStart={(e) => e.stopPropagation()}
                         className="block px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                        style={{ touchAction: 'manipulation' }}
+                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
                       >
                         Mes formations
                       </Link>
@@ -765,12 +878,14 @@ const Header = () => {
                         to="/cart"
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           setIsMenuOpen(false);
-                          setTimeout(() => navigate('/cart'), 100);
+                          document.body.classList.remove('menu-open');
+                          setTimeout(() => navigate('/cart'), 150);
                         }}
                         onTouchStart={(e) => e.stopPropagation()}
                         className="block px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                        style={{ touchAction: 'manipulation' }}
+                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
                       >
                         Mon panier
                       </Link>
@@ -779,12 +894,14 @@ const Header = () => {
                           to="/admin"
                           onClick={(e) => {
                             e.preventDefault();
+                            e.stopPropagation();
                             setIsMenuOpen(false);
-                            setTimeout(() => navigate('/admin'), 100);
+                            document.body.classList.remove('menu-open');
+                            setTimeout(() => navigate('/admin'), 150);
                           }}
                           onTouchStart={(e) => e.stopPropagation()}
                           className="block px-4 py-3 text-base font-medium text-blue-600 active:bg-blue-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                          style={{ touchAction: 'manipulation' }}
+                          style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
                         >
                           Dashboard Admin
                         </Link>
@@ -793,17 +910,19 @@ const Header = () => {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          handleLogout();
                           setIsMenuOpen(false);
+                          document.body.classList.remove('menu-open');
+                          handleLogout();
                         }}
                         onTouchStart={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          handleLogout();
                           setIsMenuOpen(false);
+                          document.body.classList.remove('menu-open');
+                          handleLogout();
                         }}
                         className="block w-full text-left px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                        style={{ touchAction: 'manipulation' }}
+                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
                       >
                         Se déconnecter
                       </button>
@@ -814,12 +933,14 @@ const Header = () => {
                         to="/login"
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           setIsMenuOpen(false);
-                          setTimeout(() => navigate('/login'), 100);
+                          document.body.classList.remove('menu-open');
+                          setTimeout(() => navigate('/login'), 150);
                         }}
                         onTouchStart={(e) => e.stopPropagation()}
                         className="block px-4 py-3 text-base font-medium bg-blue-600 active:bg-blue-700 text-white rounded-lg transition-colors duration-200 text-center min-h-[48px] flex items-center justify-center"
-                        style={{ touchAction: 'manipulation' }}
+                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
                       >
                         {t('common.seConnecter')}
                       </Link>
@@ -827,9 +948,10 @@ const Header = () => {
                   )}
                   </div>
               </div>
-            </div>
-          </>
-        )}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </nav>
     </header>
     </>
