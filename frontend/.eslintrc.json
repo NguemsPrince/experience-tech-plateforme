@@ -1,0 +1,18 @@
+{
+  "extends": [
+    "react-app",
+    "react-app/jest"
+  ],
+  "rules": {
+    "no-unused-vars": [
+      "warn",
+      {
+        "varsIgnorePattern": "^_|^t$|Icon$",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "react-hooks/exhaustive-deps": "warn",
+    "no-unreachable": "warn"
+  }
+}
+

@@ -1,0 +1,587 @@
+/* Solar Journey Inspired Animations */
+
+/* Enhanced Float with subtle rotation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+/* Advanced floating with multiple axis movement */
+@keyframes float-sophisticated {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) translateX(2px) rotate(0.5deg);
+  }
+  50% {
+    transform: translateY(-12px) translateX(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-6px) translateX(-2px) rotate(-0.5deg);
+  }
+}
+
+/* Enhanced pulse glow with multiple layers */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 5px rgba(239, 68, 68, 0.3),
+      0 0 10px rgba(239, 68, 68, 0.2),
+      0 0 15px rgba(239, 68, 68, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 20px rgba(239, 68, 68, 0.6),
+      0 0 30px rgba(239, 68, 68, 0.4),
+      0 0 40px rgba(239, 68, 68, 0.2);
+  }
+}
+
+/* Solar Journey inspired energy pulse */
+@keyframes energy-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 0 0 0 rgba(239, 68, 68, 0.4),
+      0 0 0 0 rgba(239, 68, 68, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 
+      0 0 0 10px rgba(239, 68, 68, 0),
+      0 0 0 20px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Solar Journey inspired smooth slide animations */
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%) scale(0.95);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+/* Enhanced slide with momentum */
+@keyframes slide-in-left-momentum {
+  0% {
+    transform: translateX(-120%) scale(0.9);
+    opacity: 0;
+    filter: blur(15px);
+  }
+  60% {
+    transform: translateX(10%) scale(1.02);
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%) scale(0.95);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    transform: translateY(100%) scale(0.95);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    transform: translateY(-100%) scale(0.95);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+/* Enhanced fade with subtle scale and blur */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+}
+
+/* Solar Journey inspired morphing fade */
+@keyframes morph-fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) rotateY(10deg);
+    filter: blur(20px);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05) rotateY(0deg);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateY(0deg);
+    filter: blur(0px);
+  }
+}
+
+/* Enhanced scale with elastic effect */
+@keyframes scale-in {
+  from {
+    transform: scale(0.8) rotate(2deg);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+/* Solar Journey inspired elastic scale */
+@keyframes elastic-scale {
+  0% {
+    transform: scale(0.3) rotate(-5deg);
+    opacity: 0;
+    filter: blur(15px);
+  }
+  50% {
+    transform: scale(1.1) rotate(2deg);
+    opacity: 0.8;
+    filter: blur(3px);
+  }
+  70% {
+    transform: scale(0.95) rotate(-1deg);
+    opacity: 0.9;
+    filter: blur(1px);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes rotate-in {
+  from {
+    transform: rotate(-200deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Solar Journey Inspired Utility Classes */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-sophisticated {
+  animation: float-sophisticated 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-energy-pulse {
+  animation: energy-pulse 2s ease-in-out infinite;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-slide-in-left-momentum {
+  animation: slide-in-left-momentum 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-morph-fade-in {
+  animation: morph-fade-in 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-scale-in {
+  animation: scale-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-elastic-scale {
+  animation: elastic-scale 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.8s ease-out;
+}
+
+.animate-rotate-in {
+  animation: rotate-in 0.8s ease-out;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Solar Journey Inspired Hover Effects */
+.hover-lift {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-style: preserve-3d;
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px) rotateX(5deg) rotateY(2deg);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.hover-scale {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-scale:hover {
+  transform: scale(1.08) rotate(1deg);
+}
+
+.hover-glow {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-glow:hover {
+  box-shadow: 
+    0 0 30px rgba(239, 68, 68, 0.4),
+    0 0 60px rgba(239, 68, 68, 0.2),
+    0 0 90px rgba(239, 68, 68, 0.1);
+}
+
+/* Solar Journey inspired advanced hover effects */
+.hover-solar {
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-solar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.hover-solar:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.hover-solar:hover::before {
+  left: 100%;
+}
+
+/* Magnetic hover effect */
+.hover-magnetic {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-magnetic:hover {
+  transform: translateY(-3px) rotateZ(1deg);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Solar Journey Inspired Text Animations */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #000 0%,
+    #fff 50%,
+    #000 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Solar Journey inspired gradient text */
+.text-solar-gradient {
+  background: linear-gradient(
+    45deg,
+    #ef4444 0%,
+    #f97316 25%,
+    #eab308 50%,
+    #22c55e 75%,
+    #3b82f6 100%
+  );
+  background-size: 400% 400%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-flow 3s ease-in-out infinite;
+}
+
+@keyframes gradient-flow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Typing animation */
+.text-typing {
+  overflow: hidden;
+  border-right: 2px solid #ef4444;
+  white-space: nowrap;
+  animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #ef4444; }
+}
+
+/* Text reveal animation */
+.text-reveal {
+  overflow: hidden;
+  position: relative;
+}
+
+.text-reveal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ef4444;
+  transform: translateX(-100%);
+  animation: text-reveal 1s ease-out forwards;
+}
+
+@keyframes text-reveal {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Solar Journey Inspired Loading Animations */
+.loading-dots::after {
+  content: '';
+  animation: loading-dots 1.5s infinite;
+}
+
+@keyframes loading-dots {
+  0%, 20% {
+    content: '';
+  }
+  40% {
+    content: '.';
+  }
+  60% {
+    content: '..';
+  }
+  80%, 100% {
+    content: '...';
+  }
+}
+
+/* Solar Journey inspired loading spinner */
+.loading-solar {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(239, 68, 68, 0.1);
+  border-top: 3px solid #ef4444;
+  border-radius: 50%;
+  animation: solar-spin 1s linear infinite;
+}
+
+@keyframes solar-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Advanced loading with energy effect */
+.loading-energy {
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+
+.loading-energy::before,
+.loading-energy::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  animation: energy-pulse-loading 2s ease-in-out infinite;
+}
+
+.loading-energy::before {
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(239, 68, 68, 0.2);
+}
+
+.loading-energy::after {
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+  border: 2px solid #ef4444;
+  animation-delay: 0.5s;
+}
+
+@keyframes energy-pulse-loading {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+/* Floating loading dots */
+.loading-floating-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.loading-floating-dots span {
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: floating-dots 1.4s ease-in-out infinite both;
+}
+
+.loading-floating-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-floating-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes floating-dots {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* Stagger Animation Delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+.stagger-7 { animation-delay: 0.7s; }
+.stagger-8 { animation-delay: 0.8s; }
+.stagger-9 { animation-delay: 0.9s; }
+.stagger-10 { animation-delay: 1.0s; }

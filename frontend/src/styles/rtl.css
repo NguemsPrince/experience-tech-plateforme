@@ -1,0 +1,358 @@
+/* Styles RTL pour le support de l'arabe */
+
+/* Direction RTL de base */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Inversion des marges et paddings */
+[dir="rtl"] .ml-auto {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: 0 !important;
+  margin-left: auto !important;
+}
+
+[dir="rtl"] .ml-2 {
+  margin-left: 0 !important;
+  margin-right: 0.5rem !important;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0 !important;
+  margin-left: 0.5rem !important;
+}
+
+[dir="rtl"] .ml-4 {
+  margin-left: 0 !important;
+  margin-right: 1rem !important;
+}
+
+[dir="rtl"] .mr-4 {
+  margin-right: 0 !important;
+  margin-left: 1rem !important;
+}
+
+/* Inversion des paddings */
+[dir="rtl"] .pl-4 {
+  padding-left: 0 !important;
+  padding-right: 1rem !important;
+}
+
+[dir="rtl"] .pr-4 {
+  padding-right: 0 !important;
+  padding-left: 1rem !important;
+}
+
+/* Inversion des positions */
+[dir="rtl"] .left-0 {
+  left: auto !important;
+  right: 0 !important;
+}
+
+[dir="rtl"] .right-0 {
+  right: auto !important;
+  left: 0 !important;
+}
+
+[dir="rtl"] .left-4 {
+  left: auto !important;
+  right: 1rem !important;
+}
+
+[dir="rtl"] .right-4 {
+  right: auto !important;
+  left: 1rem !important;
+}
+
+/* Inversion des bordures */
+[dir="rtl"] .border-l {
+  border-left: 0 !important;
+  border-right: 1px solid !important;
+}
+
+[dir="rtl"] .border-r {
+  border-right: 0 !important;
+  border-left: 1px solid !important;
+}
+
+[dir="rtl"] .border-l-4 {
+  border-left: 0 !important;
+  border-right: 4px solid !important;
+}
+
+[dir="rtl"] .border-r-4 {
+  border-right: 0 !important;
+  border-left: 4px solid !important;
+}
+
+/* Inversion des rayons de bordure */
+[dir="rtl"] .rounded-l {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+
+[dir="rtl"] .rounded-r {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-left-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+}
+
+/* Inversion des espaces flexbox */
+[dir="rtl"] .space-x-2 > * + * {
+  margin-left: 0 !important;
+  margin-right: 0.5rem !important;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+  margin-left: 0 !important;
+  margin-right: 1rem !important;
+}
+
+[dir="rtl"] .space-x-6 > * + * {
+  margin-left: 0 !important;
+  margin-right: 1.5rem !important;
+}
+
+[dir="rtl"] .space-x-reverse > * + * {
+  margin-right: 0 !important;
+  margin-left: 0.5rem !important;
+}
+
+/* Inversion des grilles */
+[dir="rtl"] .grid-cols-2 {
+  direction: rtl;
+}
+
+[dir="rtl"] .grid-cols-3 {
+  direction: rtl;
+}
+
+[dir="rtl"] .grid-cols-4 {
+  direction: rtl;
+}
+
+/* Navigation RTL */
+[dir="rtl"] .navbar {
+  direction: rtl;
+}
+
+[dir="rtl"] .navbar .nav-item {
+  text-align: right;
+}
+
+/* Formulaires RTL */
+[dir="rtl"] .form-group {
+  text-align: right;
+}
+
+[dir="rtl"] .form-control {
+  text-align: right;
+}
+
+[dir="rtl"] .form-label {
+  text-align: right;
+}
+
+/* Boutons RTL */
+[dir="rtl"] .btn {
+  text-align: center;
+}
+
+/* Cartes RTL */
+[dir="rtl"] .card {
+  text-align: right;
+}
+
+[dir="rtl"] .card-header {
+  text-align: right;
+}
+
+[dir="rtl"] .card-body {
+  text-align: right;
+}
+
+/* Modales RTL */
+[dir="rtl"] .modal {
+  text-align: right;
+}
+
+[dir="rtl"] .modal-header {
+  text-align: right;
+}
+
+[dir="rtl"] .modal-body {
+  text-align: right;
+}
+
+/* Tables RTL */
+[dir="rtl"] .table {
+  direction: rtl;
+}
+
+[dir="rtl"] .table th,
+[dir="rtl"] .table td {
+  text-align: right;
+}
+
+/* Dropdown RTL */
+[dir="rtl"] .dropdown-menu {
+  right: auto;
+  left: 0;
+  text-align: right;
+}
+
+/* Tooltips RTL */
+[dir="rtl"] .tooltip {
+  text-align: right;
+}
+
+/* Animations RTL */
+[dir="rtl"] .slide-in-right {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+[dir="rtl"] .slide-in-left {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Icônes RTL */
+[dir="rtl"] .icon-arrow-left::before {
+  content: "→";
+}
+
+[dir="rtl"] .icon-arrow-right::before {
+  content: "←";
+}
+
+/* Responsive RTL */
+@media (max-width: 768px) {
+  [dir="rtl"] .mobile-menu {
+    right: auto;
+    left: 0;
+  }
+  
+  [dir="rtl"] .mobile-menu .menu-item {
+    text-align: right;
+  }
+}
+
+/* Styles spécifiques pour les cartes */
+[dir="rtl"] .map-container {
+  direction: ltr; /* Les cartes restent en LTR */
+}
+
+[dir="rtl"] .map-controls {
+  direction: rtl;
+}
+
+/* Styles pour les composants React */
+[dir="rtl"] .react-component {
+  direction: rtl;
+}
+
+[dir="rtl"] .react-component input,
+[dir="rtl"] .react-component textarea {
+  text-align: right;
+}
+
+[dir="rtl"] .react-component .form-group {
+  text-align: right;
+}
+
+/* Styles pour les notifications */
+[dir="rtl"] .toast {
+  right: auto;
+  left: 1rem;
+  text-align: right;
+}
+
+/* Styles pour les modales */
+[dir="rtl"] .modal-dialog {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+[dir="rtl"] .modal-content {
+  text-align: right;
+}
+
+/* Styles pour les alertes */
+[dir="rtl"] .alert {
+  text-align: right;
+}
+
+[dir="rtl"] .alert .alert-icon {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* Styles pour les badges */
+[dir="rtl"] .badge {
+  text-align: center;
+}
+
+/* Styles pour les breadcrumbs */
+[dir="rtl"] .breadcrumb {
+  direction: rtl;
+}
+
+[dir="rtl"] .breadcrumb-item {
+  text-align: right;
+}
+
+/* Styles pour les paginations */
+[dir="rtl"] .pagination {
+  direction: rtl;
+}
+
+[dir="rtl"] .pagination .page-item {
+  text-align: center;
+}
+
+/* Styles pour les onglets */
+[dir="rtl"] .nav-tabs {
+  direction: rtl;
+}
+
+[dir="rtl"] .nav-tabs .nav-item {
+  text-align: right;
+}
+
+/* Styles pour les accordéons */
+[dir="rtl"] .accordion {
+  text-align: right;
+}
+
+[dir="rtl"] .accordion .accordion-header {
+  text-align: right;
+}
+
+[dir="rtl"] .accordion .accordion-body {
+  text-align: right;
+}

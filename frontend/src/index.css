@@ -1,0 +1,269 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Custom Animations */
+@import './styles/animations.css';
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+    color: theme('colors.secondary.800');
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Ensure header is always visible */
+  header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999 !important;
+    width: 100% !important;
+  }
+  
+  /* Force login button to be visible */
+  a[href="/login"] {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10 !important;
+    min-width: 120px !important;
+    text-align: center !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* RTL Support for Arabic */
+  [dir="rtl"] {
+    font-family: 'Noto Sans Arabic', system-ui, sans-serif;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: theme('colors.gray.100');
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: theme('colors.primary.500');
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.primary.600');
+  }
+}
+
+/* Component styles */
+@layer components {
+  .btn-primary {
+    @apply bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-100 hover:bg-secondary-200 text-secondary-800 font-semibold py-3 px-6 rounded-lg transition-all duration-200 border border-secondary-300 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-soft border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-medium hover:-translate-y-1;
+  }
+  
+  .card-hover {
+    @apply card hover:shadow-hard;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200;
+  }
+  
+  .section-padding {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+  
+  /* Hero section specific styles */
+  .hero-section {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Ensure proper spacing between sections */
+  .section-spacing {
+    @apply relative z-10;
+  }
+  
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .gradient-bg {
+    background: linear-gradient(135deg, theme('colors.red.500') 0%, theme('colors.red.600') 100%);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, theme('colors.red.500') 0%, theme('colors.red.600') 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+  
+  .animate-slide-down {
+    animation: slideDown 0.5s ease-out;
+  }
+  
+  .backdrop-blur-soft {
+    backdrop-filter: blur(8px);
+  }
+  
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Loading animations */
+.loading-spinner {
+  @apply inline-block w-6 h-6 border-2 border-current border-t-transparent rounded-full animate-spin;
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Responsive text sizes */
+@responsive {
+  .text-responsive-xl {
+    @apply text-2xl md:text-3xl lg:text-4xl xl:text-5xl;
+  }
+  
+  .text-responsive-lg {
+    @apply text-xl md:text-2xl lg:text-3xl xl:text-4xl;
+  }
+  
+  .text-responsive-md {
+    @apply text-lg md:text-xl lg:text-2xl xl:text-3xl;
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    @apply bg-gray-900 text-gray-100;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* Leaflet Map Responsive Styles */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Responsive map container */
+#map {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+}
+
+/* Mobile optimizations for Leaflet */
+@media (max-width: 640px) {
+  .leaflet-container {
+    font-size: 12px;
+  }
+  
+  .leaflet-popup-content-wrapper {
+    max-width: 250px !important;
+  }
+  
+  .leaflet-control {
+    font-size: 12px;
+  }
+  
+  .leaflet-control-zoom {
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+  
+  .leaflet-control-attribution {
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .leaflet-popup-content-wrapper {
+    max-width: 300px !important;
+  }
+}
+
+/* Ensure map controls are accessible on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .leaflet-control-zoom a {
+    min-width: 44px;
+    min-height: 44px;
+    line-height: 44px;
+  }
+  
+  .leaflet-bar a {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Fix for Leaflet marker icons on high DPI displays */
+.leaflet-marker-icon {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}

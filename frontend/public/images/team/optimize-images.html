@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimiseur d'Images - Équipe Expérience Tech</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2563eb;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .upload-area {
+            border: 2px dashed #3b82f6;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            background: #f0f9ff;
+        }
+        .upload-area.dragover {
+            background: #dbeafe;
+            border-color: #1d4ed8;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .preview {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .preview-item {
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f9fafb;
+        }
+        .preview-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #3b82f6;
+        }
+        .info {
+            background: #f0f9ff;
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .specs {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .download-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .download-btn:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 Optimiseur d'Images - Équipe Expérience Tech</h1>
+        
+        <div class="info">
+            <h3>ℹ️ Instructions</h3>
+            <p>Cet outil vous aide à optimiser les photos de l'équipe pour la plateforme web :</p>
+            <ul>
+                <li>Redimensionne automatiquement à 200x200px</li>
+                <li>Optimise la qualité pour le web</li>
+                <li>Convertit au format JPG</li>
+                <li>Génère un nom de fichier conforme</li>
+            </ul>
+        </div>
+        
+        <div class="specs">
+            <h3>📋 Spécifications Requises</h3>
+            <ul>
+                <li><strong>Taille :</strong> 200x200px (carré)</li>
+                <li><strong>Format :</strong> JPG</li>
+                <li><strong>Poids :</strong> < 100KB</li>
+                <li><strong>Qualité :</strong> Optimisée pour le web</li>
+            </ul>
+        </div>
+        
+        <div class="upload-area" id="uploadArea">
+            <h3>📁 Glissez-déposez vos images ici</h3>
+            <p>ou</p>
+            <input type="file" id="fileInput" multiple accept="image/*">
+            <p><small>Formats acceptés : JPG, PNG, GIF</small></p>
+        </div>
+        
+        <div id="preview" class="preview"></div>
+        
+        <div id="results" style="display: none;">
+            <h3>✅ Images Optimisées</h3>
+            <p>Cliquez sur les boutons pour télécharger les images optimisées :</p>
+            <div id="downloadButtons"></div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const results = document.getElementById('results');
+        const downloadButtons = document.getElementById('downloadButtons');
+        
+        let optimizedImages = [];
+        
+        // Gestion du drag & drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    processImage(file);
+                }
+            });
+        }
+        
+        function processImage(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    // Créer un canvas pour redimensionner
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Redimensionner à 200x200
+                    canvas.width = 200;
+                    canvas.height = 200;
+                    
+                    // Dessiner l'image redimensionnée
+                    ctx.drawImage(img, 0, 0, 200, 200);
+                    
+                    // Convertir en blob JPG
+                    canvas.toBlob((blob) => {
+                        const optimizedFile = new File([blob], generateFileName(file.name), {
+                            type: 'image/jpeg'
+                        });
+                        
+                        optimizedImages.push(optimizedFile);
+                        
+                        // Afficher la prévisualisation
+                        showPreview(optimizedFile, file.name);
+                        
+                        // Afficher les résultats
+                        showResults();
+                    }, 'image/jpeg', 0.8);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function generateFileName(originalName) {
+            // Extraire le nom sans extension
+            const nameWithoutExt = originalName.split('.')[0];
+            // Nettoyer le nom (enlever espaces, caractères spéciaux)
+            const cleanName = nameWithoutExt
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
+            
+            return `${cleanName}.jpg`;
+        }
+        
+        function showPreview(optimizedFile, originalName) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(optimizedFile);
+            
+            const info = document.createElement('div');
+            info.innerHTML = `
+                <p><strong>${generateFileName(originalName)}</strong></p>
+                <p><small>${(optimizedFile.size / 1024).toFixed(1)} KB</small></p>
+            `;
+            
+            previewItem.appendChild(img);
+            previewItem.appendChild(info);
+            preview.appendChild(previewItem);
+        }
+        
+        function showResults() {
+            results.style.display = 'block';
+            downloadButtons.innerHTML = '';
+            
+            optimizedImages.forEach((file, index) => {
+                const button = document.createElement('button');
+                button.className = 'download-btn';
+                button.textContent = `📥 Télécharger ${file.name}`;
+                button.onclick = () => downloadFile(file);
+                downloadButtons.appendChild(button);
+            });
+        }
+        
+        function downloadFile(file) {
+            const url = URL.createObjectURL(file);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

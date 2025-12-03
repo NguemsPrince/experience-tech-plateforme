@@ -1,0 +1,311 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non",
+    "seConnecter": "Se connecter",
+    "support": "Support",
+    "profile": "Profil",
+    "notreEquipe": "Notre équipe",
+    "votreNomComplet": "Votre nom complet",
+    "decrireDemande": "Décrivez votre demande en détail"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "products": "Produits",
+    "training": "Formations",
+    "news": "Actualités",
+    "forum": "Forum",
+    "careers": "Carrières",
+    "contact": "Contact",
+    "login": "Connexion",
+    "register": "Inscription",
+    "dashboard": "Tableau de bord",
+    "admin": "Administration",
+    "profile": "Profil",
+    "logout": "Déconnexion"
+  },
+  "home": {
+    "title": "Expérience Tech - Votre partenaire numérique au Tchad",
+    "subtitle": "Solutions numériques innovantes pour transformer votre entreprise",
+    "hero": {
+      "title": "Transformez votre entreprise avec nos solutions numériques",
+      "subtitle": "Nous offrons des services de développement web, formation, impression et réseaux adaptés au contexte tchadien",
+      "cta": "Découvrir nos services"
+    },
+    "stats": {
+      "experience": "Ans d'expérience",
+      "clients": "Clients satisfaits",
+      "projects": "Projets réalisés",
+      "certifications": "Certifications délivrées"
+    },
+    "features": {
+      "title": "Pourquoi choisir Expérience Tech ?",
+      "development": {
+        "title": "Développement Web",
+        "description": "Sites web modernes et applications sur mesure"
+      },
+      "training": {
+        "title": "Formation Professionnelle",
+        "description": "Formations en développement et technologies numériques"
+      },
+      "printing": {
+        "title": "Services d'Impression",
+        "description": "Impression de qualité pour tous vos besoins"
+      },
+      "networks": {
+        "title": "Réseaux & Infrastructure",
+        "description": "Solutions réseau et infrastructure IT"
+      }
+    },
+    "whyChoose": {
+      "title": "Pourquoi choisir Expérience Tech ?",
+      "subtitle": "Découvrez ce qui nous rend uniques",
+      "features": [
+        {
+          "title": "Expertise Locale",
+          "description": "Nous comprenons les défis et opportunités du marché tchadien"
+        },
+        {
+          "title": "Solutions Personnalisées",
+          "description": "Des services adaptés à vos besoins spécifiques"
+        },
+        {
+          "title": "Support Réactif",
+          "description": "Une équipe dédiée à votre service 24/7"
+        },
+        {
+          "title": "Innovation Continue",
+          "description": "Nous restons à la pointe des dernières technologies"
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "Témoignages",
+      "subtitle": "Découvrez ce que nos clients disent de nous"
+    }
+  },
+  "about": {
+    "title": "À propos d'Expérience Tech",
+    "subtitle": "Notre histoire et notre mission",
+    "mission": {
+      "title": "Notre Mission",
+      "description": "Démocratiser l'accès aux technologies numériques au Tchad en offrant des solutions adaptées au contexte local."
+    },
+    "vision": {
+      "title": "Notre Vision",
+      "description": "Devenir le leader des solutions numériques au Tchad et contribuer au développement technologique du pays."
+    },
+    "team": {
+      "title": "Notre Équipe",
+      "subtitle": "Des professionnels passionnés et expérimentés"
+    }
+  },
+  "services": {
+    "title": "Nos Services",
+    "subtitle": "Solutions complètes pour votre entreprise",
+    "digital": {
+      "title": "Solutions Numériques",
+      "description": "Solutions numériques complètes pour votre transformation digitale",
+      "features": ["Développement Web & Mobile", "Logiciels sur mesure", "Maintenance IT", "Conseil Technologique"]
+    },
+    "web_development": {
+      "title": "Développement Web",
+      "description": "Création de sites web et applications sur mesure",
+      "features": ["Sites web responsives", "Applications web", "E-commerce", "Maintenance"]
+    },
+    "training": {
+      "title": "Formation Professionnelle",
+      "description": "Formations en technologies numériques",
+      "features": ["Programmation", "Design web", "Réseaux", "Certification"]
+    },
+    "printing": {
+      "title": "Services d'Impression",
+      "description": "Impression de qualité pour tous vos besoins",
+      "features": ["Impression offset", "Impression numérique", "Design graphique", "Livraison"]
+    },
+    "commerce": {
+      "title": "Commerce & Import-Export",
+      "description": "Commerce et import-export de matériel IT",
+      "features": ["Import équipements", "Distribution", "Conseil commercial", "Logistique"]
+    },
+    "networks": {
+      "title": "Réseaux & Infrastructure",
+      "description": "Solutions réseau et infrastructure IT",
+      "features": ["Installation réseau", "Maintenance", "Sécurité", "Support technique"]
+    }
+  },
+  "training": {
+    "title": "Nos Formations",
+    "subtitle": "Développez vos compétences numériques",
+    "courses": {
+      "web_development": {
+        "title": "Développement Web",
+        "description": "Apprenez à créer des sites web modernes",
+        "duration": "3 mois",
+        "level": "Débutant à Avancé"
+      },
+      "mobile_development": {
+        "title": "Développement Mobile",
+        "description": "Créez des applications mobiles",
+        "duration": "2 mois",
+        "level": "Intermédiaire"
+      },
+      "networking": {
+        "title": "Réseaux & Sécurité",
+        "description": "Maîtrisez les réseaux informatiques",
+        "duration": "2 mois",
+        "level": "Intermédiaire"
+      }
+    },
+    "languages": {
+      "french": "Français",
+      "english": "Anglais",
+      "arabic": "Arabe"
+    }
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Nous sommes là pour vous aider",
+    "form": {
+      "name": "Nom complet",
+      "email": "Adresse email",
+      "phone": "Téléphone",
+      "subject": "Sujet",
+      "message": "Message",
+      "send": "Envoyer le message"
+    },
+    "info": {
+      "address": "Adresse",
+      "phone": "Téléphone",
+      "email": "Email",
+      "hours": "Heures d'ouverture"
+    }
+  },
+  "admin": {
+    "title": "Tableau de bord Administrateur",
+    "dashboard": {
+      "title": "Tableau de bord",
+      "welcome": "Bienvenue dans le tableau de bord administrateur"
+    },
+    "dashboardDescription": "Centre de contrôle complet de la plateforme",
+    "users": "Utilisateurs",
+    "usersManagement": {
+      "title": "Gestion des utilisateurs",
+      "add_user": "Ajouter un utilisateur",
+      "edit_user": "Modifier l'utilisateur",
+      "delete_user": "Supprimer l'utilisateur"
+    },
+    "projects": {
+      "title": "Gestion des projets",
+      "add_project": "Nouveau projet",
+      "edit_project": "Modifier le projet",
+      "delete_project": "Supprimer le projet"
+    },
+    "training": "Formations",
+    "trainingManagement": {
+      "title": "Gestion des formations",
+      "add_training": "Nouvelle formation",
+      "edit_training": "Modifier la formation",
+      "delete_training": "Supprimer la formation"
+    },
+    "reports": {
+      "title": "Rapports",
+      "generate_report": "Générer un rapport",
+      "export_data": "Exporter les données"
+    },
+    "settings": "Paramètres",
+    "settingsManagement": {
+      "title": "Paramètres système",
+      "general": "Général",
+      "security": "Sécurité",
+      "notifications": "Notifications"
+    },
+    "orders": "Commandes",
+    "products": "Produits",
+    "content": "Contenu",
+    "quotes": "Demandes de devis",
+    "messages": "Messages de contact",
+    "chatbotQuestions": "Questions Chatbot",
+    "jobApplications": "Candidatures",
+    "support": "Support",
+    "notifications": "Notifications",
+    "paymentMethods": "Moyens de paiement"
+  },
+  "map": {
+    "title": "Nos Localisations",
+    "subtitle": "Trouvez nos bureaux et partenaires",
+    "loading": "Chargement de la carte...",
+    "error": "Erreur lors du chargement de la carte",
+    "switch_to_osm": "Basculer vers OpenStreetMap",
+    "switch_to_google": "Basculer vers Google Maps",
+    "powered_by_google": "Propulsé par Google Maps",
+    "powered_by_osm": "Propulsé par OpenStreetMap"
+  },
+  "language": {
+    "french": "Français",
+    "english": "English",
+    "arabic": "العربية",
+    "switch_language": "Changer de langue"
+  },
+  "footer": {
+    "description": "Votre partenaire de confiance pour la transformation numérique au Tchad. Nous offrons des solutions technologiques innovantes adaptées à votre contexte local.",
+    "quickLinks": "Liens rapides",
+    "services": "Nos services",
+    "contactInfo": "Informations de contact",
+    "newsletter": "Newsletter",
+    "subscribe": "S'abonner",
+    "allRightsReserved": "Tous droits réservés",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation"
+  },
+  "forms": {
+    "placeholders": {
+      "email": "Votre adresse email"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion à votre compte",
+      "subtitle": "Connectez-vous à votre compte",
+      "email": "Adresse email",
+      "password": "Mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "createAccount": "Créer un compte",
+      "invalidCredentials": "Identifiants invalides",
+      "sessionExpired": "Session expirée. Veuillez vous reconnecter."
+    }
+  },
+  "testimonials": {
+    "title": "Témoignages",
+    "subtitle": "Découvrez ce que nos clients disent de nous",
+    "filters": {
+      "date": "Date",
+      "rating": "Note",
+      "helpfulness": "Utilité"
+    },
+    "sort": {
+      "ascending": "Croissant",
+      "descending": "Décroissant"
+    }
+  }
+}

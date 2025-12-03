@@ -1,0 +1,793 @@
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet-async';
+import { 
+  ClockIcon, 
+  UserIcon, 
+  StarIcon, 
+  ArrowRightIcon,
+  MagnifyingGlassIcon,
+  FunnelIcon,
+  PlayIcon,
+  BookOpenIcon,
+  TrophyIcon,
+  HeartIcon,
+  ShareIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CheckCircleIcon,
+  AcademicCapIcon,
+  VideoCameraIcon,
+  DocumentTextIcon,
+  GlobeAltIcon,
+  CreditCardIcon
+} from '@heroicons/react/24/outline';
+import { StarIcon as StarSolidIcon, HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
+import PaymentModal from '../components/PaymentModal';
+import { useAuth } from '../hooks/useAuth';
+import trainingService from '../services/training';
+
+const Training = () => {
+  const { t } = useTranslation();
+  const { user, isAuthenticated } = useAuth();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Tous');
+  const [selectedLevel, setSelectedLevel] = useState('Tous');
+  const [selectedPrice, setSelectedPrice] = useState('Tous');
+  const [sortBy, setSortBy] = useState('popularity');
+  const [showFilters, setShowFilters] = useState(false);
+  const [favorites, setFavorites] = useState(new Set());
+  const [enrolledCourses, setEnrolledCourses] = useState(new Set());
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+
+  // Load courses from API
+  useEffect(() => {
+    fetchCourses();
+    if (isAuthenticated) {
+      fetchUserEnrollments();
+    }
+  }, [isAuthenticated]);
+
+  const fetchCourses = async () => {
+    try {
+      setLoading(true);
+      const filters = {
+        category: selectedCategory,
+        level: selectedLevel,
+        price: selectedPrice,
+        search: searchTerm,
+        sortBy
+      };
+      const response = await trainingService.getAllCourses(filters);
+      setCourses(response.data.courses);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+      // Fallback to mock data
+      setCourses([
+        {
+          _id: 1,
+          title: 'Formation React.js Complète',
+          description: 'Maîtrisez React.js de A à Z avec des projets pratiques et des exercices concrets.',
+          image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3',
+          duration: '4 semaines',
+          price: 75000,
+          originalPrice: 95000,
+          level: 'Intermédiaire',
+          instructor: { name: 'Jean Paul Mballa' },
+          instructorImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3',
+          startDate: '2024-02-15',
+          maxStudents: 15,
+          rating: { average: 4.8, count: 120 },
+          studentsCount: 120,
+          category: 'Développement Web',
+          lessons: 45,
+          totalHours: 28,
+          language: 'Français',
+          lastUpdated: '2024-01-15',
+          isBestSeller: true,
+          isNew: false,
+          tags: ['React', 'JavaScript', 'Frontend', 'Hooks', 'Redux']
+        },
+        {
+          _id: 2,
+          title: 'Formation Node.js & Express',
+          description: 'Apprenez à créer des APIs robustes avec Node.js et Express.js.',
+          image: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3',
+          duration: '3 semaines',
+          price: 65000,
+          originalPrice: 85000,
+          level: 'Intermédiaire',
+          instructor: { name: 'Marie Claire Nguema' },
+          instructorImage: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3',
+          startDate: '2024-02-20',
+          maxStudents: 12,
+          rating: { average: 4.9, count: 95 },
+          studentsCount: 95,
+          category: 'Développement Backend',
+          lessons: 32,
+          totalHours: 22,
+          language: 'Français',
+          lastUpdated: '2024-01-10',
+          isBestSeller: false,
+          isNew: true,
+          tags: ['Node.js', 'Express', 'API', 'Backend', 'JavaScript']
+        },
+        {
+          _id: 3,
+      title: 'Formation MongoDB & Base de Données',
+      description: 'Maîtrisez MongoDB et les bases de données NoSQL pour vos applications.',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3',
+      duration: '2 semaines',
+      price: 45000,
+      originalPrice: 60000,
+      level: 'Débutant',
+      instructor: 'Fatou Diallo',
+      instructorImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3',
+      startDate: '2024-03-01',
+      maxStudents: 18,
+      rating: 4.7,
+      studentsCount: 80,
+      category: 'Base de Données',
+      lessons: 28,
+      totalHours: 16,
+      language: 'Français',
+      lastUpdated: '2024-01-05',
+      isBestSeller: false,
+      isNew: false,
+      tags: ['MongoDB', 'NoSQL', 'Database', 'Backend']
+    },
+    {
+      id: 4,
+      title: 'Certification Microsoft Office',
+      description: 'Formation complète sur Microsoft Word, Excel, PowerPoint et Outlook.',
+      image: 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?ixlib=rb-4.0.3',
+      duration: '1 semaine',
+      price: 35000,
+      originalPrice: 50000,
+      level: 'Débutant',
+      instructor: 'Paul Biya',
+      instructorImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3',
+      startDate: '2024-02-25',
+      maxStudents: 20,
+      rating: 4.6,
+      studentsCount: 150,
+      category: 'Bureautique',
+      lessons: 20,
+      totalHours: 12,
+      language: 'Français',
+      lastUpdated: '2024-01-20',
+      isBestSeller: true,
+      isNew: false,
+      tags: ['Office', 'Excel', 'Word', 'PowerPoint', 'Bureautique']
+    },
+    {
+      id: 5,
+      title: 'Formation DevOps & Docker',
+      description: 'Apprenez les pratiques DevOps et la containerisation avec Docker.',
+      image: 'https://images.unsplash.com/photo-1667372393120-2e8b8c4d5b5e?ixlib=rb-4.0.3',
+      duration: '5 semaines',
+      price: 95000,
+      originalPrice: 120000,
+      level: 'Avancé',
+      instructor: 'David Nguema',
+      instructorImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3',
+      startDate: '2024-03-10',
+      maxStudents: 10,
+      rating: 4.9,
+      studentsCount: 45,
+      category: 'DevOps',
+      lessons: 55,
+      totalHours: 35,
+      language: 'Français',
+      lastUpdated: '2024-01-12',
+      isBestSeller: false,
+      isNew: false,
+      tags: ['DevOps', 'Docker', 'CI/CD', 'AWS', 'Linux']
+    },
+    {
+      id: 6,
+      title: 'Formation Intelligence Artificielle',
+      description: 'Introduction à l\'IA, machine learning et deep learning avec Python.',
+      image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3',
+      duration: '6 semaines',
+      price: 120000,
+      originalPrice: 150000,
+      level: 'Avancé',
+      instructor: 'Dr. Sarah Mballa',
+      instructorImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3',
+      startDate: '2024-03-15',
+      maxStudents: 8,
+      rating: 5.0,
+      studentsCount: 25,
+      category: 'Intelligence Artificielle',
+      lessons: 60,
+      totalHours: 42,
+      language: 'Français',
+      lastUpdated: '2024-01-18',
+      isBestSeller: true,
+      isNew: true,
+      tags: ['IA', 'Machine Learning', 'Python', 'Deep Learning', 'TensorFlow']
+    }
+  ];
+
+  const categories = ['Tous', 'Développement Web', 'Développement Backend', 'Base de Données', 'Bureautique', 'DevOps', 'Intelligence Artificielle'];
+  const levels = ['Tous', 'Débutant', 'Intermédiaire', 'Avancé'];
+  const priceRanges = ['Tous', 'Gratuit', '0-50000', '50000-100000', '100000+'];
+  const sortOptions = [
+    { value: 'popularity', label: 'Plus populaires' },
+    { value: 'newest', label: 'Plus récents' },
+    { value: 'rating', label: 'Mieux notés' },
+    { value: 'price-low', label: 'Prix croissant' },
+    { value: 'price-high', label: 'Prix décroissant' }
+  ];
+
+  // Filter and search logic
+  const filteredCourses = courses.filter(course => {
+    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         course.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         course.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory = selectedCategory === 'Tous' || course.category === selectedCategory;
+    const matchesLevel = selectedLevel === 'Tous' || course.level === selectedLevel;
+    const matchesPrice = selectedPrice === 'Tous' || 
+                        (selectedPrice === 'Gratuit' && course.price === 0) ||
+                        (selectedPrice === '0-50000' && course.price > 0 && course.price <= 50000) ||
+                        (selectedPrice === '50000-100000' && course.price > 50000 && course.price <= 100000) ||
+                        (selectedPrice === '100000+' && course.price > 100000);
+    
+    return matchesSearch && matchesCategory && matchesLevel && matchesPrice;
+  });
+
+  // Sort courses
+  const sortedCourses = [...filteredCourses].sort((a, b) => {
+    switch (sortBy) {
+      case 'newest':
+        return new Date(b.lastUpdated) - new Date(a.lastUpdated);
+      case 'rating':
+        return b.rating - a.rating;
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      default:
+        return b.studentsCount - a.studentsCount;
+    }
+  });
+
+  const toggleFavorite = (courseId) => {
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(courseId)) {
+        newFavorites.delete(courseId);
+      } else {
+        newFavorites.add(courseId);
+      }
+      return newFavorites;
+    });
+  };
+
+  const fetchUserEnrollments = async () => {
+    try {
+      const response = await trainingService.getMyCourses('enrolled');
+      const enrolledIds = response.data.enrollments.map(e => e.course._id);
+      setEnrolledCourses(new Set(enrolledIds));
+    } catch (error) {
+      console.error('Error fetching enrollments:', error);
+    }
+  };
+
+  const handleEnrollCourse = (course) => {
+    if (!isAuthenticated) {
+      // Redirect to login or show login modal
+      alert('Veuillez vous connecter pour vous inscrire à une formation');
+      return;
+    }
+
+    setSelectedCourse(course);
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentSuccess = () => {
+    setShowPaymentModal(false);
+    setSelectedCourse(null);
+    // Refresh enrollments
+    if (isAuthenticated) {
+      fetchUserEnrollments();
+    }
+    // Show success message
+    alert('Paiement effectué avec succès ! Vous êtes maintenant inscrit à la formation.');
+  };
+
+  const getDiscountPercentage = (originalPrice, currentPrice) => {
+    return Math.round(((originalPrice - currentPrice) / originalPrice) * 100);
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>Formation - Expérience Tech</title>
+        <meta name="description" content="Découvrez nos formations professionnelles en développement web, bureautique, IA et technologies émergentes au Cameroun." />
+      </Helmet>
+
+      {/* Hero Section - Udemy Style */}
+      <section className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 text-white">
+        <div className="container-custom py-16">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              Apprenez sans limites
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 opacity-90">
+              Plus de 6 formations professionnelles pour développer vos compétences
+            </p>
+            
+            {/* Search Bar */}
+            <div className="max-w-2xl mx-auto mb-8">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Rechercher des formations..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-6 py-4 pr-12 text-gray-900 rounded-lg text-lg focus:outline-none focus:ring-4 focus:ring-white/30"
+                />
+                <MagnifyingGlassIcon className="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-500" />
+              </div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="flex flex-wrap justify-center gap-8 text-center">
+              <div>
+                <div className="text-3xl font-bold">6+</div>
+                <div className="text-sm opacity-80">Formations</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold">500+</div>
+                <div className="text-sm opacity-80">Étudiants</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold">4.8</div>
+                <div className="text-sm opacity-80">Note moyenne</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Navigation & Filters */}
+      <section className="bg-white border-b sticky top-0 z-40">
+        <div className="container-custom py-4">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            {/* Categories */}
+            <div className="flex flex-wrap gap-2">
+              {categories.map((category, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    selectedCategory === category
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+
+            {/* Sort & Filter */}
+            <div className="flex items-center gap-4">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              >
+                {sortOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
+              >
+                <FunnelIcon className="w-4 h-4" />
+                Filtres
+                {showFilters ? <ChevronUpIcon className="w-4 h-4" /> : <ChevronDownIcon className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Advanced Filters */}
+          {showFilters && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Niveau</label>
+                  <select
+                    value={selectedLevel}
+                    onChange={(e) => setSelectedLevel(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  >
+                    {levels.map(level => (
+                      <option key={level} value={level}>{level}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Prix</label>
+                  <select
+                    value={selectedPrice}
+                    onChange={(e) => setSelectedPrice(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  >
+                    {priceRanges.map(price => (
+                      <option key={price} value={price}>{price}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex items-end">
+                  <button
+                    onClick={() => {
+                      setSelectedCategory('Tous');
+                      setSelectedLevel('Tous');
+                      setSelectedPrice('Tous');
+                      setSearchTerm('');
+                    }}
+                    className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200"
+                  >
+                    Réinitialiser
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Courses Grid - Udemy Style */}
+      <section className="py-8 bg-gray-50">
+        <div className="container-custom">
+          {/* Results Header */}
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              {sortedCourses.length} formation{sortedCourses.length > 1 ? 's' : ''} trouvée{sortedCourses.length > 1 ? 's' : ''}
+            </h2>
+            <p className="text-gray-600">
+              {selectedCategory !== 'Tous' && `dans la catégorie "${selectedCategory}"`}
+              {searchTerm && ` pour "${searchTerm}"`}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {sortedCourses.map((course) => (
+              <div key={course.id} className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                {/* Course Image */}
+                <div className="relative overflow-hidden">
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  
+                  {/* Overlay with play button */}
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="bg-white rounded-full p-3 shadow-lg">
+                        <PlayIcon className="w-6 h-6 text-purple-600" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Badges */}
+                  <div className="absolute top-3 left-3 flex flex-col gap-2">
+                    {course.isBestSeller && (
+                      <span className="bg-yellow-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                        Meilleure vente
+                      </span>
+                    )}
+                    {course.isNew && (
+                      <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                        Nouveau
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Favorite Button */}
+                  <button
+                    onClick={() => toggleFavorite(course.id)}
+                    className="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
+                  >
+                    {favorites.has(course.id) ? (
+                      <HeartSolidIcon className="w-4 h-4 text-red-500" />
+                    ) : (
+                      <HeartIcon className="w-4 h-4 text-gray-600" />
+                    )}
+                  </button>
+
+                  {/* Discount Badge */}
+                  {course.originalPrice && course.originalPrice > course.price && (
+                    <div className="absolute bottom-3 right-3 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                      -{getDiscountPercentage(course.originalPrice, course.price)}%
+                    </div>
+                  )}
+                </div>
+
+                {/* Course Content */}
+                <div className="p-4">
+                  {/* Category */}
+                  <div className="text-xs text-purple-600 font-semibold mb-2">
+                    {course.category}
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 text-sm leading-tight">
+                    {course.title}
+                  </h3>
+
+                  {/* Instructor */}
+                  <div className="flex items-center mb-2">
+                    <img
+                      src={course.instructorImage}
+                      alt={course.instructor}
+                      className="w-6 h-6 rounded-full mr-2"
+                    />
+                    <span className="text-xs text-gray-600">{course.instructor}</span>
+                  </div>
+
+                  {/* Rating */}
+                  <div className="flex items-center mb-2">
+                    <div className="flex items-center">
+                      <span className="text-sm font-bold text-gray-900 mr-1">{course.rating}</span>
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <StarSolidIcon
+                            key={i}
+                            className={`w-3 h-3 ${
+                              i < Math.floor(course.rating)
+                                ? 'text-yellow-400'
+                                : 'text-gray-300'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <span className="text-xs text-gray-500 ml-2">({course.studentsCount})</span>
+                  </div>
+
+                  {/* Course Details */}
+                  <div className="flex items-center text-xs text-gray-600 mb-3 space-x-3">
+                    <div className="flex items-center">
+                      <ClockIcon className="w-3 h-3 mr-1" />
+                      {course.totalHours}h
+                    </div>
+                    <div className="flex items-center">
+                      <BookOpenIcon className="w-3 h-3 mr-1" />
+                      {course.lessons} leçons
+                    </div>
+                    <div className="flex items-center">
+                      <GlobeAltIcon className="w-3 h-3 mr-1" />
+                      {course.language}
+                    </div>
+                  </div>
+
+                  {/* Price */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg font-bold text-gray-900">
+                        {course.price.toLocaleString('fr-FR')} FCFA
+                      </span>
+                      {course.originalPrice && course.originalPrice > course.price && (
+                        <span className="text-sm text-gray-500 line-through">
+                          {course.originalPrice.toLocaleString('fr-FR')} FCFA
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Action Button */}
+                  <button 
+                    onClick={() => handleEnrollCourse(course)}
+                    className={`w-full py-2 px-4 rounded font-semibold text-sm transition-all duration-200 ${
+                      enrolledCourses.has(course._id || course.id)
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                        : 'bg-purple-600 text-white hover:bg-purple-700'
+                    }`}
+                  >
+                    {enrolledCourses.has(course._id || course.id) ? (
+                      <div className="flex items-center justify-center">
+                        <CheckCircleIcon className="w-4 h-4 mr-2" />
+                        Inscrit
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center">
+                        <CreditCardIcon className="w-4 h-4 mr-2" />
+                        S'inscrire maintenant
+                      </div>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* No Results */}
+          {sortedCourses.length === 0 && (
+            <div className="text-center py-16">
+              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MagnifyingGlassIcon className="w-12 h-12 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Aucune formation trouvée</h3>
+              <p className="text-gray-600 mb-6">
+                Essayez de modifier vos critères de recherche ou de filtres
+              </p>
+              <button
+                onClick={() => {
+                  setSelectedCategory('Tous');
+                  setSelectedLevel('Tous');
+                  setSelectedPrice('Tous');
+                  setSearchTerm('');
+                }}
+                className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                Voir toutes les formations
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Featured Categories */}
+      <section className="py-16 bg-white">
+        <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Explorez par catégorie
+            </h2>
+            <p className="text-lg text-gray-600">
+              Découvrez nos formations organisées par domaine d'expertise
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {categories.slice(1).map((category, index) => (
+              <div key={index} className="text-center group cursor-pointer">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <AcademicCapIcon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
+                  {category}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {courses.filter(c => c.category === category).length} formation{courses.filter(c => c.category === category).length > 1 ? 's' : ''}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-16 bg-gray-50">
+        <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Pourquoi choisir Expérience Tech ?
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Nous offrons des formations de qualité supérieure avec des formateurs expérimentés
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <TrophyIcon className="w-10 h-10 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Certifications Reconnues
+              </h3>
+              <p className="text-gray-600">
+                Certificats reconnus par l'industrie et les employeurs
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <UserIcon className="w-10 h-10 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Formateurs Experts
+              </h3>
+              <p className="text-gray-600">
+                Des professionnels expérimentés et certifiés
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <ClockIcon className="w-10 h-10 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Apprentissage Flexible
+              </h3>
+              <p className="text-gray-600">
+                Formations en ligne et en présentiel selon vos besoins
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <StarIcon className="w-10 h-10 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Support Continu
+              </h3>
+              <p className="text-gray-600">
+                Accompagnement et support après la formation
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-gradient-to-r from-purple-600 to-blue-600">
+        <div className="container-custom text-center">
+          <div className="max-w-4xl mx-auto text-white">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Prêt à transformer votre carrière ?
+            </h2>
+            <p className="text-xl mb-8 opacity-90">
+              Rejoignez plus de 500 étudiants qui ont déjà choisi nos formations pour développer leurs compétences
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+              <button className="bg-white text-purple-600 hover:bg-gray-100 font-bold py-4 px-8 rounded-lg text-lg transition-all duration-200 transform hover:scale-105 shadow-lg">
+                Commencer maintenant
+              </button>
+              <button className="border-2 border-white text-white hover:bg-white hover:text-purple-600 font-bold py-4 px-8 rounded-lg text-lg transition-all duration-200">
+                Voir le catalogue
+              </button>
+            </div>
+
+            <div className="flex flex-wrap justify-center items-center gap-8 text-sm opacity-80">
+              <div className="flex items-center">
+                <CheckCircleIcon className="w-5 h-5 mr-2" />
+                Accès à vie
+              </div>
+              <div className="flex items-center">
+                <CheckCircleIcon className="w-5 h-5 mr-2" />
+                Certificat inclus
+              </div>
+              <div className="flex items-center">
+                <CheckCircleIcon className="w-5 h-5 mr-2" />
+                Support 24/7
+              </div>
+              <div className="flex items-center">
+                <CheckCircleIcon className="w-5 h-5 mr-2" />
+                Garantie 30 jours
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => {
+          setShowPaymentModal(false);
+          setSelectedCourse(null);
+        }}
+        course={selectedCourse}
+        onPaymentSuccess={handlePaymentSuccess}
+      />
+    </>
+  );
+};
+
+export default Training;

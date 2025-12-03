@@ -1,0 +1,10 @@
+# Placeholder pour la photo d'Assure (Ndoubahidi Neko Assur)
+# 
+# Pour ajouter la vraie photo d'Assure :
+# 1. Remplacez ce fichier par l'image JPG/PNG
+# 2. Assurez-vous que l'image fait au moins 200x200px
+# 3. Optimisez le poids (< 100KB)
+# 4. Format carré recommandé (1:1)
+#
+# Le code dans About.js sera configuré pour afficher cette image
+# avec un fallback vers l'icône si l'image ne charge pas.

@@ -1,0 +1,70 @@
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+// Import User model
+const User = require('./models/User');
+
+const correctAdminEmail = async () => {
+  try {
+    // Connect to MongoDB
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/experience_tech';
+    await mongoose.connect(mongoUri);
+    console.log('Connected to MongoDB');
+
+    // Force update admin user using the correct field name
+    const result = await User.updateOne(
+      { email: 'admin@experiencetech-tchad.com' },
+      { 
+        $set: {
+          firstName: 'admin',
+          lastName: 'admin',
+          isEmailVerified: true,  // Correct field name
+          isActive: true,
+          role: 'admin',
+          updatedAt: new Date()
+        }
+      }
+    );
+    
+    if (result.matchedCount === 0) {
+      console.log('❌ Admin user not found');
+      process.exit(1);
+    }
+    
+    console.log('✅ Admin user corrected successfully!');
+    console.log(`📊 Documents matched: ${result.matchedCount}`);
+    console.log(`📊 Documents modified: ${result.modifiedCount}`);
+    
+    // Verify the update
+    const updatedAdmin = await User.findOne({ email: 'admin@experiencetech-tchad.com' });
+    
+    console.log('\n🔍 Vérification du compte admin:');
+    console.log('='.repeat(50));
+    console.log(`👤 Nom: ${updatedAdmin.firstName} ${updatedAdmin.lastName}`);
+    console.log(`📧 Email: ${updatedAdmin.email}`);
+    console.log(`👑 Rôle: ${updatedAdmin.role}`);
+    console.log(`✅ Actif: ${updatedAdmin.isActive ? 'Oui' : 'Non'}`);
+    console.log(`🔐 Email vérifié: ${updatedAdmin.isEmailVerified ? 'Oui' : 'Non'}`);
+    console.log(`📱 Téléphone: ${updatedAdmin.phone}`);
+    console.log(`📅 Mis à jour: ${updatedAdmin.updatedAt ? updatedAdmin.updatedAt.toLocaleString('fr-FR') : 'Non défini'}`);
+    
+    console.log('\n🎯 Connexion possible avec:');
+    console.log('   📧 Email: admin@experiencetech-tchad.com');
+    console.log('   🔑 Mot de passe: admin123');
+    
+    console.log('\n✅ Compte administrateur prêt !');
+    console.log('🎉 Vous pouvez maintenant vous connecter à la plateforme');
+    
+  } catch (error) {
+    console.error('❌ Error correcting admin:', error.message);
+    process.exit(1);
+  } finally {
+    // Close connection
+    await mongoose.connection.close();
+    console.log('\n🔌 Database connection closed');
+    process.exit(0);
+  }
+};
+
+// Run the script
+correctAdminEmail();

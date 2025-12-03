@@ -1,0 +1,281 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "seConnecter": "Sign in",
+    "support": "Support",
+    "profile": "Profile",
+    "notreEquipe": "Our team",
+    "votreNomComplet": "Your full name",
+    "decrireDemande": "Describe your request in detail"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "products": "Products",
+    "training": "Training",
+    "news": "News",
+    "forum": "Forum",
+    "careers": "Careers",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "admin": "Administration",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "home": {
+    "title": "Experience Tech - Your Digital Partner in Chad",
+    "subtitle": "Innovative digital solutions to transform your business",
+    "hero": {
+      "title": "Transform your business with our digital solutions",
+      "subtitle": "We offer web development, training, printing and network services adapted to the Chadian context",
+      "cta": "Discover our services"
+    },
+    "stats": {
+      "experience": "Years of experience",
+      "clients": "Satisfied clients",
+      "projects": "Completed projects",
+      "certifications": "Certifications awarded"
+    },
+    "features": {
+      "title": "Why choose Experience Tech?",
+      "development": {
+        "title": "Web Development",
+        "description": "Modern websites and custom applications"
+      },
+      "training": {
+        "title": "Professional Training",
+        "description": "Training in development and digital technologies"
+      },
+      "printing": {
+        "title": "Printing Services",
+        "description": "Quality printing for all your needs"
+      },
+      "networks": {
+        "title": "Networks & Infrastructure",
+        "description": "Network solutions and IT infrastructure"
+      }
+    },
+    "whyChoose": {
+      "title": "Why choose Experience Tech?",
+      "subtitle": "Discover what makes us unique",
+      "features": [
+        {
+          "title": "Local Expertise",
+          "description": "We understand the challenges and opportunities of the Chadian market"
+        },
+        {
+          "title": "Customized Solutions",
+          "description": "Services tailored to your specific needs"
+        },
+        {
+          "title": "Responsive Support",
+          "description": "A team dedicated to your service 24/7"
+        },
+        {
+          "title": "Continuous Innovation",
+          "description": "We stay at the forefront of the latest technologies"
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "Testimonials",
+      "subtitle": "Discover what our clients say about us"
+    }
+  },
+  "about": {
+    "title": "About Experience Tech",
+    "subtitle": "Our story and mission",
+    "mission": {
+      "title": "Our Mission",
+      "description": "Democratize access to digital technologies in Chad by offering solutions adapted to the local context."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "Become the leader in digital solutions in Chad and contribute to the technological development of the country."
+    },
+    "team": {
+      "title": "Our Team",
+      "subtitle": "Passionate and experienced professionals"
+    }
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Complete solutions for your business",
+    "digital": {
+      "title": "Digital Solutions",
+      "description": "Complete digital solutions for your digital transformation",
+      "features": ["Web & Mobile Development", "Custom Software", "IT Maintenance", "Technology Consulting"]
+    },
+    "web_development": {
+      "title": "Web Development",
+      "description": "Creation of websites and custom applications",
+      "features": ["Responsive websites", "Web applications", "E-commerce", "Maintenance"]
+    },
+    "training": {
+      "title": "Professional Training",
+      "description": "Training in digital technologies",
+      "features": ["Programming", "Web design", "Networks", "Certification"]
+    },
+    "printing": {
+      "title": "Printing Services",
+      "description": "Quality printing for all your needs",
+      "features": ["Offset printing", "Digital printing", "Graphic design", "Delivery"]
+    },
+    "commerce": {
+      "title": "Commerce & Import-Export",
+      "description": "Commerce and import-export of IT equipment",
+      "features": ["Equipment import", "Distribution", "Commercial consulting", "Logistics"]
+    },
+    "networks": {
+      "title": "Networks & Infrastructure",
+      "description": "Network solutions and IT infrastructure",
+      "features": ["Network installation", "Maintenance", "Security", "Technical support"]
+    }
+  },
+  "training": {
+    "title": "Our Training Programs",
+    "subtitle": "Develop your digital skills",
+    "courses": {
+      "web_development": {
+        "title": "Web Development",
+        "description": "Learn to create modern websites",
+        "duration": "3 months",
+        "level": "Beginner to Advanced"
+      },
+      "mobile_development": {
+        "title": "Mobile Development",
+        "description": "Create mobile applications",
+        "duration": "2 months",
+        "level": "Intermediate"
+      },
+      "networking": {
+        "title": "Networks & Security",
+        "description": "Master computer networks",
+        "duration": "2 months",
+        "level": "Intermediate"
+      }
+    },
+    "languages": {
+      "french": "French",
+      "english": "English",
+      "arabic": "Arabic"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We are here to help you",
+    "form": {
+      "name": "Full name",
+      "email": "Email address",
+      "phone": "Phone",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send message"
+    },
+    "info": {
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "hours": "Opening hours"
+    }
+  },
+  "admin": {
+    "title": "Administrator Dashboard",
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "Welcome to the administrator dashboard"
+    },
+    "dashboardDescription": "Complete platform control center",
+    "users": "Users",
+    "usersManagement": {
+      "title": "User Management",
+      "add_user": "Add user",
+      "edit_user": "Edit user",
+      "delete_user": "Delete user"
+    },
+    "projects": {
+      "title": "Project Management",
+      "add_project": "New project",
+      "edit_project": "Edit project",
+      "delete_project": "Delete project"
+    },
+    "training": "Training",
+    "trainingManagement": {
+      "title": "Training Management",
+      "add_training": "New training",
+      "edit_training": "Edit training",
+      "delete_training": "Delete training"
+    },
+    "reports": {
+      "title": "Reports",
+      "generate_report": "Generate report",
+      "export_data": "Export data"
+    },
+    "settings": "Settings",
+    "settingsManagement": {
+      "title": "System Settings",
+      "general": "General",
+      "security": "Security",
+      "notifications": "Notifications"
+    },
+    "orders": "Orders",
+    "products": "Products",
+    "content": "Content",
+    "quotes": "Quote Requests",
+    "messages": "Contact Messages",
+    "chatbotQuestions": "Chatbot Questions",
+    "jobApplications": "Job Applications",
+    "support": "Support",
+    "notifications": "Notifications",
+    "paymentMethods": "Payment Methods"
+  },
+  "map": {
+    "title": "Our Locations",
+    "subtitle": "Find our offices and partners",
+    "loading": "Loading map...",
+    "error": "Error loading map",
+    "switch_to_osm": "Switch to OpenStreetMap",
+    "switch_to_google": "Switch to Google Maps",
+    "powered_by_google": "Powered by Google Maps",
+    "powered_by_osm": "Powered by OpenStreetMap"
+  },
+  "language": {
+    "french": "Français",
+    "english": "English",
+    "arabic": "العربية",
+    "switch_language": "Switch language"
+  },
+  "testimonials": {
+    "title": "Testimonials",
+    "subtitle": "Discover what our clients say about us",
+    "filters": {
+      "date": "Date",
+      "rating": "Rating",
+      "helpfulness": "Helpfulness"
+    },
+    "sort": {
+      "ascending": "Ascending",
+      "descending": "Descending"
+    }
+  }
+}

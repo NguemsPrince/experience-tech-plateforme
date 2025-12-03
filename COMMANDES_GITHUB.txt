@@ -1,0 +1,84 @@
+═══════════════════════════════════════════════════════════════
+  GUIDE RAPIDE : Mettre le projet sur GitHub
+═══════════════════════════════════════════════════════════════
+
+ÉTAPE 1 : Configurer Git (si pas déjà fait)
+────────────────────────────────────────────
+git config --global user.name "Votre Nom"
+git config --global user.email "votre.email@example.com"
+
+
+ÉTAPE 2 : Créer le dépôt sur GitHub.com
+─────────────────────────────────────────
+1. Allez sur https://github.com
+2. Cliquez sur "+" → "New repository"
+3. Nom : experience-tech-platform (ou votre choix)
+4. Description : "Plateforme web Expérience Tech"
+5. Choisissez Public ou Private
+6. NE PAS cocher "Initialize with README"
+7. Cliquez "Create repository"
+
+
+ÉTAPE 3 : Connecter le dépôt local à GitHub
+─────────────────────────────────────────────
+# Remplacez USERNAME et REPO_NAME par vos valeurs
+git remote add origin https://github.com/USERNAME/REPO_NAME.git
+
+# OU avec SSH :
+git remote add origin git@github.com:USERNAME/REPO_NAME.git
+
+
+ÉTAPE 4 : Ajouter les fichiers et pousser
+──────────────────────────────────────────
+# Ajouter tous les fichiers
+git add .
+
+# Faire le premier commit
+git commit -m "Initial commit: Plateforme Expérience Tech"
+
+# Renommer la branche en main (si nécessaire)
+git branch -M main
+
+# Pousser vers GitHub
+git push -u origin main
+
+
+═══════════════════════════════════════════════════════════════
+  ALTERNATIVE : Utiliser le script automatique
+═══════════════════════════════════════════════════════════════
+
+./setup-github.sh
+
+Ce script vous guidera étape par étape.
+
+
+═══════════════════════════════════════════════════════════════
+  AUTHENTIFICATION GITHUB
+═══════════════════════════════════════════════════════════════
+
+Si GitHub demande un mot de passe :
+→ Utilisez un Personal Access Token (pas votre mot de passe)
+
+Créer un token :
+1. https://github.com/settings/tokens
+2. "Generate new token" → "Generate new token (classic)"
+3. Nom : "Expérience Tech Platform"
+4. Permissions : cocher "repo"
+5. Générer et copier le token
+6. Utilisez ce token comme mot de passe lors du push
+
+
+═══════════════════════════════════════════════════════════════
+  VÉRIFICATION
+═══════════════════════════════════════════════════════════════
+
+Après le push, vérifiez sur GitHub.com que :
+✅ Tous les fichiers sont présents
+✅ Le README.md s'affiche correctement
+✅ Les dossiers frontend/ et backend/ sont visibles
+
+
+═══════════════════════════════════════════════════════════════
+
+Pour plus de détails, consultez : GITHUB_SETUP.md
+

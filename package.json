@@ -1,0 +1,48 @@
+{
+  "name": "experience-tech-platform",
+  "version": "1.0.0",
+  "description": "Plateforme web dynamique pour Expérience Tech - Services numériques, formations, impression, commerce et réseaux",
+  "main": "server.js",
+  "scripts": {
+    "dev": "PATH=\"./node-v18.19.0-darwin-x64/bin:$PATH\" concurrently \"npm run server\" \"npm run client\"",
+    "server": "PATH=\"./node-v18.19.0-darwin-x64/bin:$PATH\" cd backend && ../node-v18.19.0-darwin-x64/bin/node ../node-v18.19.0-darwin-x64/bin/nodemon server.js",
+    "client": "PATH=\"./node-v18.19.0-darwin-x64/bin:$PATH\" cd frontend && ../node-v18.19.0-darwin-x64/bin/npm start",
+    "build": "cd frontend && npm install --legacy-peer-deps && GENERATE_SOURCEMAP=false npm run build",
+    "install-all": "npm install && cd frontend && npm install --legacy-peer-deps && cd ../backend && npm install",
+    "start": "cd backend && node server.js",
+    "init-env": "./init-env.sh",
+    "lint": "cd frontend && npm run lint",
+    "lint:fix": "cd frontend && npm run lint:fix",
+    "test": "cd frontend && npm test",
+    "test:backend": "cd backend && npm test"
+  },
+  "keywords": [
+    "experience-tech",
+    "digital-services",
+    "formation",
+    "impression",
+    "commerce",
+    "reseaux"
+  ],
+  "author": "Expérience Tech",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.7",
+    "pdfkit": "^0.17.2",
+    "puppeteer": "^24.26.1"
+  }
+}

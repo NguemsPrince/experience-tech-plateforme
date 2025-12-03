@@ -1,0 +1,346 @@
+/* Styles pour les modes de vue responsive */
+
+/* Mode Mobile */
+.view-mobile {
+  max-width: 375px !important;
+  margin: 20px auto !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 20px !important;
+  overflow: visible !important;
+  position: relative !important;
+  min-height: 100vh !important;
+  background: white !important;
+}
+
+.view-mobile::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: -1;
+}
+
+/* Mode Tablette */
+.view-tablet {
+  max-width: 768px !important;
+  margin: 20px auto !important;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 15px !important;
+  overflow: visible !important;
+  position: relative !important;
+  min-height: 100vh !important;
+  background: white !important;
+}
+
+.view-tablet::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: -1;
+}
+
+/* Mode Desktop */
+.view-desktop {
+  max-width: 100% !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  position: static !important;
+  background: transparent !important;
+}
+
+.view-desktop::before {
+  display: none !important;
+}
+
+/* Animation de transition */
+.view-mobile,
+.view-tablet,
+.view-desktop {
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* Indicateur de mode de vue */
+.view-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 9999;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Styles pour les éléments dans les modes de vue */
+.view-mobile .container-custom,
+.view-tablet .container-custom {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* Ajustements pour le header en mode mobile/tablette */
+.view-mobile header,
+.view-tablet header {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  z-index: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Ajustements pour la navigation en mode mobile/tablette */
+.view-mobile .container-custom,
+.view-tablet .container-custom {
+  max-width: 100% !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+/* Ajustements pour les éléments du header */
+.view-mobile .flex.items-center.justify-between,
+.view-tablet .flex.items-center.justify-between {
+  flex-direction: column !important;
+  gap: 1rem !important;
+  align-items: stretch !important;
+}
+
+/* Ajustements pour la navigation desktop en mode mobile/tablette */
+.view-mobile .hidden.lg\\:flex,
+.view-tablet .hidden.lg\\:flex {
+  display: none !important;
+}
+
+/* Ajustements pour les actions du header */
+.view-mobile .flex.items-center.space-x-4,
+.view-tablet .flex.items-center.space-x-4 {
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+}
+
+/* Ajustements pour le sélecteur de vue */
+.view-mobile .view-selector,
+.view-tablet .view-selector {
+  width: 100% !important;
+}
+
+.view-mobile .view-selector button,
+.view-tablet .view-selector button {
+  width: 100% !important;
+  justify-content: center !important;
+}
+
+/* Ajustements pour le menu mobile */
+.view-mobile .lg\\:hidden,
+.view-tablet .lg\\:hidden {
+  display: block !important;
+}
+
+/* Ajustements pour la navigation mobile */
+.view-mobile .lg\\:hidden .px-2.pt-2.pb-3.space-y-1,
+.view-tablet .lg\\:hidden .px-2.pt-2.pb-3.space-y-1 {
+  background: #1f2937 !important;
+  border-top: 1px solid #374151 !important;
+}
+
+/* Ajustements pour les liens de navigation mobile */
+.view-mobile .lg\\:hidden a,
+.view-tablet .lg\\:hidden a {
+  color: white !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 0.5rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.view-mobile .lg\\:hidden a:hover,
+.view-tablet .lg\\:hidden a:hover {
+  background: #374151 !important;
+  color: #60a5fa !important;
+}
+
+/* Ajustements pour les boutons du header */
+.view-mobile button,
+.view-tablet button {
+  padding: 0.5rem !important;
+  font-size: 0.875rem !important;
+}
+
+/* Ajustements pour les icônes du header */
+.view-mobile svg,
+.view-tablet svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+/* Ajustements pour le sélecteur de langue */
+.view-mobile .language-selector,
+.view-tablet .language-selector {
+  width: 100% !important;
+}
+
+/* Ajustements pour les actions utilisateur */
+.view-mobile .flex.items-center.space-x-2,
+.view-tablet .flex.items-center.space-x-2 {
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  flex-wrap: wrap !important;
+}
+
+/* Ajustements pour les sections */
+.view-mobile section,
+.view-tablet section {
+  padding: 1rem !important;
+}
+
+/* Ajustements pour les grilles */
+.view-mobile .grid,
+.view-tablet .grid {
+  grid-template-columns: 1fr !important;
+  gap: 1rem !important;
+}
+
+/* Ajustements pour les cartes */
+.view-mobile .card-hover,
+.view-tablet .card-hover {
+  margin-bottom: 1rem !important;
+}
+
+/* Ajustements pour les textes */
+.view-mobile h1,
+.view-tablet h1 {
+  font-size: 1.5rem !important;
+}
+
+.view-mobile h2,
+.view-tablet h2 {
+  font-size: 1.25rem !important;
+}
+
+.view-mobile h3,
+.view-tablet h3 {
+  font-size: 1.125rem !important;
+}
+
+/* Ajustements pour les boutons */
+.view-mobile .btn-primary,
+.view-tablet .btn-primary {
+  width: 100% !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+/* Ajustements pour les images */
+.view-mobile img,
+.view-tablet img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Ajustements spécifiques pour les grilles de cours */
+.view-mobile .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3.xl\\:grid-cols-4,
+.view-tablet .grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3.xl\\:grid-cols-4 {
+  grid-template-columns: 1fr !important;
+  gap: 1rem !important;
+}
+
+/* Ajustements pour les cartes de cours */
+.view-mobile .bg-white.rounded-lg.shadow-sm,
+.view-tablet .bg-white.rounded-lg.shadow-sm {
+  margin-bottom: 1rem !important;
+  padding: 1rem !important;
+}
+
+/* Ajustements pour les images de cours */
+.view-mobile .w-full.h-48.object-cover,
+.view-tablet .w-full.h-48.object-cover {
+  height: 200px !important;
+}
+
+/* Ajustements pour les textes de cours */
+.view-mobile .text-sm,
+.view-tablet .text-sm {
+  font-size: 0.75rem !important;
+}
+
+.view-mobile .text-lg,
+.view-tablet .text-lg {
+  font-size: 1rem !important;
+}
+
+/* Ajustements pour les boutons de cours */
+.view-mobile .py-2.px-4.rounded,
+.view-tablet .py-2.px-4.rounded {
+  padding: 0.5rem 1rem !important;
+  font-size: 0.75rem !important;
+}
+
+/* Ajustements pour les sections avec padding */
+.view-mobile .section-padding,
+.view-tablet .section-padding {
+  padding: 1rem !important;
+}
+
+.view-mobile .py-16,
+.view-tablet .py-16 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.view-mobile .py-8,
+.view-tablet .py-8 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* Ajustements pour les conteneurs */
+.view-mobile .container-custom,
+.view-tablet .container-custom {
+  max-width: 100% !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+/* Ajustements pour les flexbox */
+.view-mobile .flex.flex-col.sm\\:flex-row,
+.view-tablet .flex.flex-col.sm\\:flex-row {
+  flex-direction: column !important;
+}
+
+.view-mobile .flex.items-center.justify-center,
+.view-tablet .flex.items-center.justify-center {
+  flex-direction: column !important;
+  text-align: center !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .view-mobile,
+  .view-tablet {
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+  
+  .view-mobile::before,
+  .view-tablet::before {
+    display: none !important;
+  }
+}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/images/logo.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/images/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="description" content="Expérience Tech - Votre partenaire numérique de confiance pour les services technologiques, formations et solutions innovantes au Tchad." />
+    <meta name="keywords" content="services numériques, formation IT, impression, réseaux, Tchad, Abéché, technologie, développement web, mobile, logiciels" />
+    <meta name="author" content="Expérience Tech" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://experiencetech-tchad.com/" />
+    <meta property="og:title" content="Expérience Tech - Services Numériques & Formations" />
+    <meta property="og:description" content="Solutions technologiques complètes : développement web, formations IT, impression, réseaux au Tchad." />
+    <meta property="og:image" content="%PUBLIC_URL%/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://experiencetech-tchad.com/" />
+    <meta property="twitter:title" content="Expérience Tech - Services Numériques & Formations" />
+    <meta property="twitter:description" content="Solutions technologiques complètes : développement web, formations IT, impression, réseaux au Tchad." />
+    <meta property="twitter:image" content="%PUBLIC_URL%/og-image.jpg" />
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Expérience Tech",
+      "description": "Services numériques, formations IT, impression et solutions technologiques au Tchad",
+      "url": "https://experiencetech-tchad.com",
+      "logo": "https://experiencetech-tchad.com/logo.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+235-60-29-05-10",
+        "contactType": "customer service",
+        "availableLanguage": ["French", "English", "Arabic"]
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Avenue Mareshal Idriss Deby Itno",
+        "addressLocality": "Abéché",
+        "addressRegion": "Ouaddaï",
+        "addressCountry": "TD"
+      },
+      "sameAs": [
+        "https://instagram.com/experience_tech_",
+        "https://tiktok.com/@exprience_tech",
+        "https://x.com/experience1tech",
+        "https://experiencetech-tchad.com"
+      ]
+    }
+    </script>
+
+    <title>Expérience Tech - Services Numériques & Formations</title>
+  </head>
+  <body>
+    <noscript>Vous devez activer JavaScript pour utiliser cette application.</noscript>
+    
+    <!-- Header de fallback pour diagnostic -->
+    <div id="fallback-header" style="position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: white; border-bottom: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1); height: 64px; display: none;">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 0 1rem; display: flex; align-items: center; justify-content: space-between; height: 100%;">
+        <div style="display: flex; align-items: center;">
+          <img src="/images/logo.png" alt="Expérience Tech" style="height: 40px; margin-right: 8px;" onerror="this.style.display='none'">
+          <span style="font-size: 20px; font-weight: bold; color: #111827;">Expérience Tech</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 2rem;">
+          <a href="/training" style="color: #374151; text-decoration: none;">Formation</a>
+          <a href="/services" style="color: #374151; text-decoration: none;">Services</a>
+          <a href="/products" style="color: #374151; text-decoration: none;">Produits</a>
+          <a href="/news" style="color: #374151; text-decoration: none;">Actualités</a>
+          <a href="/testimonials" style="color: #374151; text-decoration: none;">Témoignages</a>
+          <a href="/contact" style="color: #374151; text-decoration: none;">Contact</a>
+          <a href="/about" style="color: #374151; text-decoration: none;">À propos</a>
+        </div>
+        <div>
+          <a href="/login" style="background: #3b82f6; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none;">Connexion</a>
+        </div>
+      </div>
+    </div>
+    
+    <div id="root"></div>
+    
+    <script>
+      // Vider complètement le cache pour éviter les erreurs JSX
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          names.forEach(name => caches.delete(name));
+        });
+      }
+      
+      // Forcer le rechargement si des erreurs persistent
+      window.addEventListener('error', (e) => {
+        if (e.message.includes('expected expression, got')) {
+          console.log('🔄 Erreur JSX détectée, rechargement de la page...');
+          setTimeout(() => {
+            window.location.reload(true);
+          }, 1000);
+        }
+      });
+    </script>
+    
+    <script>
+      // Afficher le header de fallback si React ne se charge pas
+      setTimeout(() => {
+        const reactRoot = document.getElementById('root');
+        const fallbackHeader = document.getElementById('fallback-header');
+        
+        if (reactRoot && reactRoot.children.length === 0) {
+          console.log('⚠️ React ne s\'est pas chargé, affichage du header de fallback');
+          fallbackHeader.style.display = 'block';
+        } else {
+          console.log('✅ React chargé, masquage du header de fallback');
+          fallbackHeader.style.display = 'none';
+        }
+      }, 3000);
+    </script>
+  </body>
+</html>

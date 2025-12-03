@@ -1,0 +1,95 @@
+services:
+  # Service Backend (API)
+  - type: web
+    name: experience-tech-backend
+    env: node
+    plan: starter
+    buildCommand: cd backend && npm install && npm run build || echo "No build script"
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: JWT_REFRESH_EXPIRE
+        value: 30d
+      - key: CORS_ORIGIN
+        sync: false
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 100
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        value: 587
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: FRESHDESK_DOMAIN
+        sync: false
+      - key: FRESHDESK_API_KEY
+        sync: false
+
+  # Service Frontend (React)
+  - type: web
+    name: experience-tech-frontend
+    env: node
+    plan: starter
+    buildCommand: cd frontend && npm install --legacy-peer-deps && npm run build
+    startCommand: cd frontend && npx serve -s build -l 10000
+    staticPublishPath: ./frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        sync: false
+      - key: REACT_APP_APP_NAME
+        value: Expérience Tech
+      - key: REACT_APP_VERSION
+        value: 1.0.0
+      - key: REACT_APP_STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: REACT_APP_GA_MEASUREMENT_ID
+        sync: false
+      - key: REACT_APP_SENTRY_DSN
+        sync: false
+      - key: REACT_APP_MONITORING_ENABLED
+        value: true
+      - key: REACT_APP_AI_CHATBOT_ENABLED
+        value: true
+      - key: REACT_APP_ANALYTICS_ENABLED
+        value: true
+      - key: REACT_APP_CRM_ENABLED
+        value: true
+
+databases:
+  # Base de données MongoDB (optionnel - si vous n'utilisez pas MongoDB Atlas)
+  - name: experience-tech-mongodb
+    plan: starter
+    databaseName: experience_tech
+    user: experience_tech_user
+
