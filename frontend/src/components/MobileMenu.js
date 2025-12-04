@@ -24,23 +24,29 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     const checkMobile = () => {
       const width = window.innerWidth || document.documentElement.clientWidth;
       const mobile = width < 768;
+      console.log('Checking mobile, width:', width, 'isMobile:', mobile);
       setIsMobile(mobile);
       
       // FORCER la visibilité du bouton
       const btn = document.getElementById('mobile-menu-btn');
       if (btn) {
         if (mobile) {
-          btn.style.display = 'flex';
-          btn.style.visibility = 'visible';
-          btn.style.opacity = '1';
-          btn.style.pointerEvents = 'auto';
+          btn.style.setProperty('display', 'flex', 'important');
+          btn.style.setProperty('visibility', 'visible', 'important');
+          btn.style.setProperty('opacity', '1', 'important');
+          btn.style.setProperty('pointer-events', 'auto', 'important');
         } else {
-          btn.style.display = 'none';
+          btn.style.setProperty('display', 'none', 'important');
         }
       }
     };
 
+    // Vérifier immédiatement
     checkMobile();
+    
+    // Vérifier après un court délai
+    setTimeout(checkMobile, 100);
+    
     const interval = setInterval(checkMobile, 500);
     window.addEventListener('resize', checkMobile);
     window.addEventListener('orientationchange', checkMobile);
@@ -104,7 +110,13 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     setTimeout(() => navigate(href), 100);
   };
 
-  if (!isMobile) return null;
+  // Ne pas retourner null même si isMobile n'est pas encore détecté
+  // Le bouton sera caché par les styles si ce n'est pas mobile
+  const shouldShow = isMobile || window.innerWidth < 768;
+  
+  if (!shouldShow) {
+    return null;
+  }
 
   return (
     <>
@@ -193,7 +205,8 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
         >
             <div style={{ padding: '1rem' }}>
               {/* Navigation principale */}
-              {navigation.map((item, index) => (
+              {navigation && navigation.length > 0 ? (
+                navigation.map((item, index) => (
                 <Link
                   key={item.name}
                   to={item.href}
@@ -217,9 +230,15 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                 >
                   {item.name}
                 </Link>
-              ))}
+              ))
+              ) : (
+                <div style={{ padding: '12px 16px', color: '#6b7280' }}>
+                  Aucun élément de navigation disponible
+                </div>
+              )}
 
               {/* Actualités */}
+              {newsMenu && newsMenu.length > 0 && (
               <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
                 <div style={{ padding: '8px 12px', fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase' }}>
                   Actualités & Blog
@@ -250,8 +269,10 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                   </Link>
                 ))}
               </div>
+              )}
 
               {/* Communauté */}
+              {communityMenu && communityMenu.length > 0 && (
               <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
                 <div style={{ padding: '8px 12px', fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase' }}>
                   Communauté
@@ -282,8 +303,10 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                   </Link>
                 ))}
               </div>
+              )}
 
               {/* Contact & Info */}
+              {infoMenu && infoMenu.length > 0 && (
               <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
                 <div style={{ padding: '8px 12px', fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase' }}>
                   Contact & Info
@@ -314,6 +337,7 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                   </Link>
                 ))}
               </div>
+              )}
 
               {/* Section utilisateur */}
               <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
