@@ -68,10 +68,34 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
   }, [isOpen, isMobile]);
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    console.log('Toggle menu clicked, current isOpen:', isOpen, 'isMobile:', isMobile);
+    const newState = !isOpen;
+    setIsOpen(newState);
+    console.log('Setting isOpen to:', newState);
+    
+    // FORCER l'affichage immédiat avec manipulation DOM
+    if (newState && isMobile) {
+      setTimeout(() => {
+        const overlay = document.querySelector('.mobile-menu-overlay');
+        const panel = document.querySelector('.mobile-menu-panel');
+        console.log('Forcing display, overlay:', overlay, 'panel:', panel);
+        if (overlay) {
+          overlay.style.setProperty('display', 'block', 'important');
+          overlay.style.setProperty('visibility', 'visible', 'important');
+          overlay.style.setProperty('opacity', '1', 'important');
+        }
+        if (panel) {
+          panel.style.setProperty('display', 'block', 'important');
+          panel.style.setProperty('visibility', 'visible', 'important');
+          panel.style.setProperty('opacity', '1', 'important');
+          panel.style.setProperty('transform', 'translateX(0)', 'important');
+        }
+      }, 10);
+    }
   };
 
   const closeMenu = () => {
+    console.log('Closing menu');
     setIsOpen(false);
   };
 
@@ -122,58 +146,51 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
         )}
       </button>
 
-      {/* Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={closeMenu}
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 10001,
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              display: 'block',
-              visibility: 'visible',
-              opacity: 1,
-              pointerEvents: 'auto'
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {/* Overlay - FORCER l'affichage */}
+      {isOpen && (
+        <div
+          className="mobile-menu-overlay"
+          onClick={closeMenu}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 10001,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'block',
+            visibility: 'visible',
+            opacity: 1,
+            pointerEvents: 'auto'
+          }}
+        />
+      )}
 
-      {/* Menu Panel */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ x: '-100%', opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: '-100%', opacity: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            style={{
-              position: 'fixed',
-              top: '4rem',
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 10002,
-              backgroundColor: 'white',
-              overflowY: 'auto',
-              overflowX: 'hidden',
-              display: 'block',
-              visibility: 'visible',
-              opacity: 1,
-              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-              borderTop: '1px solid #e5e7eb'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
+      {/* Menu Panel - FORCER l'affichage avec styles inline */}
+      {isOpen && (
+        <div
+          className="mobile-menu-panel"
+          style={{
+            position: 'fixed',
+            top: '4rem',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 10002,
+            backgroundColor: 'white',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            display: 'block',
+            visibility: 'visible',
+            opacity: 1,
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+            borderTop: '1px solid #e5e7eb',
+            transform: 'translateX(0)',
+            transition: 'transform 0.3s ease'
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
             <div style={{ padding: '1rem' }}>
               {/* Navigation principale */}
               {navigation.map((item, index) => (
@@ -421,9 +438,8 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                 )}
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
     </>
   );
 };
