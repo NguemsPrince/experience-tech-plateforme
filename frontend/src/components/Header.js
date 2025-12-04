@@ -24,6 +24,7 @@ import '../styles/dropdown.css';
 import '../styles/mobile-fixes.css';
 import '../styles/mobile-menu.css';
 import '../styles/mobile-menu-fixes.css';
+import '../styles/mobile-menu-guaranteed.css';
 
 const Header = () => {
   const location = useLocation();
@@ -38,6 +39,61 @@ const Header = () => {
   const [showNewsMenu, setShowNewsMenu] = useState(false);
   const [showCommunityMenu, setShowCommunityMenu] = useState(false);
   const [showInfoMenu, setShowInfoMenu] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Détection de la taille d'écran pour forcer la visibilité du menu mobile
+  useEffect(() => {
+    const checkIsMobile = () => {
+      const width = window.innerWidth || document.documentElement.clientWidth;
+      const isMobileDevice = width < 768;
+      setIsMobile(isMobileDevice);
+      
+      // FORCER la visibilité du bouton hamburger sur mobile
+      const menuButton = document.getElementById('mobile-menu-button');
+      if (menuButton) {
+        if (isMobileDevice) {
+          menuButton.style.display = 'flex';
+          menuButton.style.visibility = 'visible';
+          menuButton.style.opacity = '1';
+          menuButton.style.position = 'relative';
+          menuButton.style.zIndex = '10003';
+          menuButton.style.pointerEvents = 'auto';
+        } else {
+          menuButton.style.display = 'none';
+        }
+      }
+      
+      // FORCER la visibilité du menu panel et overlay quand ouvert
+      if (isMenuOpen && isMobileDevice) {
+        const overlay = document.getElementById('mobile-menu-overlay');
+        const panel = document.getElementById('mobile-menu-panel');
+        if (overlay) {
+          overlay.style.display = 'block';
+          overlay.style.visibility = 'visible';
+          overlay.style.opacity = '1';
+          overlay.style.zIndex = '10001';
+        }
+        if (panel) {
+          panel.style.display = 'block';
+          panel.style.visibility = 'visible';
+          panel.style.opacity = '1';
+          panel.style.zIndex = '10002';
+        }
+      }
+    };
+    
+    // Vérifier au chargement
+    checkIsMobile();
+    
+    // Vérifier au redimensionnement
+    window.addEventListener('resize', checkIsMobile);
+    window.addEventListener('orientationchange', checkIsMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+      window.removeEventListener('orientationchange', checkIsMobile);
+    };
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,22 +105,65 @@ const Header = () => {
 
   // Empêcher le scroll du body quand le menu mobile est ouvert
   useEffect(() => {
-    if (isMenuOpen) {
+    if (isMenuOpen && isMobile) {
       // Sauvegarder la position du scroll
       const scrollY = window.scrollY;
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
       document.body.classList.add('menu-open');
+      
+      // FORCER l'affichage du menu avec manipulation DOM directe
+      setTimeout(() => {
+        const overlay = document.getElementById('mobile-menu-overlay');
+        const panel = document.getElementById('mobile-menu-panel');
+        if (overlay) {
+          overlay.style.display = 'block';
+          overlay.style.visibility = 'visible';
+          overlay.style.opacity = '1';
+          overlay.style.position = 'fixed';
+          overlay.style.top = '0';
+          overlay.style.left = '0';
+          overlay.style.right = '0';
+          overlay.style.bottom = '0';
+          overlay.style.zIndex = '10001';
+          overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        }
+        if (panel) {
+          panel.style.display = 'block';
+          panel.style.visibility = 'visible';
+          panel.style.opacity = '1';
+          panel.style.position = 'fixed';
+          panel.style.top = '4rem';
+          panel.style.left = '0';
+          panel.style.right = '0';
+          panel.style.bottom = '0';
+          panel.style.zIndex = '10002';
+          panel.style.backgroundColor = 'white';
+          panel.style.overflowY = 'auto';
+        }
+      }, 10);
     } else {
       // Restaurer la position du scroll
       const scrollY = document.body.style.top;
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
+      document.body.style.overflow = '';
       document.body.classList.remove('menu-open');
       if (scrollY) {
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+      
+      // Cacher le menu
+      const overlay = document.getElementById('mobile-menu-overlay');
+      const panel = document.getElementById('mobile-menu-panel');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+      if (panel) {
+        panel.style.display = 'none';
       }
     }
     return () => {
@@ -72,9 +171,10 @@ const Header = () => {
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
+      document.body.style.overflow = '';
       document.body.classList.remove('menu-open');
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, isMobile]);
 
   // Fermer les menus déroulants quand on clique ailleurs
   useEffect(() => {
@@ -527,9 +627,24 @@ const Header = () => {
                 e.stopPropagation();
                 const newState = !isMenuOpen;
                 setIsMenuOpen(newState);
-                // Forcer la mise à jour immédiate
-                if (newState) {
+                // Forcer la mise à jour immédiate avec manipulation DOM directe
+                if (newState && isMobile) {
                   document.body.classList.add('menu-open');
+                  // Forcer l'affichage immédiat
+                  setTimeout(() => {
+                    const overlay = document.getElementById('mobile-menu-overlay');
+                    const panel = document.getElementById('mobile-menu-panel');
+                    if (overlay) {
+                      overlay.style.display = 'block';
+                      overlay.style.visibility = 'visible';
+                      overlay.style.opacity = '1';
+                    }
+                    if (panel) {
+                      panel.style.display = 'block';
+                      panel.style.visibility = 'visible';
+                      panel.style.opacity = '1';
+                    }
+                  }, 0);
                 } else {
                   document.body.classList.remove('menu-open');
                 }
@@ -539,8 +654,22 @@ const Header = () => {
                 e.stopPropagation();
                 const newState = !isMenuOpen;
                 setIsMenuOpen(newState);
-                if (newState) {
+                if (newState && isMobile) {
                   document.body.classList.add('menu-open');
+                  setTimeout(() => {
+                    const overlay = document.getElementById('mobile-menu-overlay');
+                    const panel = document.getElementById('mobile-menu-panel');
+                    if (overlay) {
+                      overlay.style.display = 'block';
+                      overlay.style.visibility = 'visible';
+                      overlay.style.opacity = '1';
+                    }
+                    if (panel) {
+                      panel.style.display = 'block';
+                      panel.style.visibility = 'visible';
+                      panel.style.opacity = '1';
+                    }
+                  }, 0);
                 } else {
                   document.body.classList.remove('menu-open');
                 }
@@ -553,17 +682,21 @@ const Header = () => {
               style={{ 
                 position: 'relative',
                 zIndex: 10003,
-                display: 'flex',
-                visibility: 'visible',
-                opacity: 1,
+                display: isMobile ? 'flex' : 'none',
+                visibility: isMobile ? 'visible' : 'hidden',
+                opacity: isMobile ? 1 : 0,
                 touchAction: 'manipulation',
                 WebkitTapHighlightColor: 'transparent',
                 cursor: 'pointer',
-                pointerEvents: 'auto',
-                // Force la visibilité sur mobile
-                '@media (min-width: 768px)': {
-                  display: 'none'
-                }
+                pointerEvents: isMobile ? 'auto' : 'none',
+                minWidth: '48px',
+                minHeight: '48px',
+                backgroundColor: '#2563eb',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                padding: '0.625rem',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
               }}
             >
               <motion.div
@@ -618,7 +751,7 @@ const Header = () => {
         <AnimatePresence>
           {isMenuOpen && (
             <>
-              {/* Overlay avec animation */}
+              {/* Overlay avec animation - FORCER l'affichage */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -634,8 +767,13 @@ const Header = () => {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  display: 'block',
-                  visibility: 'visible'
+                  display: isMobile && isMenuOpen ? 'block' : 'none',
+                  visibility: isMobile && isMenuOpen ? 'visible' : 'hidden',
+                  opacity: isMobile && isMenuOpen ? 1 : 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  backdropFilter: 'blur(2px)',
+                  WebkitBackdropFilter: 'blur(2px)',
+                  pointerEvents: isMobile && isMenuOpen ? 'auto' : 'none'
                 }}
                 onClick={(e) => {
                   e.preventDefault();
@@ -650,10 +788,10 @@ const Header = () => {
                   document.body.classList.remove('menu-open');
                 }}
               />
-              {/* Navigation Mobile avec animation slide */}
+              {/* Navigation Mobile avec animation slide - FORCER l'affichage */}
               <motion.div 
                 initial={{ x: '-100%', opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
+                animate={{ x: isMobile && isMenuOpen ? 0 : '-100%', opacity: isMobile && isMenuOpen ? 1 : 0 }}
                 exit={{ x: '-100%', opacity: 0 }}
                 transition={{ 
                   type: 'spring',
@@ -676,8 +814,14 @@ const Header = () => {
                   overscrollBehavior: 'contain',
                   backgroundColor: 'white',
                   boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-                  display: 'block',
-                  visibility: 'visible'
+                  display: isMobile && isMenuOpen ? 'block' : 'none',
+                  visibility: isMobile && isMenuOpen ? 'visible' : 'hidden',
+                  opacity: isMobile && isMenuOpen ? 1 : 0,
+                  transform: isMobile && isMenuOpen ? 'translateX(0)' : 'translateX(-100%)',
+                  pointerEvents: isMobile && isMenuOpen ? 'auto' : 'none',
+                  borderTop: '1px solid #e5e7eb',
+                  overflowY: 'auto',
+                  overflowX: 'hidden'
                 }}
                 onClick={(e) => e.stopPropagation()}
                 onTouchStart={(e) => e.stopPropagation()}
