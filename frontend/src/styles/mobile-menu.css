@@ -1,0 +1,207 @@
+/* Styles spécifiques pour le menu mobile - Animations et transitions fluides */
+
+/* Animation d'entrée du menu mobile */
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animation de sortie du menu mobile */
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Animation du bouton hamburger */
+@keyframes rotateIcon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(90deg);
+  }
+}
+
+/* Animation de l'overlay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Styles pour le menu mobile ouvert */
+.mobile-menu-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+/* Amélioration des performances avec will-change */
+#mobile-menu-panel {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+#mobile-menu-overlay {
+  will-change: opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Amélioration des transitions pour les liens */
+#mobile-menu-panel a {
+  position: relative;
+  overflow: hidden;
+}
+
+#mobile-menu-panel a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+#mobile-menu-panel a:active::before {
+  left: 100%;
+}
+
+/* Amélioration de l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  #mobile-menu-panel,
+  #mobile-menu-overlay {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  #mobile-menu-panel a::before {
+    display: none;
+  }
+}
+
+/* Support pour les appareils avec écran tactile */
+@media (hover: none) and (pointer: coarse) {
+  #mobile-menu-panel a:hover {
+    background-color: transparent !important;
+  }
+  
+  #mobile-menu-panel a:active {
+    background-color: rgba(59, 130, 246, 0.1) !important;
+  }
+}
+
+/* Amélioration du scroll sur iOS */
+#mobile-menu-panel {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Empêcher le pull-to-refresh sur mobile quand le menu est ouvert */
+body.menu-open {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Amélioration de la visibilité du bouton hamburger */
+#mobile-menu-button {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+#mobile-menu-button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+#mobile-menu-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Amélioration de la séparation visuelle dans le menu */
+#mobile-menu-panel .pt-2,
+#mobile-menu-panel .pt-4 {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+}
+
+/* Amélioration des titres de sections */
+#mobile-menu-panel .text-xs {
+  color: #6b7280;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+/* États focus pour l'accessibilité au clavier */
+#mobile-menu-panel a:focus-visible,
+#mobile-menu-panel button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Amélioration de la lisibilité sur fond clair */
+#mobile-menu-panel {
+  background-color: #ffffff;
+  color: #1f2937;
+}
+
+/* Support du mode sombre si nécessaire */
+@media (prefers-color-scheme: dark) {
+  #mobile-menu-panel {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+  
+  #mobile-menu-panel a {
+    color: #e5e7eb;
+  }
+  
+  #mobile-menu-panel a[class*="bg-gray-100"] {
+    background-color: #374151 !important;
+    color: #ffffff !important;
+  }
+  
+  #mobile-menu-panel .text-xs {
+    color: #9ca3af;
+  }
+  
+  #mobile-menu-panel .pt-2,
+  #mobile-menu-panel .pt-4 {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+}
+

@@ -1,0 +1,407 @@
+/* 
+ * FICHIER DE GARANTIE ABSOLUE POUR LE MENU MOBILE
+ * Ce fichier utilise des sélecteurs ultra-spécifiques et des !important
+ * pour garantir que le menu fonctionne même si d'autres styles interfèrent
+ */
+
+/* ============================================
+   GARANTIE ABSOLUE DU BOUTON HAMBURGER
+   ============================================ */
+
+/* Tous les sélecteurs possibles - FORCER la visibilité sur mobile */
+button#mobile-menu-button,
+#mobile-menu-button,
+button[aria-label="Menu mobile"],
+.mobile-menu-btn,
+header button#mobile-menu-button,
+header #mobile-menu-button,
+nav button#mobile-menu-button,
+nav #mobile-menu-button,
+header nav button#mobile-menu-button,
+header nav #mobile-menu-button {
+  /* Styles de base ABSOLUS */
+  position: relative !important;
+  z-index: 10003 !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  flex-shrink: 0 !important;
+  margin-left: 4px !important;
+  padding: 0.625rem !important;
+  border-radius: 0.5rem !important;
+  background-color: #2563eb !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  will-change: transform !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+/* SUR MOBILE - FORCER LA VISIBILITÉ */
+@media screen and (max-width: 767px),
+       screen and (max-width: 767.98px),
+       (max-width: 767px),
+       (max-width: 767.98px) {
+  
+  button#mobile-menu-button,
+  #mobile-menu-button,
+  button[aria-label="Menu mobile"],
+  .mobile-menu-btn,
+  header button#mobile-menu-button,
+  header #mobile-menu-button,
+  nav button#mobile-menu-button,
+  nav #mobile-menu-button,
+  header nav button#mobile-menu-button,
+  header nav #mobile-menu-button {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10003 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+}
+
+/* SUR DESKTOP - CACHER */
+@media screen and (min-width: 768px),
+       screen and (min-width: 768.01px),
+       (min-width: 768px),
+       (min-width: 768.01px) {
+  
+  button#mobile-menu-button,
+  #mobile-menu-button,
+  button[aria-label="Menu mobile"],
+  .mobile-menu-btn,
+  header button#mobile-menu-button,
+  header #mobile-menu-button,
+  nav button#mobile-menu-button,
+  nav #mobile-menu-button,
+  header nav button#mobile-menu-button,
+  header nav #mobile-menu-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* ============================================
+   GARANTIE ABSOLUE DU MENU OVERLAY
+   ============================================ */
+
+.mobile-menu-overlay,
+#mobile-menu-overlay,
+div.mobile-menu-overlay,
+div#mobile-menu-overlay,
+div[id="mobile-menu-overlay"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10001 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* SUR MOBILE - FORCER LA VISIBILITÉ QUAND OUVERT */
+@media screen and (max-width: 767px),
+       screen and (max-width: 767.98px),
+       (max-width: 767px),
+       (max-width: 767.98px) {
+  
+  body.menu-open .mobile-menu-overlay,
+  body.menu-open #mobile-menu-overlay,
+  body.menu-open div.mobile-menu-overlay,
+  body.menu-open div#mobile-menu-overlay {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+/* SUR DESKTOP - TOUJOURS CACHÉ */
+@media screen and (min-width: 768px),
+       screen and (min-width: 768.01px),
+       (min-width: 768px),
+       (min-width: 768.01px) {
+  
+  .mobile-menu-overlay,
+  #mobile-menu-overlay,
+  div.mobile-menu-overlay,
+  div#mobile-menu-overlay {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+}
+
+/* ============================================
+   GARANTIE ABSOLUE DU MENU PANEL
+   ============================================ */
+
+.mobile-menu-panel,
+#mobile-menu-panel,
+div.mobile-menu-panel,
+div#mobile-menu-panel,
+div[id="mobile-menu-panel"] {
+  position: fixed !important;
+  top: 4rem !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10002 !important;
+  background-color: white !important;
+  border-top: 1px solid #e5e7eb !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-height: calc(100vh - 4rem) !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+  will-change: transform, opacity !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* SUR MOBILE - FORCER LA VISIBILITÉ QUAND OUVERT */
+@media screen and (max-width: 767px),
+       screen and (max-width: 767.98px),
+       (max-width: 767px),
+       (max-width: 767.98px) {
+  
+  body.menu-open .mobile-menu-panel,
+  body.menu-open #mobile-menu-panel,
+  body.menu-open div.mobile-menu-panel,
+  body.menu-open div#mobile-menu-panel {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+    -webkit-transform: translateX(0) !important;
+    pointer-events: auto !important;
+  }
+  
+  /* Animation d'entrée */
+  body.menu-open .mobile-menu-panel,
+  body.menu-open #mobile-menu-panel {
+    animation: slideInFromLeft 0.3s ease-out !important;
+  }
+}
+
+/* SUR DESKTOP - TOUJOURS CACHÉ */
+@media screen and (min-width: 768px),
+       screen and (min-width: 768.01px),
+       (min-width: 768px),
+       (min-width: 768.01px) {
+  
+  .mobile-menu-panel,
+  #mobile-menu-panel,
+  div.mobile-menu-panel,
+  div#mobile-menu-panel {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    transform: translateX(-100%) !important;
+    -webkit-transform: translateX(-100%) !important;
+  }
+}
+
+/* Animation d'entrée */
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   GARANTIE DES LIENS ET BOUTONS DANS LE MENU
+   ============================================ */
+
+#mobile-menu-panel a,
+#mobile-menu-panel button,
+.mobile-menu-panel a,
+.mobile-menu-panel button,
+div#mobile-menu-panel a,
+div#mobile-menu-panel button {
+  min-height: 48px !important;
+  padding: 12px 16px !important;
+  -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1) !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  transition: background-color 0.2s ease, color 0.2s ease !important;
+  text-decoration: none !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+  background-color: transparent !important;
+  border: none !important;
+  text-align: left !important;
+}
+
+#mobile-menu-panel a:active,
+#mobile-menu-panel button:active,
+.mobile-menu-panel a:active,
+.mobile-menu-panel button:active {
+  transform: scale(0.98) !important;
+  transition: transform 0.1s ease !important;
+}
+
+#mobile-menu-panel a:hover,
+#mobile-menu-panel button:hover,
+.mobile-menu-panel a:hover,
+.mobile-menu-panel button:hover {
+  background-color: #f3f4f6 !important;
+}
+
+/* ============================================
+   GARANTIE DU SCROLL BODY QUAND MENU OUVERT
+   ============================================ */
+
+body.menu-open {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: none !important;
+}
+
+/* ============================================
+   SUPPORT DES TRÈS PETITS ÉCRANS
+   ============================================ */
+
+@media screen and (max-width: 480px),
+       screen and (max-width: 479.98px),
+       (max-width: 480px),
+       (max-width: 479.98px) {
+  
+  button#mobile-menu-button,
+  #mobile-menu-button {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 0.5rem !important;
+  }
+  
+  #mobile-menu-panel a,
+  #mobile-menu-panel button,
+  .mobile-menu-panel a,
+  .mobile-menu-panel button {
+    min-height: 44px !important;
+    padding: 10px 14px !important;
+    font-size: 15px !important;
+  }
+}
+
+/* ============================================
+   FALLBACKS POUR NAVIGATEURS ANCIENS
+   ============================================ */
+
+/* Si backdrop-filter n'est pas supporté */
+@supports not (backdrop-filter: blur(2px)) {
+  .mobile-menu-overlay,
+  #mobile-menu-overlay {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+  }
+}
+
+/* Si transform n'est pas supporté */
+@supports not (transform: translateX(0)) {
+  .mobile-menu-panel,
+  #mobile-menu-panel {
+    left: 0 !important;
+  }
+  
+  body.menu-open .mobile-menu-panel,
+  body.menu-open #mobile-menu-panel {
+    left: 0 !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITÉ
+   ============================================ */
+
+/* Focus visible pour navigation clavier */
+button#mobile-menu-button:focus-visible,
+#mobile-menu-button:focus-visible,
+#mobile-menu-panel a:focus-visible,
+#mobile-menu-panel button:focus-visible {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu-panel,
+  #mobile-menu-panel,
+  .mobile-menu-overlay,
+  #mobile-menu-overlay {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  body.menu-open .mobile-menu-panel,
+  body.menu-open #mobile-menu-panel {
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   MODE SOMBRE
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  .mobile-menu-panel,
+  #mobile-menu-panel {
+    background-color: #1f2937 !important;
+    color: #f9fafb !important;
+    border-top-color: #374151 !important;
+  }
+  
+  #mobile-menu-panel a,
+  .mobile-menu-panel a {
+    color: #e5e7eb !important;
+  }
+  
+  #mobile-menu-panel a:hover,
+  .mobile-menu-panel a:hover {
+    background-color: #374151 !important;
+  }
+}
+

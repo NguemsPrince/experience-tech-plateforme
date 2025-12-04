@@ -1,0 +1,342 @@
+/* Fichier de corrections spécifiques pour le menu mobile */
+/* Ce fichier force la visibilité et la fonctionnalité du menu mobile */
+/* avec des styles très spécifiques qui ne dépendent pas de Tailwind */
+
+/* ============================================
+   BOUTON HAMBURGER - FORCER LA VISIBILITÉ
+   ============================================ */
+
+/* Tous les sélecteurs possibles pour le bouton hamburger */
+.mobile-menu-btn,
+button.mobile-menu-btn,
+button[aria-label="Menu mobile"],
+button[aria-label="Menu mobile"].mobile-menu-btn,
+button#mobile-menu-button,
+#mobile-menu-button,
+button[id="mobile-menu-button"] {
+  /* Styles de base - FORCER */
+  position: relative !important;
+  z-index: 10003 !important;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  flex-shrink: 0 !important;
+  margin-left: 4px !important;
+  padding: 0.625rem !important;
+  border-radius: 0.5rem !important;
+  background-color: #2563eb !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  will-change: transform;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Hover et active states */
+.mobile-menu-btn:hover,
+button[aria-label="Menu mobile"]:hover,
+#mobile-menu-button:hover {
+  background-color: #1d4ed8 !important;
+  transform: scale(1.05) !important;
+}
+
+.mobile-menu-btn:active,
+button[aria-label="Menu mobile"]:active,
+#mobile-menu-button:active {
+  background-color: #1e40af !important;
+  transform: scale(0.95) !important;
+}
+
+/* Focus pour accessibilité */
+.mobile-menu-btn:focus-visible,
+button[aria-label="Menu mobile"]:focus-visible,
+#mobile-menu-button:focus-visible {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+
+/* ============================================
+   MENU MOBILE OVERLAY ET PANEL
+   ============================================ */
+
+.mobile-menu-overlay,
+#mobile-menu-overlay,
+div.mobile-menu-overlay,
+div[id="mobile-menu-overlay"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10001 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+}
+
+.mobile-menu-panel,
+#mobile-menu-panel,
+div.mobile-menu-panel,
+div[id="mobile-menu-panel"] {
+  position: fixed !important;
+  top: 4rem !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10002 !important;
+  background-color: white !important;
+  border-top: 1px solid #e5e7eb !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-height: calc(100vh - 4rem) !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+  will-change: transform, opacity !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE SEULEMENT
+   ============================================ */
+
+/* Sur mobile - FORCER la visibilité */
+@media screen and (max-width: 767px) {
+  .mobile-menu-btn,
+  button[aria-label="Menu mobile"],
+  button#mobile-menu-button,
+  #mobile-menu-button {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .mobile-menu-overlay,
+  .mobile-menu-panel,
+  #mobile-menu-overlay,
+  #mobile-menu-panel {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Sur desktop - CACHER le menu mobile */
+@media screen and (min-width: 768px) {
+  .mobile-menu-btn,
+  button[aria-label="Menu mobile"],
+  button#mobile-menu-button,
+  #mobile-menu-button,
+  .mobile-menu-overlay,
+  .mobile-menu-panel,
+  #mobile-menu-overlay,
+  #mobile-menu-panel {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   LIENS ET BOUTONS DANS LE MENU MOBILE
+   ============================================ */
+
+#mobile-menu-panel a,
+#mobile-menu-panel button,
+.mobile-menu-panel a,
+.mobile-menu-panel button {
+  min-height: 48px !important;
+  padding: 12px 16px !important;
+  -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1) !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  transition: background-color 0.2s ease, color 0.2s ease !important;
+  text-decoration: none !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+}
+
+#mobile-menu-panel a:active,
+#mobile-menu-panel button:active,
+.mobile-menu-panel a:active,
+.mobile-menu-panel button:active {
+  transform: scale(0.98) !important;
+  transition: transform 0.1s ease !important;
+}
+
+/* Focus pour accessibilité */
+#mobile-menu-panel a:focus-visible,
+#mobile-menu-panel button:focus-visible,
+.mobile-menu-panel a:focus-visible,
+.mobile-menu-panel button:focus-visible {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+
+/* ============================================
+   CONTENEUR DU MENU MOBILE
+   ============================================ */
+
+#mobile-menu-panel > div,
+.mobile-menu-panel > div {
+  padding: 1rem !important;
+  gap: 0.25rem !important;
+}
+
+/* Sections avec espacement */
+#mobile-menu-panel .pt-2,
+#mobile-menu-panel .pt-4,
+.mobile-menu-panel .pt-2,
+.mobile-menu-panel .pt-4 {
+  padding-top: 1rem !important;
+  margin-top: 0.5rem !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Titres de sections */
+#mobile-menu-panel .text-xs,
+.mobile-menu-panel .text-xs {
+  padding: 0.5rem 0.75rem !important;
+  margin-bottom: 0.25rem !important;
+  color: #6b7280 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+
+/* ============================================
+   EMPÊCHER LE SCROLL DU BODY
+   ============================================ */
+
+body.menu-open {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* ============================================
+   SUPPORT DES TRÈS PETITS ÉCRANS
+   ============================================ */
+
+@media screen and (max-width: 480px) {
+  #mobile-menu-button,
+  .mobile-menu-btn {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 0.5rem !important;
+  }
+  
+  #mobile-menu-panel > div,
+  .mobile-menu-panel > div {
+    padding: 0.75rem !important;
+  }
+  
+  #mobile-menu-panel a,
+  #mobile-menu-panel button,
+  .mobile-menu-panel a,
+  .mobile-menu-panel button {
+    min-height: 44px !important;
+    padding: 10px 14px !important;
+    font-size: 15px !important;
+  }
+}
+
+/* ============================================
+   SUPPORT DU MODE SOMBRE
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  .mobile-menu-panel,
+  #mobile-menu-panel {
+    background-color: #1f2937 !important;
+    color: #f9fafb !important;
+    border-top-color: #374151 !important;
+  }
+  
+  #mobile-menu-panel a,
+  .mobile-menu-panel a {
+    color: #e5e7eb !important;
+  }
+  
+  #mobile-menu-panel a[class*="bg-gray-100"],
+  .mobile-menu-panel a[class*="bg-gray-100"] {
+    background-color: #374151 !important;
+    color: #ffffff !important;
+  }
+  
+  #mobile-menu-panel .text-xs,
+  .mobile-menu-panel .text-xs {
+    color: #9ca3af !important;
+  }
+  
+  #mobile-menu-panel .pt-2,
+  #mobile-menu-panel .pt-4,
+  .mobile-menu-panel .pt-2,
+  .mobile-menu-panel .pt-4 {
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITÉ - REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu-btn,
+  #mobile-menu-button,
+  .mobile-menu-overlay,
+  .mobile-menu-panel,
+  #mobile-menu-overlay,
+  #mobile-menu-panel {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  #mobile-menu-panel a::before,
+  .mobile-menu-panel a::before {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   FALLBACKS POUR NAVIGATEURS ANCIENS
+   ============================================ */
+
+/* Support pour les navigateurs qui ne supportent pas les media queries modernes */
+@supports not (display: flex) {
+  .mobile-menu-btn,
+  #mobile-menu-button {
+    display: block !important;
+  }
+}
+
+/* Support pour les navigateurs qui ne supportent pas backdrop-filter */
+@supports not (backdrop-filter: blur(2px)) {
+  .mobile-menu-overlay,
+  #mobile-menu-overlay {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+  }
+}
+
