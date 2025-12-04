@@ -15,6 +15,7 @@ import { UserIcon as UserSolidIcon } from '@heroicons/react/24/solid';
 import LanguageSelector from './LanguageSelector';
 import ThemeToggle from './ThemeToggle';
 import NotificationCenter from './NotificationCenter';
+import MobileMenu from './MobileMenu';
 import { useAuth } from '../hooks/useAuth';
 import { IMAGES } from '../config/images';
 import { isAdmin, getAllowedPages } from '../utils/permissions';
@@ -48,18 +49,26 @@ const Header = () => {
       const isMobileDevice = width < 768;
       setIsMobile(isMobileDevice);
       
-      // FORCER la visibilité du bouton hamburger sur mobile
+      // FORCER la visibilité du bouton hamburger sur mobile - APPROCHE AGRESSIVE
       const menuButton = document.getElementById('mobile-menu-button');
       if (menuButton) {
+        // Supprimer toutes les classes Tailwind qui pourraient cacher le bouton
+        menuButton.classList.remove('md:hidden', 'hidden');
+        
         if (isMobileDevice) {
-          menuButton.style.display = 'flex';
-          menuButton.style.visibility = 'visible';
-          menuButton.style.opacity = '1';
-          menuButton.style.position = 'relative';
-          menuButton.style.zIndex = '10003';
-          menuButton.style.pointerEvents = 'auto';
+          // FORCER avec tous les styles possibles
+          menuButton.style.setProperty('display', 'flex', 'important');
+          menuButton.style.setProperty('visibility', 'visible', 'important');
+          menuButton.style.setProperty('opacity', '1', 'important');
+          menuButton.style.setProperty('position', 'relative', 'important');
+          menuButton.style.setProperty('z-index', '10003', 'important');
+          menuButton.style.setProperty('pointer-events', 'auto', 'important');
+          menuButton.style.setProperty('min-width', '48px', 'important');
+          menuButton.style.setProperty('min-height', '48px', 'important');
+          menuButton.setAttribute('aria-hidden', 'false');
         } else {
-          menuButton.style.display = 'none';
+          menuButton.style.setProperty('display', 'none', 'important');
+          menuButton.setAttribute('aria-hidden', 'true');
         }
       }
       
@@ -67,29 +76,63 @@ const Header = () => {
       if (isMenuOpen && isMobileDevice) {
         const overlay = document.getElementById('mobile-menu-overlay');
         const panel = document.getElementById('mobile-menu-panel');
+        
         if (overlay) {
-          overlay.style.display = 'block';
-          overlay.style.visibility = 'visible';
-          overlay.style.opacity = '1';
-          overlay.style.zIndex = '10001';
+          overlay.style.setProperty('display', 'block', 'important');
+          overlay.style.setProperty('visibility', 'visible', 'important');
+          overlay.style.setProperty('opacity', '1', 'important');
+          overlay.style.setProperty('z-index', '10001', 'important');
+          overlay.style.setProperty('position', 'fixed', 'important');
+          overlay.style.setProperty('top', '0', 'important');
+          overlay.style.setProperty('left', '0', 'important');
+          overlay.style.setProperty('right', '0', 'important');
+          overlay.style.setProperty('bottom', '0', 'important');
+          overlay.style.setProperty('background-color', 'rgba(0, 0, 0, 0.5)', 'important');
+        }
+        
+        if (panel) {
+          panel.style.setProperty('display', 'block', 'important');
+          panel.style.setProperty('visibility', 'visible', 'important');
+          panel.style.setProperty('opacity', '1', 'important');
+          panel.style.setProperty('z-index', '10002', 'important');
+          panel.style.setProperty('position', 'fixed', 'important');
+          panel.style.setProperty('top', '4rem', 'important');
+          panel.style.setProperty('left', '0', 'important');
+          panel.style.setProperty('right', '0', 'important');
+          panel.style.setProperty('bottom', '0', 'important');
+          panel.style.setProperty('background-color', 'white', 'important');
+          panel.style.setProperty('overflow-y', 'auto', 'important');
+          panel.style.setProperty('transform', 'translateX(0)', 'important');
+        }
+      } else if (!isMenuOpen) {
+        // Cacher le menu quand fermé
+        const overlay = document.getElementById('mobile-menu-overlay');
+        const panel = document.getElementById('mobile-menu-panel');
+        if (overlay) {
+          overlay.style.setProperty('display', 'none', 'important');
         }
         if (panel) {
-          panel.style.display = 'block';
-          panel.style.visibility = 'visible';
-          panel.style.opacity = '1';
-          panel.style.zIndex = '10002';
+          panel.style.setProperty('display', 'none', 'important');
         }
       }
     };
     
-    // Vérifier au chargement
+    // Vérifier immédiatement
     checkIsMobile();
+    
+    // Vérifier après un court délai pour s'assurer que le DOM est prêt
+    const timeoutId = setTimeout(checkIsMobile, 100);
     
     // Vérifier au redimensionnement
     window.addEventListener('resize', checkIsMobile);
     window.addEventListener('orientationchange', checkIsMobile);
     
+    // Vérifier périodiquement pour forcer la visibilité
+    const intervalId = setInterval(checkIsMobile, 500);
+    
     return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
       window.removeEventListener('resize', checkIsMobile);
       window.removeEventListener('orientationchange', checkIsMobile);
     };
@@ -619,99 +662,13 @@ const Header = () => {
               <MagnifyingGlassIcon className="w-6 h-6 text-gray-700" />
             </button>
 
-            {/* Menu mobile - Toujours visible sur mobile - DERNIER ÉLÉMENT */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const newState = !isMenuOpen;
-                setIsMenuOpen(newState);
-                // Forcer la mise à jour immédiate avec manipulation DOM directe
-                if (newState && isMobile) {
-                  document.body.classList.add('menu-open');
-                  // Forcer l'affichage immédiat
-                  setTimeout(() => {
-                    const overlay = document.getElementById('mobile-menu-overlay');
-                    const panel = document.getElementById('mobile-menu-panel');
-                    if (overlay) {
-                      overlay.style.display = 'block';
-                      overlay.style.visibility = 'visible';
-                      overlay.style.opacity = '1';
-                    }
-                    if (panel) {
-                      panel.style.display = 'block';
-                      panel.style.visibility = 'visible';
-                      panel.style.opacity = '1';
-                    }
-                  }, 0);
-                } else {
-                  document.body.classList.remove('menu-open');
-                }
-              }}
-              onTouchStart={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const newState = !isMenuOpen;
-                setIsMenuOpen(newState);
-                if (newState && isMobile) {
-                  document.body.classList.add('menu-open');
-                  setTimeout(() => {
-                    const overlay = document.getElementById('mobile-menu-overlay');
-                    const panel = document.getElementById('mobile-menu-panel');
-                    if (overlay) {
-                      overlay.style.display = 'block';
-                      overlay.style.visibility = 'visible';
-                      overlay.style.opacity = '1';
-                    }
-                    if (panel) {
-                      panel.style.display = 'block';
-                      panel.style.visibility = 'visible';
-                      panel.style.opacity = '1';
-                    }
-                  }, 0);
-                } else {
-                  document.body.classList.remove('menu-open');
-                }
-              }}
-              className="mobile-menu-btn p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white transition-all duration-200 relative flex-shrink-0 min-w-[48px] min-h-[48px] flex items-center justify-center shadow-lg ml-1"
-              aria-label="Menu mobile"
-              aria-expanded={isMenuOpen}
-              id="mobile-menu-button"
-              type="button"
-              style={{ 
-                position: 'relative',
-                zIndex: 10003,
-                display: isMobile ? 'flex' : 'none',
-                visibility: isMobile ? 'visible' : 'hidden',
-                opacity: isMobile ? 1 : 0,
-                touchAction: 'manipulation',
-                WebkitTapHighlightColor: 'transparent',
-                cursor: 'pointer',
-                pointerEvents: isMobile ? 'auto' : 'none',
-                minWidth: '48px',
-                minHeight: '48px',
-                backgroundColor: '#2563eb',
-                color: 'white',
-                border: 'none',
-                borderRadius: '0.5rem',
-                padding: '0.625rem',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-              }}
-            >
-              <motion.div
-                initial={false}
-                animate={{ rotate: isMenuOpen ? 90 : 0 }}
-                transition={{ duration: 0.2 }}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              >
-                {isMenuOpen ? (
-                  <XMarkIcon className="w-7 h-7 text-white" />
-                ) : (
-                  <Bars3Icon className="w-7 h-7 text-white" />
-                )}
-              </motion.div>
-            </motion.button>
+            {/* Menu mobile - Composant dédié avec garantie 100% */}
+            <MobileMenu 
+              navigation={navigation}
+              newsMenu={newsMenu}
+              communityMenu={communityMenu}
+              infoMenu={infoMenu}
+            />
           </div>
         </div>
 
@@ -747,355 +704,6 @@ const Header = () => {
           )}
         </AnimatePresence>
 
-        {/* Overlay et Navigation Mobile avec animations fluides */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <>
-              {/* Overlay avec animation - FORCER l'affichage */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="mobile-menu-overlay fixed inset-0 bg-black/50"
-                id="mobile-menu-overlay"
-                style={{ 
-                  zIndex: 10001,
-                  touchAction: 'manipulation',
-                  position: 'fixed',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: isMobile && isMenuOpen ? 'block' : 'none',
-                  visibility: isMobile && isMenuOpen ? 'visible' : 'hidden',
-                  opacity: isMobile && isMenuOpen ? 1 : 0,
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                  backdropFilter: 'blur(2px)',
-                  WebkitBackdropFilter: 'blur(2px)',
-                  pointerEvents: isMobile && isMenuOpen ? 'auto' : 'none'
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsMenuOpen(false);
-                  document.body.classList.remove('menu-open');
-                }}
-                onTouchStart={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsMenuOpen(false);
-                  document.body.classList.remove('menu-open');
-                }}
-              />
-              {/* Navigation Mobile avec animation slide - FORCER l'affichage */}
-              <motion.div 
-                initial={{ x: '-100%', opacity: 0 }}
-                animate={{ x: isMobile && isMenuOpen ? 0 : '-100%', opacity: isMobile && isMenuOpen ? 1 : 0 }}
-                exit={{ x: '-100%', opacity: 0 }}
-                transition={{ 
-                  type: 'spring',
-                  damping: 25,
-                  stiffness: 200,
-                  duration: 0.3
-                }}
-                className="mobile-menu-panel fixed top-16 left-0 right-0 bottom-0 bg-white border-t border-gray-200 overflow-y-auto"
-                id="mobile-menu-panel"
-                style={{ 
-                  zIndex: 10002,
-                  position: 'fixed',
-                  top: '4rem',
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  maxHeight: 'calc(100vh - 4rem)',
-                  WebkitOverflowScrolling: 'touch',
-                  touchAction: 'pan-y',
-                  overscrollBehavior: 'contain',
-                  backgroundColor: 'white',
-                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-                  display: isMobile && isMenuOpen ? 'block' : 'none',
-                  visibility: isMobile && isMenuOpen ? 'visible' : 'hidden',
-                  opacity: isMobile && isMenuOpen ? 1 : 0,
-                  transform: isMobile && isMenuOpen ? 'translateX(0)' : 'translateX(-100%)',
-                  pointerEvents: isMobile && isMenuOpen ? 'auto' : 'none',
-                  borderTop: '1px solid #e5e7eb',
-                  overflowY: 'auto',
-                  overflowX: 'hidden'
-                }}
-                onClick={(e) => e.stopPropagation()}
-                onTouchStart={(e) => e.stopPropagation()}
-              >
-              <div className="p-4 space-y-1">
-                {/* Navigation principale */}
-                {navigation.map((item, index) => (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05, duration: 0.2 }}
-                  >
-                    <Link
-                      to={item.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsMenuOpen(false);
-                        document.body.classList.remove('menu-open');
-                        setTimeout(() => {
-                          navigate(item.href);
-                        }, 150);
-                      }}
-                      onTouchStart={(e) => {
-                        e.stopPropagation();
-                      }}
-                      className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
-                        location.pathname === item.href
-                          ? 'text-gray-900 bg-gray-100'
-                          : 'text-gray-600 active:bg-gray-50'
-                      }`}
-                      style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                    >
-                      {item.name}
-                    </Link>
-                  </motion.div>
-                ))}
-
-                {/* Menu Actualités & Témoignages Mobile */}
-                <motion.div 
-                  className="pt-2"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: navigation.length * 0.05 + 0.1, duration: 0.2 }}
-                >
-                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Actualités & Blog
-                  </div>
-                  {newsMenu.map((item, index) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: (navigation.length + index) * 0.05 + 0.15, duration: 0.2 }}
-                    >
-                      <Link
-                        to={item.href}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          document.body.classList.remove('menu-open');
-                          setTimeout(() => navigate(item.href), 150);
-                        }}
-                        onTouchStart={(e) => e.stopPropagation()}
-                        className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
-                          location.pathname === item.href
-                            ? 'text-gray-900 bg-gray-100'
-                            : 'text-gray-600 active:bg-gray-50'
-                        }`}
-                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                      >
-                        {item.name}
-                      </Link>
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                {/* Menu Communauté Mobile */}
-                <motion.div 
-                  className="pt-2"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: (navigation.length + newsMenu.length) * 0.05 + 0.2, duration: 0.2 }}
-                >
-                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Communauté
-                  </div>
-                  {communityMenu.map((item, index) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: (navigation.length + newsMenu.length + index) * 0.05 + 0.25, duration: 0.2 }}
-                    >
-                      <Link
-                        to={item.href}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          document.body.classList.remove('menu-open');
-                          setTimeout(() => navigate(item.href), 150);
-                        }}
-                        onTouchStart={(e) => e.stopPropagation()}
-                        className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
-                          location.pathname === item.href
-                            ? 'text-gray-900 bg-gray-100'
-                            : 'text-gray-600 active:bg-gray-50'
-                        }`}
-                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                      >
-                        {item.name}
-                      </Link>
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                {/* Menu Contact & Info Mobile */}
-                <motion.div 
-                  className="pt-2"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: (navigation.length + newsMenu.length + communityMenu.length) * 0.05 + 0.3, duration: 0.2 }}
-                >
-                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Contact & Info
-                  </div>
-                  {infoMenu.map((item, index) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: (navigation.length + newsMenu.length + communityMenu.length + index) * 0.05 + 0.35, duration: 0.2 }}
-                    >
-                      <Link
-                        to={item.href}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          document.body.classList.remove('menu-open');
-                          setTimeout(() => navigate(item.href), 150);
-                        }}
-                        onTouchStart={(e) => e.stopPropagation()}
-                        className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors duration-200 min-h-[48px] flex items-center ${
-                          location.pathname === item.href
-                            ? 'text-gray-900 bg-gray-100'
-                            : 'text-gray-600 active:bg-gray-50'
-                        }`}
-                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                      >
-                        {item.name}
-                      </Link>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              
-                {/* Section utilisateur mobile */}
-                <div className="pt-4 border-t border-gray-200 mt-4">
-                  {isAuthenticated ? (
-                    <div className="space-y-2">
-                      <div className="px-3 py-2 text-sm text-gray-600">
-                        Bonjour, {user?.firstName}
-                      </div>
-                      <Link
-                        to="/profile"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          document.body.classList.remove('menu-open');
-                          setTimeout(() => navigate('/profile'), 150);
-                        }}
-                        onTouchStart={(e) => e.stopPropagation()}
-                        className="block px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                      >
-                        Mon profil
-                      </Link>
-                      <Link
-                        to="/my-courses"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          document.body.classList.remove('menu-open');
-                          setTimeout(() => navigate('/my-courses'), 150);
-                        }}
-                        onTouchStart={(e) => e.stopPropagation()}
-                        className="block px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                      >
-                        Mes formations
-                      </Link>
-                      <Link
-                        to="/cart"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          document.body.classList.remove('menu-open');
-                          setTimeout(() => navigate('/cart'), 150);
-                        }}
-                        onTouchStart={(e) => e.stopPropagation()}
-                        className="block px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                      >
-                        Mon panier
-                      </Link>
-                      {isAdmin(user?.role) && (
-                        <Link
-                          to="/admin"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setIsMenuOpen(false);
-                            document.body.classList.remove('menu-open');
-                            setTimeout(() => navigate('/admin'), 150);
-                          }}
-                          onTouchStart={(e) => e.stopPropagation()}
-                          className="block px-4 py-3 text-base font-medium text-blue-600 active:bg-blue-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                          style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                        >
-                          Dashboard Admin
-                        </Link>
-                      )}
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          document.body.classList.remove('menu-open');
-                          handleLogout();
-                        }}
-                        onTouchStart={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          document.body.classList.remove('menu-open');
-                          handleLogout();
-                        }}
-                        className="block w-full text-left px-4 py-3 text-base font-medium text-gray-600 active:bg-gray-50 rounded-lg transition-colors duration-200 min-h-[48px] flex items-center"
-                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                      >
-                        Se déconnecter
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <Link
-                        to="/login"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsMenuOpen(false);
-                          document.body.classList.remove('menu-open');
-                          setTimeout(() => navigate('/login'), 150);
-                        }}
-                        onTouchStart={(e) => e.stopPropagation()}
-                        className="block px-4 py-3 text-base font-medium bg-blue-600 active:bg-blue-700 text-white rounded-lg transition-colors duration-200 text-center min-h-[48px] flex items-center justify-center"
-                        style={{ touchAction: 'manipulation', pointerEvents: 'auto' }}
-                      >
-                        {t('common.seConnecter')}
-                      </Link>
-                    </div>
-                  )}
-                  </div>
-              </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
       </nav>
     </header>
     </>
