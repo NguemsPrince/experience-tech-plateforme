@@ -32,7 +32,6 @@ const Header = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
   const { t } = useTranslation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -42,101 +41,22 @@ const Header = () => {
   const [showInfoMenu, setShowInfoMenu] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Détection de la taille d'écran pour forcer la visibilité du menu mobile
+  // Détection de la taille d'écran (pour d'autres usages si nécessaire)
   useEffect(() => {
     const checkIsMobile = () => {
       const width = window.innerWidth || document.documentElement.clientWidth;
-      const isMobileDevice = width < 768;
-      setIsMobile(isMobileDevice);
-      
-      // FORCER la visibilité du bouton hamburger sur mobile - APPROCHE AGRESSIVE
-      const menuButton = document.getElementById('mobile-menu-button');
-      if (menuButton) {
-        // Supprimer toutes les classes Tailwind qui pourraient cacher le bouton
-        menuButton.classList.remove('md:hidden', 'hidden');
-        
-        if (isMobileDevice) {
-          // FORCER avec tous les styles possibles
-          menuButton.style.setProperty('display', 'flex', 'important');
-          menuButton.style.setProperty('visibility', 'visible', 'important');
-          menuButton.style.setProperty('opacity', '1', 'important');
-          menuButton.style.setProperty('position', 'relative', 'important');
-          menuButton.style.setProperty('z-index', '10003', 'important');
-          menuButton.style.setProperty('pointer-events', 'auto', 'important');
-          menuButton.style.setProperty('min-width', '48px', 'important');
-          menuButton.style.setProperty('min-height', '48px', 'important');
-          menuButton.setAttribute('aria-hidden', 'false');
-        } else {
-          menuButton.style.setProperty('display', 'none', 'important');
-          menuButton.setAttribute('aria-hidden', 'true');
-        }
-      }
-      
-      // FORCER la visibilité du menu panel et overlay quand ouvert
-      if (isMenuOpen && isMobileDevice) {
-        const overlay = document.getElementById('mobile-menu-overlay');
-        const panel = document.getElementById('mobile-menu-panel');
-        
-        if (overlay) {
-          overlay.style.setProperty('display', 'block', 'important');
-          overlay.style.setProperty('visibility', 'visible', 'important');
-          overlay.style.setProperty('opacity', '1', 'important');
-          overlay.style.setProperty('z-index', '10001', 'important');
-          overlay.style.setProperty('position', 'fixed', 'important');
-          overlay.style.setProperty('top', '0', 'important');
-          overlay.style.setProperty('left', '0', 'important');
-          overlay.style.setProperty('right', '0', 'important');
-          overlay.style.setProperty('bottom', '0', 'important');
-          overlay.style.setProperty('background-color', 'rgba(0, 0, 0, 0.5)', 'important');
-        }
-        
-        if (panel) {
-          panel.style.setProperty('display', 'block', 'important');
-          panel.style.setProperty('visibility', 'visible', 'important');
-          panel.style.setProperty('opacity', '1', 'important');
-          panel.style.setProperty('z-index', '10002', 'important');
-          panel.style.setProperty('position', 'fixed', 'important');
-          panel.style.setProperty('top', '4rem', 'important');
-          panel.style.setProperty('left', '0', 'important');
-          panel.style.setProperty('right', '0', 'important');
-          panel.style.setProperty('bottom', '0', 'important');
-          panel.style.setProperty('background-color', 'white', 'important');
-          panel.style.setProperty('overflow-y', 'auto', 'important');
-          panel.style.setProperty('transform', 'translateX(0)', 'important');
-        }
-      } else if (!isMenuOpen) {
-        // Cacher le menu quand fermé
-        const overlay = document.getElementById('mobile-menu-overlay');
-        const panel = document.getElementById('mobile-menu-panel');
-        if (overlay) {
-          overlay.style.setProperty('display', 'none', 'important');
-        }
-        if (panel) {
-          panel.style.setProperty('display', 'none', 'important');
-        }
-      }
+      setIsMobile(width < 768);
     };
     
-    // Vérifier immédiatement
     checkIsMobile();
-    
-    // Vérifier après un court délai pour s'assurer que le DOM est prêt
-    const timeoutId = setTimeout(checkIsMobile, 100);
-    
-    // Vérifier au redimensionnement
     window.addEventListener('resize', checkIsMobile);
     window.addEventListener('orientationchange', checkIsMobile);
     
-    // Vérifier périodiquement pour forcer la visibilité
-    const intervalId = setInterval(checkIsMobile, 500);
-    
     return () => {
-      clearTimeout(timeoutId);
-      clearInterval(intervalId);
       window.removeEventListener('resize', checkIsMobile);
       window.removeEventListener('orientationchange', checkIsMobile);
     };
-  }, [isMenuOpen]);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -146,78 +66,8 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Empêcher le scroll du body quand le menu mobile est ouvert
-  useEffect(() => {
-    if (isMenuOpen && isMobile) {
-      // Sauvegarder la position du scroll
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-      document.body.classList.add('menu-open');
-      
-      // FORCER l'affichage du menu avec manipulation DOM directe
-      setTimeout(() => {
-        const overlay = document.getElementById('mobile-menu-overlay');
-        const panel = document.getElementById('mobile-menu-panel');
-        if (overlay) {
-          overlay.style.display = 'block';
-          overlay.style.visibility = 'visible';
-          overlay.style.opacity = '1';
-          overlay.style.position = 'fixed';
-          overlay.style.top = '0';
-          overlay.style.left = '0';
-          overlay.style.right = '0';
-          overlay.style.bottom = '0';
-          overlay.style.zIndex = '10001';
-          overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        }
-        if (panel) {
-          panel.style.display = 'block';
-          panel.style.visibility = 'visible';
-          panel.style.opacity = '1';
-          panel.style.position = 'fixed';
-          panel.style.top = '4rem';
-          panel.style.left = '0';
-          panel.style.right = '0';
-          panel.style.bottom = '0';
-          panel.style.zIndex = '10002';
-          panel.style.backgroundColor = 'white';
-          panel.style.overflowY = 'auto';
-        }
-      }, 10);
-    } else {
-      // Restaurer la position du scroll
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      document.body.classList.remove('menu-open');
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
-      
-      // Cacher le menu
-      const overlay = document.getElementById('mobile-menu-overlay');
-      const panel = document.getElementById('mobile-menu-panel');
-      if (overlay) {
-        overlay.style.display = 'none';
-      }
-      if (panel) {
-        panel.style.display = 'none';
-      }
-    }
-    return () => {
-      // Nettoyage au démontage
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      document.body.classList.remove('menu-open');
-    };
-  }, [isMenuOpen, isMobile]);
+  // Le menu mobile est maintenant géré entièrement par le composant MobileMenu
+  // Plus besoin de gérer le scroll ici
 
   // Fermer les menus déroulants quand on clique ailleurs
   useEffect(() => {
@@ -265,22 +115,12 @@ const Header = () => {
   // Fermer tous les menus quand on change de page
   useEffect(() => {
     closeAllMenus();
-    setIsMenuOpen(false); // Fermer aussi le menu mobile
+    // Le menu mobile se ferme automatiquement via son propre useEffect dans MobileMenu
   }, [location.pathname]);
-  
-  // Fermer le menu mobile avec la touche Escape
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape' && isMenuOpen) {
-        setIsMenuOpen(false);
-      }
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isMenuOpen]);
 
   // Navigation de base pour tous les utilisateurs (non connectés)
   const baseNavigation = [
+    { name: 'Accueil', href: '/' },
     { name: t('navigation.training') || 'Formation', href: '/training' },
     { name: t('navigation.services'), href: '/services' },
     { name: t('navigation.products'), href: '/products' },
@@ -289,6 +129,7 @@ const Header = () => {
   // Navigation pour les utilisateurs connectés
   // Remplace "Formation" par "Mes Formations" quand l'utilisateur est connecté
   const userNavigation = [
+    { name: 'Accueil', href: '/' },
     { name: 'Mes Formations', href: '/my-courses' },
     { name: 'Mon Panier', href: '/cart' },
     { name: t('navigation.services'), href: '/services' },

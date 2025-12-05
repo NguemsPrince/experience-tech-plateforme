@@ -17,7 +17,13 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    // Initialiser avec la valeur actuelle
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
 
   // Détection mobile avec vérification continue
   useEffect(() => {
@@ -58,46 +64,143 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     };
   }, []);
 
+  // Fermer le menu quand on change de page
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  // Forcer l'affichage du menu quand isOpen devient true
+  useEffect(() => {
+    if (isOpen) {
+      const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
+      if (isMobileDevice) {
+        // Double vérification pour s'assurer que le menu s'affiche
+        const forceDisplay = () => {
+          const overlay = document.getElementById('mobile-menu-overlay');
+          const panel = document.getElementById('mobile-menu-panel');
+          
+          if (overlay) {
+            overlay.style.setProperty('display', 'block', 'important');
+            overlay.style.setProperty('visibility', 'visible', 'important');
+            overlay.style.setProperty('opacity', '1', 'important');
+            overlay.style.setProperty('z-index', '10001', 'important');
+            overlay.style.setProperty('position', 'fixed', 'important');
+          }
+          if (panel) {
+            panel.style.setProperty('display', 'block', 'important');
+            panel.style.setProperty('visibility', 'visible', 'important');
+            panel.style.setProperty('opacity', '1', 'important');
+            panel.style.setProperty('z-index', '10002', 'important');
+            panel.style.setProperty('position', 'fixed', 'important');
+          }
+        };
+        
+        // Forcer immédiatement et après un court délai
+        forceDisplay();
+        setTimeout(forceDisplay, 10);
+        setTimeout(forceDisplay, 50);
+        setTimeout(forceDisplay, 100);
+      }
+    }
+  }, [isOpen]);
+
   // Gestion de l'ouverture/fermeture
   useEffect(() => {
-    if (isOpen && isMobile) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.classList.add('menu-open');
-    } else {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.classList.remove('menu-open');
-    }
-  }, [isOpen, isMobile]);
-
-  const toggleMenu = () => {
-    console.log('Toggle menu clicked, current isOpen:', isOpen, 'isMobile:', isMobile);
-    const newState = !isOpen;
-    setIsOpen(newState);
-    console.log('Setting isOpen to:', newState);
+    const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
     
-    // FORCER l'affichage immédiat avec manipulation DOM
-    if (newState && isMobile) {
+    if (isOpen && isMobileDevice) {
+      // Sauvegarder la position du scroll
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('menu-open');
+      
+      // FORCER l'affichage du menu après un court délai
       setTimeout(() => {
-        const overlay = document.querySelector('.mobile-menu-overlay');
-        const panel = document.querySelector('.mobile-menu-panel');
-        console.log('Forcing display, overlay:', overlay, 'panel:', panel);
+        const overlay = document.getElementById('mobile-menu-overlay');
+        const panel = document.getElementById('mobile-menu-panel');
+        
         if (overlay) {
           overlay.style.setProperty('display', 'block', 'important');
           overlay.style.setProperty('visibility', 'visible', 'important');
           overlay.style.setProperty('opacity', '1', 'important');
+          overlay.style.setProperty('z-index', '10001', 'important');
         }
         if (panel) {
           panel.style.setProperty('display', 'block', 'important');
           panel.style.setProperty('visibility', 'visible', 'important');
           panel.style.setProperty('opacity', '1', 'important');
-          panel.style.setProperty('transform', 'translateX(0)', 'important');
+          panel.style.setProperty('z-index', '10002', 'important');
         }
       }, 10);
+    } else {
+      // Restaurer la position du scroll
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      document.body.classList.remove('menu-open');
+      
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+      
+      // Cacher le menu
+      const overlay = document.getElementById('mobile-menu-overlay');
+      const panel = document.getElementById('mobile-menu-panel');
+      if (overlay) {
+        overlay.style.setProperty('display', 'none', 'important');
+      }
+      if (panel) {
+        panel.style.setProperty('display', 'none', 'important');
+      }
     }
+  }, [isOpen]);
+
+  const toggleMenu = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    const currentIsMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    console.log('Toggle menu clicked, current isOpen:', isOpen, 'isMobile:', currentIsMobile);
+    
+    setIsOpen(prev => {
+      const newState = !prev;
+      console.log('Setting isOpen to:', newState);
+      
+      // FORCER l'affichage immédiat avec manipulation DOM
+      if (newState && currentIsMobile) {
+        // Utiliser setTimeout pour s'assurer que React a mis à jour le DOM
+        setTimeout(() => {
+          const overlay = document.getElementById('mobile-menu-overlay');
+          const panel = document.getElementById('mobile-menu-panel');
+          console.log('Forcing display, overlay:', overlay, 'panel:', panel);
+          
+          if (overlay) {
+            overlay.style.setProperty('display', 'block', 'important');
+            overlay.style.setProperty('visibility', 'visible', 'important');
+            overlay.style.setProperty('opacity', '1', 'important');
+            overlay.style.setProperty('z-index', '10001', 'important');
+            overlay.style.setProperty('position', 'fixed', 'important');
+          }
+          if (panel) {
+            panel.style.setProperty('display', 'block', 'important');
+            panel.style.setProperty('visibility', 'visible', 'important');
+            panel.style.setProperty('opacity', '1', 'important');
+            panel.style.setProperty('transform', 'translateX(0)', 'important');
+            panel.style.setProperty('z-index', '10002', 'important');
+            panel.style.setProperty('position', 'fixed', 'important');
+          }
+        }, 50);
+      }
+      
+      return newState;
+    });
   };
 
   const closeMenu = () => {
@@ -110,59 +213,78 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     setTimeout(() => navigate(href), 100);
   };
 
-  // Ne pas retourner null même si isMobile n'est pas encore détecté
-  // Le bouton sera caché par les styles si ce n'est pas mobile
-  const shouldShow = isMobile || window.innerWidth < 768;
+  // Vérifier si on doit afficher le bouton (mobile uniquement)
+  const shouldShowButton = isMobile || (typeof window !== 'undefined' && window.innerWidth < 768);
   
-  if (!shouldShow) {
-    return null;
-  }
+  // Le menu doit s'afficher si isOpen est vrai, indépendamment de shouldShowButton
+  // car shouldShowButton est seulement pour le bouton
 
   return (
     <>
       {/* Bouton Hamburger - TOUJOURS VISIBLE SUR MOBILE */}
-      <button
-        id="mobile-menu-btn"
-        onClick={toggleMenu}
-        onTouchStart={toggleMenu}
-        aria-label="Menu mobile"
-        aria-expanded={isOpen}
-        style={{
-          display: 'flex',
-          visibility: 'visible',
-          opacity: 1,
-          position: 'relative',
-          zIndex: 10003,
-          minWidth: '48px',
-          minHeight: '48px',
-          padding: '0.625rem',
-          marginLeft: '4px',
-          backgroundColor: '#2563eb',
-          color: 'white',
-          border: 'none',
-          borderRadius: '0.5rem',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-          cursor: 'pointer',
-          pointerEvents: 'auto',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          touchAction: 'manipulation',
-          WebkitTapHighlightColor: 'transparent'
-        }}
-      >
-        {isOpen ? (
-          <XMarkIcon style={{ width: '28px', height: '28px', color: 'white' }} />
-        ) : (
-          <Bars3Icon style={{ width: '28px', height: '28px', color: 'white' }} />
-        )}
-      </button>
+      {shouldShowButton && (
+        <button
+          id="mobile-menu-btn"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu(e);
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleMenu(e);
+          }}
+          aria-label="Menu mobile"
+          aria-expanded={isOpen}
+          type="button"
+          style={{
+            display: 'flex',
+            visibility: 'visible',
+            opacity: 1,
+            position: 'relative',
+            zIndex: 10003,
+            minWidth: '48px',
+            minHeight: '48px',
+            padding: '0.625rem',
+            marginLeft: '4px',
+            backgroundColor: '#2563eb',
+            color: 'white',
+            border: 'none',
+            borderRadius: '0.5rem',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            cursor: 'pointer',
+            pointerEvents: 'auto',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent'
+          }}
+        >
+          {isOpen ? (
+            <XMarkIcon style={{ width: '28px', height: '28px', color: 'white' }} />
+          ) : (
+            <Bars3Icon style={{ width: '28px', height: '28px', color: 'white' }} />
+          )}
+        </button>
+      )}
 
-      {/* Overlay - FORCER l'affichage */}
+      {/* Overlay - FORCER l'affichage - S'affiche si isOpen est vrai */}
       {isOpen && (
         <div
+          id="mobile-menu-overlay"
           className="mobile-menu-overlay"
-          onClick={closeMenu}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+          }}
           style={{
             position: 'fixed',
             top: 0,
@@ -174,14 +296,17 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
             display: 'block',
             visibility: 'visible',
             opacity: 1,
-            pointerEvents: 'auto'
+            pointerEvents: 'auto',
+            width: '100%',
+            height: '100%'
           }}
         />
       )}
 
-      {/* Menu Panel - FORCER l'affichage avec styles inline */}
+      {/* Menu Panel - FORCER l'affichage avec styles inline - S'affiche si isOpen est vrai */}
       {isOpen && (
         <div
+          id="mobile-menu-panel"
           className="mobile-menu-panel"
           style={{
             position: 'fixed',
