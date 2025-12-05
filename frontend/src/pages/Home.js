@@ -13,7 +13,8 @@ import {
   PrinterIcon,
   TruckIcon,
   WifiIcon,
-  SparklesIcon
+  SparklesIcon,
+  WrenchScrewdriverIcon
 } from '@heroicons/react/24/outline';
 import CountUp from 'react-countup';
 import { InView } from 'react-intersection-observer';
@@ -61,7 +62,7 @@ const Home = () => {
       title: t('services.printing.title'),
       description: 'Services d\'impression et design professionnel',
       icon: PrinterIcon,
-      image: '/images/services/service-impression.jpg',
+      image: '/images/services/Impression.jpg',
       features: [
         'Affiches & Banderoles',
         'Cartes de visite',
@@ -71,18 +72,18 @@ const Home = () => {
       href: '/services/printing'
     },
     {
-      id: 'commerce',
-      title: t('services.commerce.title'),
-      description: 'Commerce et import-export de matériel IT',
-      icon: TruckIcon,
-      image: '/images/services/commerce-import-export.jpg',
+      id: 'maintenance',
+      title: 'Maintenance Informatique',
+      description: 'Support technique et maintenance préventive de vos équipements IT',
+      icon: WrenchScrewdriverIcon,
+      image: '/images/services/Maintenance-informatique.avif',
       features: [
-        'Import équipements',
-        'Distribution',
-        'Conseil commercial',
-        'Logistique'
+        'Support technique 24/7',
+        'Maintenance préventive',
+        'Réparation d\'équipements',
+        'Mise à jour et optimisation'
       ],
-      href: '/services/commerce'
+      href: '/services/maintenance'
     },
     {
       id: 'networks',
@@ -97,11 +98,25 @@ const Home = () => {
         'Sécurité'
       ],
       href: '/services/networks'
+    },
+    {
+      id: 'commerce',
+      title: t('services.commerce.title'),
+      description: 'Commerce et import-export de matériel IT',
+      icon: TruckIcon,
+      image: '/images/services/commerce-import-export.jpg',
+      features: [
+        'Import équipements',
+        'Distribution',
+        'Conseil commercial',
+        'Logistique'
+      ],
+      href: '/services/commerce'
     }
   ];
 
   const stats = [
-    { number: 8, suffix: '+', label: t('home.stats.experience') },
+    { number: 5, suffix: '+', label: t('home.stats.experience') },
     { number: 500, suffix: '+', label: t('home.stats.clients') },
     { number: 1000, suffix: '+', label: t('home.stats.projects') },
     { number: 50, suffix: '+', label: t('home.stats.certifications') }
@@ -231,6 +246,7 @@ const Home = () => {
                   }
                 }}
                 className="group"
+                style={{ position: 'relative' }}
               >
                 <motion.div
                   className="bg-white rounded-2xl shadow-lg overflow-hidden h-full relative"
@@ -241,10 +257,11 @@ const Home = () => {
                 >
                   {/* Effet de brillance au survol (style Impression ND) */}
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 pointer-events-none z-10"
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 pointer-events-none z-5"
                     initial={{ x: "-100%" }}
                     whileHover={{ x: "100%" }}
                     transition={{ duration: 0.6, ease: "easeInOut" }}
+                    style={{ zIndex: 5 }}
                   />
                   
                   {/* Image avec effet parallaxe */}
@@ -263,9 +280,11 @@ const Home = () => {
                       }}
                     />
                     {/* Fallback gradient si l'image ne charge pas */}
-                    <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center" style={{display: 'none'}}>
-                      <service.icon className="w-20 h-20 text-white opacity-80" />
-                    </div>
+                    {service.icon && (
+                      <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center" style={{display: 'none'}}>
+                        {React.createElement(service.icon, { className: "w-20 h-20 text-white opacity-80" })}
+                      </div>
+                    )}
                     
                     {/* Overlay au survol */}
                     <motion.div
@@ -287,7 +306,7 @@ const Home = () => {
                     </motion.div>
                   </div>
 
-                  <div className="p-6 relative z-0">
+                  <div className="p-6 relative z-10">
                     {/* Titre avec animation */}
                     <motion.h3
                       className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300"
@@ -325,10 +344,16 @@ const Home = () => {
                     <motion.div
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
+                      className="relative z-20"
                     >
                       <Link
                         to={service.href}
-                        className="inline-flex items-center w-full justify-center bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-xl"
+                        className="inline-flex items-center w-full justify-center bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-xl relative z-20"
+                        style={{ position: 'relative', zIndex: 20 }}
+                        onClick={(e) => {
+                          // S'assurer que le clic fonctionne
+                          e.stopPropagation();
+                        }}
                       >
                         En savoir plus
                         <motion.div

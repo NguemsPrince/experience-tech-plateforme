@@ -27,8 +27,9 @@ const Footer = () => {
     { name: t('services.digital.title'), href: '/services/digital' },
     { name: t('services.training.title'), href: '/services/training' },
     { name: t('services.printing.title'), href: '/services/printing' },
-    { name: t('services.commerce.title'), href: '/services/commerce' },
+    { name: 'Maintenance Informatique', href: '/services/maintenance' },
     { name: t('services.networks.title'), href: '/services/networks' },
+    { name: t('services.commerce.title'), href: '/services/commerce' },
   ];
 
   const socialLinks = [
@@ -234,7 +235,7 @@ const Footer = () => {
         <div className="container-custom py-6">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <div className="text-gray-400 text-sm">
-              © 2024 Expérience Tech. {t('footer.allRightsReserved')}
+              © 2025 Expérience Tech. {t('footer.allRightsReserved')}
             </div>
             <div className="flex items-center space-x-6 text-sm">
               <Link

@@ -39,6 +39,7 @@ const Header = () => {
   const [showNewsMenu, setShowNewsMenu] = useState(false);
   const [showCommunityMenu, setShowCommunityMenu] = useState(false);
   const [showInfoMenu, setShowInfoMenu] = useState(false);
+  const [showServicesMenu, setShowServicesMenu] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   // Détection de la taille d'écran (pour d'autres usages si nécessaire)
@@ -77,10 +78,12 @@ const Header = () => {
           !event.target.closest('.news-menu-trigger') && 
           !event.target.closest('.community-menu-trigger') && 
           !event.target.closest('.info-menu-trigger') &&
+          !event.target.closest('.services-menu-trigger') &&
           !event.target.closest('.user-menu')) {
         setShowNewsMenu(false);
         setShowCommunityMenu(false);
         setShowInfoMenu(false);
+        setShowServicesMenu(false);
         setShowUserMenu(false);
       }
     };
@@ -94,6 +97,7 @@ const Header = () => {
     setShowNewsMenu(false);
     setShowCommunityMenu(false);
     setShowInfoMenu(false);
+    setShowServicesMenu(false);
     setShowUserMenu(false);
   };
 
@@ -157,6 +161,15 @@ const Header = () => {
   const infoMenu = [
     { name: t('navigation.contact'), href: '/contact' },
     { name: t('navigation.about'), href: '/about' },
+  ];
+
+  const servicesMenu = [
+    { name: t('services.digital.title'), href: '/services/digital' },
+    { name: t('services.training.title'), href: '/services/training' },
+    { name: t('services.printing.title'), href: '/services/printing' },
+    { name: 'Maintenance Informatique', href: '/services/maintenance' },
+    { name: t('services.networks.title'), href: '/services/networks' },
+    { name: t('services.commerce.title'), href: '/services/commerce' },
   ];
 
   return (
@@ -240,11 +253,47 @@ const Header = () => {
                 </Link>
               ))}
               
+              {/* Menu Services */}
+              <div className="relative dropdown-menu">
+                <button
+                  onClick={() => {
+                    setShowServicesMenu(!showServicesMenu);
+                    if (showNewsMenu) setShowNewsMenu(false);
+                    if (showCommunityMenu) setShowCommunityMenu(false);
+                    if (showInfoMenu) setShowInfoMenu(false);
+                  }}
+                  className={`services-menu-trigger menu-trigger text-xs font-medium transition-colors duration-200 hover:text-gray-900 text-gray-600 flex items-center ${showServicesMenu ? 'active' : ''}`}
+                >
+                  Nos Services
+                  <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {showServicesMenu && (
+                  <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-[60]">
+                    {servicesMenu.map((item) => (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={`dropdown-link ${
+                          location.pathname === item.href ? 'active' : ''
+                        }`}
+                        onClick={() => setShowServicesMenu(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
               {/* Menu Actualités & Témoignages */}
               <div className="relative dropdown-menu">
                 <button
                   onClick={() => {
                     setShowNewsMenu(!showNewsMenu);
+                    if (showServicesMenu) setShowServicesMenu(false);
                     if (showCommunityMenu) setShowCommunityMenu(false);
                     if (showInfoMenu) setShowInfoMenu(false);
                   }}
@@ -279,6 +328,7 @@ const Header = () => {
                 <button
                   onClick={() => {
                     setShowCommunityMenu(!showCommunityMenu);
+                    if (showServicesMenu) setShowServicesMenu(false);
                     if (showNewsMenu) setShowNewsMenu(false);
                     if (showInfoMenu) setShowInfoMenu(false);
                   }}
@@ -313,6 +363,7 @@ const Header = () => {
                 <button
                   onClick={() => {
                     setShowInfoMenu(!showInfoMenu);
+                    if (showServicesMenu) setShowServicesMenu(false);
                     if (showNewsMenu) setShowNewsMenu(false);
                     if (showCommunityMenu) setShowCommunityMenu(false);
                   }}
@@ -357,6 +408,7 @@ const Header = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       // Fermer les autres menus d'abord
+                      setShowServicesMenu(false);
                       setShowNewsMenu(false);
                       setShowCommunityMenu(false);
                       setShowInfoMenu(false);

@@ -12,7 +12,8 @@ import {
   AcademicCapIcon,
   PrinterIcon,
   TruckIcon,
-  WifiIcon
+  WifiIcon,
+  WrenchScrewdriverIcon
 } from '@heroicons/react/24/outline';
 
 const Services = () => {
@@ -68,7 +69,7 @@ const Services = () => {
             id: 'printing',
             title: t('services.printing.title'),
             description: 'Services d\'impression et design professionnel',
-            image: '/images/services/service-impression.jpg',
+            image: '/images/services/Impression.jpg',
             icon: PrinterIcon,
             features: [
               'Affiches & Banderoles',
@@ -82,21 +83,21 @@ const Services = () => {
             href: '/services/printing'
           },
           {
-            id: 'commerce',
-            title: t('services.commerce.title'),
-            description: 'Commerce et import-export de matériel IT',
-            image: '/images/services/commerce-import-export.jpg',
-            icon: TruckIcon,
+            id: 'maintenance',
+            title: 'Maintenance Informatique',
+            description: 'Support technique et maintenance préventive de vos équipements IT',
+            image: '/images/services/Maintenance-informatique.avif',
+            icon: WrenchScrewdriverIcon,
             features: [
-              'Import équipements',
-              'Distribution',
-              'Conseil commercial',
-              'Logistique'
+              'Support technique 24/7',
+              'Maintenance préventive',
+              'Réparation d\'équipements',
+              'Mise à jour et optimisation'
             ],
             price: 'Sur devis',
             duration: 'Variable',
-            category: 'Commerce',
-            href: '/services/commerce'
+            category: 'Maintenance',
+            href: '/services/maintenance'
           },
           {
             id: 'networks',
@@ -114,6 +115,23 @@ const Services = () => {
             duration: '1-3 jours',
             category: 'Réseaux',
             href: '/services/networks'
+          },
+          {
+            id: 'commerce',
+            title: t('services.commerce.title'),
+            description: 'Commerce et import-export de matériel IT',
+            image: '/images/services/commerce-import-export.jpg',
+            icon: TruckIcon,
+            features: [
+              'Import équipements',
+              'Distribution',
+              'Conseil commercial',
+              'Logistique'
+            ],
+            price: 'Sur devis',
+            duration: 'Variable',
+            category: 'Commerce',
+            href: '/services/commerce'
           }
         ];
 
@@ -122,6 +140,8 @@ const Services = () => {
           const response = await servicesService.getAllServices();
           // Si l'API retourne des données, les mapper pour inclure les images
           const apiServices = response.data || [];
+          
+          // Mapper les services de l'API avec les données par défaut
           const mappedServices = apiServices.map(apiService => {
             // Trouver le service correspondant par ID
             const defaultService = defaultServices.find(s => s.id === apiService.id);
@@ -129,10 +149,26 @@ const Services = () => {
               ...apiService,
               image: defaultService?.image || apiService.image || '/images/services/solution-numerique.png',
               icon: defaultService?.icon,
-              category: defaultService?.category || apiService.category || 'Service'
+              category: defaultService?.category || apiService.category || 'Service',
+              href: defaultService?.href || `/services/${apiService.id}`
             };
           });
-          setServices(mappedServices.length > 0 ? mappedServices : defaultServices);
+          
+          // Ajouter les services par défaut qui ne sont pas dans l'API (comme maintenance)
+          const missingServices = defaultServices.filter(defaultService => 
+            !mappedServices.find(mapped => mapped.id === defaultService.id)
+          );
+          
+          // Combiner les services mappés avec les services manquants
+          const allServices = [...mappedServices, ...missingServices];
+          
+          // Trier pour maintenir l'ordre : digital, training, printing, maintenance, networks, commerce
+          const serviceOrder = ['digital', 'training', 'printing', 'maintenance', 'networks', 'commerce'];
+          const sortedServices = serviceOrder
+            .map(id => allServices.find(s => s.id === id))
+            .filter(Boolean);
+          
+          setServices(sortedServices.length > 0 ? sortedServices : defaultServices);
         } catch (apiError) {
           console.log('API non disponible, utilisation des services par défaut');
           setServices(defaultServices);
@@ -167,11 +203,31 @@ const Services = () => {
             id: 'printing',
             title: t('services.printing.title'),
             description: 'Services d\'impression et design professionnel',
-            image: '/images/services/service-impression.jpg',
+            image: '/images/services/Impression.jpg',
             features: ['Affiches & Banderoles', 'Cartes de visite', 'Brochures', 'Emballages'],
             price: 'À partir de 2,000 FCFA',
             duration: '24h-48h',
             category: 'Impression'
+          },
+          {
+            id: 'maintenance',
+            title: 'Maintenance Informatique',
+            description: 'Support technique et maintenance préventive de vos équipements IT',
+            image: '/images/services/Maintenance-informatique.avif',
+            features: ['Support technique 24/7', 'Maintenance préventive', 'Réparation d\'équipements', 'Mise à jour et optimisation'],
+            price: 'Sur devis',
+            duration: 'Variable',
+            category: 'Maintenance'
+          },
+          {
+            id: 'networks',
+            title: t('services.networks.title'),
+            description: 'Solutions réseaux et connectivité',
+            image: '/images/services/reseaux-infrastructures.jpg',
+            features: ['Configuration réseaux', 'Supervision', 'Maintenance', 'Sécurité'],
+            price: 'À partir de 200,000 FCFA',
+            duration: '1-3 jours',
+            category: 'Réseaux'
           },
           {
             id: 'commerce',

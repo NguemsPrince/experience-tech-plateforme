@@ -79,21 +79,27 @@ router.get('/', async (req, res) => {
         formats: ['A4', 'A3', 'A2', 'A1', 'A0', 'Personnalisé']
       },
       {
-        id: 'commerce',
-        name: 'Commerce & Import-Export',
-        description: 'Commerce et import-export de matériel IT',
-        icon: 'TruckIcon',
+        id: 'maintenance',
+        name: 'Maintenance Informatique',
+        description: 'Support technique et maintenance préventive de vos équipements IT',
+        icon: 'WrenchScrewdriverIcon',
         features: [
-          'Import équipements',
-          'Distribution',
-          'Conseil commercial',
-          'Logistique'
+          'Support technique 24/7',
+          'Maintenance préventive',
+          'Réparation d\'équipements',
+          'Mise à jour et optimisation'
         ],
-        categories: [
-          'Ordinateurs et accessoires',
-          'Équipements réseau',
-          'Matériel de bureau',
-          'Logiciels'
+        pricing: {
+          support: 'Sur devis',
+          intervention: 'Sur devis',
+          maintenance: 'Sur devis'
+        },
+        services: [
+          'Support technique à distance',
+          'Maintenance préventive',
+          'Réparation matérielle',
+          'Mise à jour logicielle',
+          'Optimisation système'
         ]
       },
       {
@@ -112,6 +118,24 @@ router.get('/', async (req, res) => {
           'Configuration routeurs',
           'Sécurité réseau',
           'Maintenance préventive'
+        ]
+      },
+      {
+        id: 'commerce',
+        name: 'Commerce & Import-Export',
+        description: 'Commerce et import-export de matériel IT',
+        icon: 'TruckIcon',
+        features: [
+          'Import équipements',
+          'Distribution',
+          'Conseil commercial',
+          'Logistique'
+        ],
+        categories: [
+          'Ordinateurs et accessoires',
+          'Équipements réseau',
+          'Matériel de bureau',
+          'Logiciels'
         ]
       }
     ];
