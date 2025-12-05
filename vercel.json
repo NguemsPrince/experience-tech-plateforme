@@ -2,7 +2,7 @@
   "version": 2,
   "buildCommand": "cd frontend && npm install --legacy-peer-deps && GENERATE_SOURCEMAP=false npm run build",
   "outputDirectory": "frontend/build",
-  "installCommand": "cd frontend && npm install --legacy-peer-deps",
+  "installCommand": "cd frontend && (npm install --legacy-peer-deps || (sleep 10 && npm install --legacy-peer-deps) || (sleep 20 && npm install --legacy-peer-deps))",
   "rewrites": [
     {
       "source": "/(.*)",
