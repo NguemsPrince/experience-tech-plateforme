@@ -72,37 +72,29 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  // Forcer l'affichage du menu quand isOpen devient true
+  // Forcer l'affichage du menu quand isOpen devient true - SANS DÉLAI
   useEffect(() => {
     if (isOpen) {
       const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
       if (isMobileDevice) {
-        // Double vérification pour s'assurer que le menu s'affiche
-        const forceDisplay = () => {
-          const overlay = document.getElementById('mobile-menu-overlay');
-          const panel = document.getElementById('mobile-menu-panel');
-          
-          if (overlay) {
-            overlay.style.setProperty('display', 'block', 'important');
-            overlay.style.setProperty('visibility', 'visible', 'important');
-            overlay.style.setProperty('opacity', '1', 'important');
-            overlay.style.setProperty('z-index', '10001', 'important');
-            overlay.style.setProperty('position', 'fixed', 'important');
-          }
-          if (panel) {
-            panel.style.setProperty('display', 'block', 'important');
-            panel.style.setProperty('visibility', 'visible', 'important');
-            panel.style.setProperty('opacity', '1', 'important');
-            panel.style.setProperty('z-index', '10002', 'important');
-            panel.style.setProperty('position', 'fixed', 'important');
-          }
-        };
+        // Forcer l'affichage immédiatement sans délai
+        const overlay = document.getElementById('mobile-menu-overlay');
+        const panel = document.getElementById('mobile-menu-panel');
         
-        // Forcer immédiatement et après un court délai
-        forceDisplay();
-        setTimeout(forceDisplay, 10);
-        setTimeout(forceDisplay, 50);
-        setTimeout(forceDisplay, 100);
+        if (overlay) {
+          overlay.style.setProperty('display', 'block', 'important');
+          overlay.style.setProperty('visibility', 'visible', 'important');
+          overlay.style.setProperty('opacity', '1', 'important');
+          overlay.style.setProperty('z-index', '10001', 'important');
+          overlay.style.setProperty('position', 'fixed', 'important');
+        }
+        if (panel) {
+          panel.style.setProperty('display', 'block', 'important');
+          panel.style.setProperty('visibility', 'visible', 'important');
+          panel.style.setProperty('opacity', '1', 'important');
+          panel.style.setProperty('z-index', '10002', 'important');
+          panel.style.setProperty('position', 'fixed', 'important');
+        }
       }
     }
   }, [isOpen]);
@@ -120,24 +112,22 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
       document.body.style.overflow = 'hidden';
       document.body.classList.add('menu-open');
       
-      // FORCER l'affichage du menu après un court délai
-      setTimeout(() => {
-        const overlay = document.getElementById('mobile-menu-overlay');
-        const panel = document.getElementById('mobile-menu-panel');
-        
-        if (overlay) {
-          overlay.style.setProperty('display', 'block', 'important');
-          overlay.style.setProperty('visibility', 'visible', 'important');
-          overlay.style.setProperty('opacity', '1', 'important');
-          overlay.style.setProperty('z-index', '10001', 'important');
-        }
-        if (panel) {
-          panel.style.setProperty('display', 'block', 'important');
-          panel.style.setProperty('visibility', 'visible', 'important');
-          panel.style.setProperty('opacity', '1', 'important');
-          panel.style.setProperty('z-index', '10002', 'important');
-        }
-      }, 10);
+      // FORCER l'affichage du menu immédiatement sans délai
+      const overlay = document.getElementById('mobile-menu-overlay');
+      const panel = document.getElementById('mobile-menu-panel');
+      
+      if (overlay) {
+        overlay.style.setProperty('display', 'block', 'important');
+        overlay.style.setProperty('visibility', 'visible', 'important');
+        overlay.style.setProperty('opacity', '1', 'important');
+        overlay.style.setProperty('z-index', '10001', 'important');
+      }
+      if (panel) {
+        panel.style.setProperty('display', 'block', 'important');
+        panel.style.setProperty('visibility', 'visible', 'important');
+        panel.style.setProperty('opacity', '1', 'important');
+        panel.style.setProperty('z-index', '10002', 'important');
+      }
     } else {
       // Restaurer la position du scroll
       const scrollY = document.body.style.top;
@@ -169,41 +159,8 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
       e.stopPropagation();
     }
     
-    const currentIsMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    console.log('Toggle menu clicked, current isOpen:', isOpen, 'isMobile:', currentIsMobile);
-    
-    setIsOpen(prev => {
-      const newState = !prev;
-      console.log('Setting isOpen to:', newState);
-      
-      // FORCER l'affichage immédiat avec manipulation DOM
-      if (newState && currentIsMobile) {
-        // Utiliser setTimeout pour s'assurer que React a mis à jour le DOM
-        setTimeout(() => {
-          const overlay = document.getElementById('mobile-menu-overlay');
-          const panel = document.getElementById('mobile-menu-panel');
-          console.log('Forcing display, overlay:', overlay, 'panel:', panel);
-          
-          if (overlay) {
-            overlay.style.setProperty('display', 'block', 'important');
-            overlay.style.setProperty('visibility', 'visible', 'important');
-            overlay.style.setProperty('opacity', '1', 'important');
-            overlay.style.setProperty('z-index', '10001', 'important');
-            overlay.style.setProperty('position', 'fixed', 'important');
-          }
-          if (panel) {
-            panel.style.setProperty('display', 'block', 'important');
-            panel.style.setProperty('visibility', 'visible', 'important');
-            panel.style.setProperty('opacity', '1', 'important');
-            panel.style.setProperty('transform', 'translateX(0)', 'important');
-            panel.style.setProperty('z-index', '10002', 'important');
-            panel.style.setProperty('position', 'fixed', 'important');
-          }
-        }, 50);
-      }
-      
-      return newState;
-    });
+    // Changer l'état immédiatement sans délai
+    setIsOpen(prev => !prev);
   };
 
   const closeMenu = () => {
@@ -227,11 +184,6 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
         id="mobile-menu-button"
         className="mobile-menu-btn flex md:hidden lg:hidden"
         onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          toggleMenu(e);
-        }}
-        onTouchStart={(e) => {
           e.preventDefault();
           e.stopPropagation();
           toggleMenu(e);
@@ -260,18 +212,22 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
+          // touch-action: manipulation améliore la réactivité tactile
           touchAction: 'manipulation',
           WebkitTapHighlightColor: 'transparent',
           // Forcer l'affichage sur mobile - le CSS avec !important prendra le dessus
           display: isMobile ? 'flex' : 'none',
           visibility: isMobile ? 'visible' : 'hidden',
-          opacity: isMobile ? 1 : 0
+          opacity: isMobile ? 1 : 0,
+          // Améliorer la réactivité
+          userSelect: 'none',
+          WebkitUserSelect: 'none'
         }}
       >
         {isOpen ? (
-          <XMarkIcon style={{ width: '28px', height: '28px', color: 'white' }} />
+          <XMarkIcon style={{ width: '28px', height: '28px', color: 'white', pointerEvents: 'none' }} />
         ) : (
-          <Bars3Icon style={{ width: '28px', height: '28px', color: 'white' }} />
+          <Bars3Icon style={{ width: '28px', height: '28px', color: 'white', pointerEvents: 'none' }} />
         )}
       </button>
 
@@ -281,11 +237,6 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
           id="mobile-menu-overlay"
           className="mobile-menu-overlay"
           onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-          }}
-          onTouchStart={(e) => {
             e.preventDefault();
             e.stopPropagation();
             closeMenu();
@@ -303,7 +254,8 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
             opacity: 1,
             pointerEvents: 'auto',
             width: '100%',
-            height: '100%'
+            height: '100%',
+            touchAction: 'manipulation'
           }}
         />
       )}
