@@ -73,29 +73,38 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  // Forcer l'affichage du menu quand isOpen devient true - SANS DÉLAI
+  // Gérer le scroll lock quand isOpen change
   useEffect(() => {
-    if (isOpen) {
-      const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
-      if (isMobileDevice) {
-        // Forcer l'affichage immédiatement sans délai
-        const overlay = document.getElementById('mobile-menu-overlay');
-        const panel = document.getElementById('mobile-menu-panel');
-        
-        if (overlay) {
-          overlay.style.setProperty('display', 'block', 'important');
-          overlay.style.setProperty('visibility', 'visible', 'important');
-          overlay.style.setProperty('opacity', '1', 'important');
-          overlay.style.setProperty('z-index', '10001', 'important');
-          overlay.style.setProperty('position', 'fixed', 'important');
+    const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
+    
+    if (isOpen && isMobileDevice) {
+      // Lock scroll quand le menu est ouvert
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        // Unlock scroll quand le composant se démonte ou le menu se ferme
+        const savedScrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        if (savedScrollY) {
+          window.scrollTo(0, parseInt(savedScrollY || '0') * -1);
         }
-        if (panel) {
-          panel.style.setProperty('display', 'block', 'important');
-          panel.style.setProperty('visibility', 'visible', 'important');
-          panel.style.setProperty('opacity', '1', 'important');
-          panel.style.setProperty('z-index', '10002', 'important');
-          panel.style.setProperty('position', 'fixed', 'important');
-        }
+      };
+    } else if (!isOpen) {
+      // Unlock scroll quand le menu est fermé
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
       }
     }
   }, [isOpen]);
@@ -105,36 +114,6 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     isOpenRef.current = isOpen;
   }, [isOpen]);
   
-  // Gestion du scroll lock (séparé pour ne pas bloquer les interactions)
-  useEffect(() => {
-    const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
-    
-    if (isOpen && isMobileDevice) {
-      // Sauvegarder la position du scroll seulement si pas déjà fait
-      if (!document.body.style.position || document.body.style.position !== 'fixed') {
-        const scrollY = window.scrollY;
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
-        document.body.classList.add('menu-open');
-      }
-    } else if (!isOpen) {
-      // Restaurer seulement si le menu était ouvert
-      if (document.body.style.position === 'fixed') {
-        const scrollY = document.body.style.top;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
-        document.body.classList.remove('menu-open');
-        
-        if (scrollY) {
-          window.scrollTo(0, parseInt(scrollY || '0') * -1);
-        }
-      }
-    }
-  }, [isOpen]);
 
   const toggleMenu = (e) => {
     if (e) {
@@ -146,52 +125,11 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
       }
     }
     
-    // Changer l'état immédiatement et mettre à jour le ref
+    // Changer l'état de manière simple et directe
     setIsOpen(prev => {
       const newState = !prev;
       isOpenRef.current = newState;
-      
-      // Forcer l'affichage/cachement immédiatement via DOM
-      const overlay = document.getElementById('mobile-menu-overlay');
-      const panel = document.getElementById('mobile-menu-panel');
-      
-      if (newState) {
-        // Ouvrir immédiatement
-        if (overlay) {
-          overlay.style.display = 'block';
-          overlay.style.visibility = 'visible';
-          overlay.style.opacity = '1';
-        }
-        if (panel) {
-          panel.style.display = 'block';
-          panel.style.visibility = 'visible';
-          panel.style.opacity = '1';
-        }
-        // Lock scroll
-        const scrollY = window.scrollY;
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
-      } else {
-        // Fermer immédiatement
-        if (overlay) {
-          overlay.style.display = 'none';
-        }
-        if (panel) {
-          panel.style.display = 'none';
-        }
-        // Unlock scroll
-        const scrollY = document.body.style.top;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
-        if (scrollY) {
-          window.scrollTo(0, parseInt(scrollY || '0') * -1);
-        }
-      }
-      
+      console.log('Menu toggle:', newState ? 'OPEN' : 'CLOSED');
       return newState;
     });
   };
@@ -217,17 +155,15 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
       <button
         id="mobile-menu-button"
         className="mobile-menu-btn flex md:hidden lg:hidden"
-        onMouseDown={(e) => {
-          // Utiliser onMouseDown pour une réactivité maximale (fonctionne aussi sur mobile)
+        onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
+          console.log('Button clicked, current isOpen:', isOpen);
           toggleMenu(e);
         }}
-        onClick={(e) => {
-          // Double protection avec onClick
-          e.preventDefault();
+        onTouchStart={(e) => {
+          // Support tactile pour mobile
           e.stopPropagation();
-          toggleMenu(e);
         }}
         aria-label="Menu mobile"
         aria-expanded={isOpen}
@@ -274,63 +210,65 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
         )}
       </button>
 
-      {/* Overlay - FORCER l'affichage - S'affiche si isOpen est vrai */}
-      {isOpen && (
-        <div
-          id="mobile-menu-overlay"
-          className="mobile-menu-overlay"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            closeMenu();
-          }}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 10001,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'block',
-            visibility: 'visible',
-            opacity: 1,
-            pointerEvents: 'auto',
-            width: '100%',
-            height: '100%',
-            touchAction: 'manipulation'
-          }}
-        />
-      )}
+      {/* Overlay - S'affiche si isOpen est vrai */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            id="mobile-menu-overlay"
+            className="mobile-menu-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              closeMenu();
+            }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 10001,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              width: '100%',
+              height: '100%',
+              touchAction: 'manipulation'
+            }}
+          />
+        )}
+      </AnimatePresence>
 
-      {/* Menu Panel - FORCER l'affichage avec styles inline - S'affiche si isOpen est vrai */}
-      {isOpen && (
-        <div
-          id="mobile-menu-panel"
-          className="mobile-menu-panel"
-          style={{
-            position: 'fixed',
-            top: '64px',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 10002,
-            backgroundColor: 'white',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            display: 'block',
-            visibility: 'visible',
-            opacity: 1,
-            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-            borderTop: '1px solid #e5e7eb',
-            transform: 'translateX(0)',
-            transition: 'transform 0.3s ease',
-            width: '100%',
-            height: 'calc(100vh - 64px)',
-            maxHeight: 'calc(100vh - 64px)'
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
+      {/* Menu Panel - S'affiche si isOpen est vrai */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            id="mobile-menu-panel"
+            className="mobile-menu-panel"
+            initial={{ x: '-100%', opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: '-100%', opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            style={{
+              position: 'fixed',
+              top: '64px',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 10002,
+              backgroundColor: 'white',
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+              borderTop: '1px solid #e5e7eb',
+              width: '100%',
+              height: 'calc(100vh - 64px)',
+              maxHeight: 'calc(100vh - 64px)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div style={{ padding: '1rem' }}>
               {/* Navigation principale */}
               {navigation && navigation.length > 0 ? (
@@ -590,8 +528,9 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                 )}
               </div>
             </div>
-          </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
