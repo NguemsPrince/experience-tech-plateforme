@@ -1,0 +1,183 @@
+/* 
+ * FICHIER DE CORRECTION POUR LA PRODUCTION VERCEL
+ * Ce fichier garantit que le bouton hamburger est visible en production
+ * même après minification et optimisation CSS
+ * 
+ * IMPORTANT: Ce fichier doit être chargé en dernier pour avoir la priorité
+ */
+
+/* ============================================
+   CORRECTION PRODUCTION - BOUTON HAMBURGER
+   ============================================ */
+
+/* Sur mobile - FORCER l'affichage avec tous les sélecteurs possibles */
+@media only screen and (max-width: 767px),
+       only screen and (max-width: 767.98px),
+       screen and (max-width: 767px),
+       screen and (max-width: 767.98px),
+       (max-width: 767px),
+       (max-width: 767.98px) {
+  
+  /* Tous les sélecteurs possibles pour garantir la compatibilité */
+  button#mobile-menu-button,
+  #mobile-menu-button,
+  button.mobile-menu-btn,
+  .mobile-menu-btn,
+  button[aria-label="Menu mobile"],
+  button[aria-label="Menu mobile"].mobile-menu-btn,
+  header button#mobile-menu-button,
+  header #mobile-menu-button,
+  nav button#mobile-menu-button,
+  nav #mobile-menu-button,
+  header nav button#mobile-menu-button,
+  header nav #mobile-menu-button,
+  header nav div button#mobile-menu-button,
+  header nav div #mobile-menu-button,
+  header button.mobile-menu-btn,
+  nav button.mobile-menu-btn,
+  header nav button.mobile-menu-btn,
+  .flex button#mobile-menu-button,
+  .flex #mobile-menu-button,
+  .flex button.mobile-menu-btn {
+    /* FORCER l'affichage - priorité absolue */
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10003 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    
+    /* Dimensions */
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    padding: 0.625rem !important;
+    margin-left: 4px !important;
+    
+    /* Styles visuels */
+    background-color: #2563eb !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    
+    /* Touch et interaction */
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    
+    /* Flexbox */
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    
+    /* Typographie */
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    
+    /* Reset des styles de navigateur */
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    outline: none !important;
+  }
+  
+  /* États hover et active pour mobile */
+  button#mobile-menu-button:hover,
+  button#mobile-menu-button:active,
+  #mobile-menu-button:hover,
+  #mobile-menu-button:active,
+  button.mobile-menu-btn:hover,
+  button.mobile-menu-btn:active,
+  .mobile-menu-btn:hover,
+  .mobile-menu-btn:active {
+    background-color: #1d4ed8 !important;
+    transform: scale(0.95) !important;
+  }
+  
+  /* Focus pour accessibilité */
+  button#mobile-menu-button:focus-visible,
+  #mobile-menu-button:focus-visible,
+  button.mobile-menu-btn:focus-visible,
+  .mobile-menu-btn:focus-visible {
+    outline: 2px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+  }
+}
+
+/* Sur desktop - CACHER le bouton */
+@media only screen and (min-width: 768px),
+       only screen and (min-width: 768.02px),
+       screen and (min-width: 768px),
+       screen and (min-width: 768.02px),
+       (min-width: 768px),
+       (min-width: 768.02px) {
+  
+  button#mobile-menu-button,
+  #mobile-menu-button,
+  button.mobile-menu-btn,
+  .mobile-menu-btn,
+  button[aria-label="Menu mobile"],
+  header button#mobile-menu-button,
+  header #mobile-menu-button,
+  nav button#mobile-menu-button,
+  nav #mobile-menu-button,
+  header nav button#mobile-menu-button,
+  header nav #mobile-menu-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* ============================================
+   CORRECTION PRODUCTION - MENU PANEL
+   ============================================ */
+
+/* Garantir que le menu panel s'affiche correctement sur mobile */
+@media only screen and (max-width: 767px),
+       screen and (max-width: 767px) {
+  #mobile-menu-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 10001 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  #mobile-menu-panel {
+    position: fixed !important;
+    top: 64px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 10002 !important;
+    background-color: white !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    transform: translateX(0) !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    height: calc(100vh - 64px) !important;
+    max-height: calc(100vh - 64px) !important;
+  }
+}
+

@@ -25,16 +25,39 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     return false;
   });
 
-  // Détection mobile pour d'autres usages si nécessaire
-  // MAIS on ne force plus l'affichage du bouton - le CSS gère ça
+  // Détection mobile et FORCE l'affichage du bouton sur mobile uniquement
   useEffect(() => {
     const checkMobile = () => {
       const width = window.innerWidth || document.documentElement.clientWidth;
       const mobile = width < 768;
       setIsMobile(mobile);
+      
+      // FORCER l'affichage du bouton sur mobile uniquement
+      const button = document.getElementById('mobile-menu-button');
+      if (button) {
+        if (mobile) {
+          // Sur mobile : FORCER l'affichage
+          button.style.setProperty('display', 'flex', 'important');
+          button.style.setProperty('visibility', 'visible', 'important');
+          button.style.setProperty('opacity', '1', 'important');
+          button.style.setProperty('pointer-events', 'auto', 'important');
+        } else {
+          // Sur desktop : CACHER le bouton
+          button.style.setProperty('display', 'none', 'important');
+          button.style.setProperty('visibility', 'hidden', 'important');
+          button.style.setProperty('opacity', '0', 'important');
+          button.style.setProperty('pointer-events', 'none', 'important');
+        }
+      }
     };
 
+    // Vérifier immédiatement
     checkMobile();
+    
+    // Vérifier après un court délai pour s'assurer que le DOM est prêt
+    setTimeout(checkMobile, 100);
+    setTimeout(checkMobile, 500);
+    
     window.addEventListener('resize', checkMobile);
     window.addEventListener('orientationchange', checkMobile);
 
@@ -198,7 +221,7 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
 
   return (
     <>
-      {/* Bouton Hamburger - TOUJOURS RENDU, CSS GÈRE LA VISIBILITÉ */}
+      {/* Bouton Hamburger - TOUJOURS RENDU, CSS ET JS GÈRENT LA VISIBILITÉ */}
       <button
         id="mobile-menu-button"
         className="mobile-menu-btn"
@@ -215,9 +238,10 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
         aria-label="Menu mobile"
         aria-expanded={isOpen}
         type="button"
+        data-mobile-only="true"
         style={{
-          // Styles inline de secours pour garantir l'affichage sur mobile
-          // Le CSS devrait gérer ça, mais on ajoute des styles inline au cas où
+          // Styles inline conditionnels selon la taille d'écran
+          // Le JavaScript forcera l'affichage sur mobile uniquement
           position: 'relative',
           zIndex: 10003,
           minWidth: '48px',
@@ -238,7 +262,11 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
           flexShrink: 0,
           touchAction: 'manipulation',
           WebkitTapHighlightColor: 'transparent',
-          display: 'flex'
+          // Affichage initial basé sur la taille d'écran
+          // Le CSS avec !important prendra le dessus en production
+          display: isMobile ? 'flex' : 'none',
+          visibility: isMobile ? 'visible' : 'hidden',
+          opacity: isMobile ? 1 : 0
         }}
       >
           {isOpen ? (
