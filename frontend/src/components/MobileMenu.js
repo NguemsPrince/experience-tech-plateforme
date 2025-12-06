@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline';
@@ -17,6 +17,7 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const isOpenRef = useRef(false);
   const [isMobile, setIsMobile] = useState(() => {
     // Initialiser avec la valeur actuelle
     if (typeof window !== 'undefined') {
@@ -99,56 +100,38 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     }
   }, [isOpen]);
 
-  // Gestion de l'ouverture/fermeture
+  // Synchroniser le ref avec l'état
+  useEffect(() => {
+    isOpenRef.current = isOpen;
+  }, [isOpen]);
+  
+  // Gestion du scroll lock (séparé pour ne pas bloquer les interactions)
   useEffect(() => {
     const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
     
     if (isOpen && isMobileDevice) {
-      // Sauvegarder la position du scroll
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-      document.body.classList.add('menu-open');
-      
-      // FORCER l'affichage du menu immédiatement sans délai
-      const overlay = document.getElementById('mobile-menu-overlay');
-      const panel = document.getElementById('mobile-menu-panel');
-      
-      if (overlay) {
-        overlay.style.setProperty('display', 'block', 'important');
-        overlay.style.setProperty('visibility', 'visible', 'important');
-        overlay.style.setProperty('opacity', '1', 'important');
-        overlay.style.setProperty('z-index', '10001', 'important');
+      // Sauvegarder la position du scroll seulement si pas déjà fait
+      if (!document.body.style.position || document.body.style.position !== 'fixed') {
+        const scrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+        document.body.classList.add('menu-open');
       }
-      if (panel) {
-        panel.style.setProperty('display', 'block', 'important');
-        panel.style.setProperty('visibility', 'visible', 'important');
-        panel.style.setProperty('opacity', '1', 'important');
-        panel.style.setProperty('z-index', '10002', 'important');
-      }
-    } else {
-      // Restaurer la position du scroll
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      document.body.classList.remove('menu-open');
-      
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
-      
-      // Cacher le menu
-      const overlay = document.getElementById('mobile-menu-overlay');
-      const panel = document.getElementById('mobile-menu-panel');
-      if (overlay) {
-        overlay.style.setProperty('display', 'none', 'important');
-      }
-      if (panel) {
-        panel.style.setProperty('display', 'none', 'important');
+    } else if (!isOpen) {
+      // Restaurer seulement si le menu était ouvert
+      if (document.body.style.position === 'fixed') {
+        const scrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        document.body.classList.remove('menu-open');
+        
+        if (scrollY) {
+          window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        }
       }
     }
   }, [isOpen]);
@@ -157,10 +140,60 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
+      // Empêcher la propagation immédiatement
+      if (e.nativeEvent) {
+        e.nativeEvent.stopImmediatePropagation();
+      }
     }
     
-    // Changer l'état immédiatement sans délai
-    setIsOpen(prev => !prev);
+    // Changer l'état immédiatement et mettre à jour le ref
+    setIsOpen(prev => {
+      const newState = !prev;
+      isOpenRef.current = newState;
+      
+      // Forcer l'affichage/cachement immédiatement via DOM
+      const overlay = document.getElementById('mobile-menu-overlay');
+      const panel = document.getElementById('mobile-menu-panel');
+      
+      if (newState) {
+        // Ouvrir immédiatement
+        if (overlay) {
+          overlay.style.display = 'block';
+          overlay.style.visibility = 'visible';
+          overlay.style.opacity = '1';
+        }
+        if (panel) {
+          panel.style.display = 'block';
+          panel.style.visibility = 'visible';
+          panel.style.opacity = '1';
+        }
+        // Lock scroll
+        const scrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+      } else {
+        // Fermer immédiatement
+        if (overlay) {
+          overlay.style.display = 'none';
+        }
+        if (panel) {
+          panel.style.display = 'none';
+        }
+        // Unlock scroll
+        const scrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        if (scrollY) {
+          window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        }
+      }
+      
+      return newState;
+    });
   };
 
   const closeMenu = () => {
@@ -183,7 +216,14 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
       <button
         id="mobile-menu-button"
         className="mobile-menu-btn flex md:hidden lg:hidden"
+        onMouseDown={(e) => {
+          // Utiliser onMouseDown pour une réactivité maximale (fonctionne aussi sur mobile)
+          e.preventDefault();
+          e.stopPropagation();
+          toggleMenu(e);
+        }}
         onClick={(e) => {
+          // Double protection avec onClick
           e.preventDefault();
           e.stopPropagation();
           toggleMenu(e);
@@ -221,7 +261,9 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
           opacity: isMobile ? 1 : 0,
           // Améliorer la réactivité
           userSelect: 'none',
-          WebkitUserSelect: 'none'
+          WebkitUserSelect: 'none',
+          // Empêcher le double-tap zoom sur mobile
+          touchAction: 'manipulation'
         }}
       >
         {isOpen ? (
