@@ -25,40 +25,20 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     return false;
   });
 
-  // Détection mobile avec vérification continue
+  // Détection mobile pour d'autres usages si nécessaire
+  // MAIS on ne force plus l'affichage du bouton - le CSS gère ça
   useEffect(() => {
     const checkMobile = () => {
       const width = window.innerWidth || document.documentElement.clientWidth;
       const mobile = width < 768;
-      console.log('Checking mobile, width:', width, 'isMobile:', mobile);
       setIsMobile(mobile);
-      
-      // FORCER la visibilité du bouton
-      const btn = document.getElementById('mobile-menu-btn');
-      if (btn) {
-        if (mobile) {
-          btn.style.setProperty('display', 'flex', 'important');
-          btn.style.setProperty('visibility', 'visible', 'important');
-          btn.style.setProperty('opacity', '1', 'important');
-          btn.style.setProperty('pointer-events', 'auto', 'important');
-        } else {
-          btn.style.setProperty('display', 'none', 'important');
-        }
-      }
     };
 
-    // Vérifier immédiatement
     checkMobile();
-    
-    // Vérifier après un court délai
-    setTimeout(checkMobile, 100);
-    
-    const interval = setInterval(checkMobile, 500);
     window.addEventListener('resize', checkMobile);
     window.addEventListener('orientationchange', checkMobile);
 
     return () => {
-      clearInterval(interval);
       window.removeEventListener('resize', checkMobile);
       window.removeEventListener('orientationchange', checkMobile);
     };
@@ -213,62 +193,60 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     setTimeout(() => navigate(href), 100);
   };
 
-  // Vérifier si on doit afficher le bouton (mobile uniquement)
-  const shouldShowButton = isMobile || (typeof window !== 'undefined' && window.innerWidth < 768);
-  
-  // Le menu doit s'afficher si isOpen est vrai, indépendamment de shouldShowButton
-  // car shouldShowButton est seulement pour le bouton
+  // Le bouton sera toujours rendu, le CSS gérera l'affichage/cache
+  // Pas besoin de shouldShowButton car le CSS avec media queries le gère
 
   return (
     <>
-      {/* Bouton Hamburger - TOUJOURS VISIBLE SUR MOBILE */}
-      {shouldShowButton && (
-        <button
-          id="mobile-menu-btn"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleMenu(e);
-          }}
-          onTouchStart={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleMenu(e);
-          }}
-          aria-label="Menu mobile"
-          aria-expanded={isOpen}
-          type="button"
-          style={{
-            display: 'flex',
-            visibility: 'visible',
-            opacity: 1,
-            position: 'relative',
-            zIndex: 10003,
-            minWidth: '48px',
-            minHeight: '48px',
-            padding: '0.625rem',
-            marginLeft: '4px',
-            backgroundColor: '#2563eb',
-            color: 'white',
-            border: 'none',
-            borderRadius: '0.5rem',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-            cursor: 'pointer',
-            pointerEvents: 'auto',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            touchAction: 'manipulation',
-            WebkitTapHighlightColor: 'transparent'
-          }}
-        >
+      {/* Bouton Hamburger - TOUJOURS RENDU, CSS GÈRE LA VISIBILITÉ */}
+      <button
+        id="mobile-menu-button"
+        className="mobile-menu-btn"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleMenu(e);
+        }}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleMenu(e);
+        }}
+        aria-label="Menu mobile"
+        aria-expanded={isOpen}
+        type="button"
+        style={{
+          // Styles inline de secours pour garantir l'affichage sur mobile
+          // Le CSS devrait gérer ça, mais on ajoute des styles inline au cas où
+          position: 'relative',
+          zIndex: 10003,
+          minWidth: '48px',
+          minHeight: '48px',
+          width: '48px',
+          height: '48px',
+          padding: '0.625rem',
+          marginLeft: '4px',
+          backgroundColor: '#2563eb',
+          color: 'white',
+          border: 'none',
+          borderRadius: '0.5rem',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          cursor: 'pointer',
+          pointerEvents: 'auto',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+          touchAction: 'manipulation',
+          WebkitTapHighlightColor: 'transparent',
+          display: 'flex'
+        }}
+      >
           {isOpen ? (
             <XMarkIcon style={{ width: '28px', height: '28px', color: 'white' }} />
           ) : (
             <Bars3Icon style={{ width: '28px', height: '28px', color: 'white' }} />
           )}
         </button>
-      )}
 
       {/* Overlay - FORCER l'affichage - S'affiche si isOpen est vrai */}
       {isOpen && (
@@ -310,7 +288,7 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
           className="mobile-menu-panel"
           style={{
             position: 'fixed',
-            top: '4rem',
+            top: '64px',
             left: 0,
             right: 0,
             bottom: 0,
@@ -324,7 +302,10 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
             boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
             borderTop: '1px solid #e5e7eb',
             transform: 'translateX(0)',
-            transition: 'transform 0.3s ease'
+            transition: 'transform 0.3s ease',
+            width: '100%',
+            height: 'calc(100vh - 64px)',
+            maxHeight: 'calc(100vh - 64px)'
           }}
           onClick={(e) => e.stopPropagation()}
         >

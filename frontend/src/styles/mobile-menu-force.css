@@ -1,0 +1,109 @@
+/* 
+ * FICHIER DE FORCE ABSOLUE POUR LE MENU MOBILE
+ * Ce fichier garantit que le bouton hamburger est TOUJOURS visible sur mobile
+ * Même si d'autres styles ou JavaScript interfèrent
+ */
+
+/* ============================================
+   FORCE ABSOLUE - BOUTON HAMBURGER SUR MOBILE
+   ============================================ */
+
+/* Sur mobile - FORCER l'affichage du bouton */
+@media screen and (max-width: 767px) {
+  /* Tous les sélecteurs possibles */
+  button#mobile-menu-button,
+  #mobile-menu-button,
+  button.mobile-menu-btn,
+  .mobile-menu-btn,
+  button[aria-label="Menu mobile"],
+  header button#mobile-menu-button,
+  header #mobile-menu-button,
+  nav button#mobile-menu-button,
+  nav #mobile-menu-button,
+  header nav button#mobile-menu-button,
+  header nav #mobile-menu-button,
+  header button.mobile-menu-btn,
+  nav button.mobile-menu-btn {
+    /* FORCER l'affichage - priorité absolue */
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10003 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    
+    /* Styles visuels */
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    padding: 0.625rem !important;
+    margin-left: 4px !important;
+    background-color: #2563eb !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    
+    /* Touch */
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    
+    /* Flex */
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* Sur desktop - CACHER le bouton */
+@media screen and (min-width: 768px) {
+  button#mobile-menu-button,
+  #mobile-menu-button,
+  button.mobile-menu-btn,
+  .mobile-menu-btn,
+  button[aria-label="Menu mobile"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* ============================================
+   FORCE ABSOLUE - MENU PANEL ET OVERLAY
+   ============================================ */
+
+/* Sur mobile - Menu ouvert */
+@media screen and (max-width: 767px) {
+  body.menu-open #mobile-menu-overlay,
+  body.menu-open #mobile-menu-panel {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  #mobile-menu-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 10001 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+  
+  #mobile-menu-panel {
+    position: fixed !important;
+    top: 64px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 10002 !important;
+    background-color: white !important;
+    overflow-y: auto !important;
+    transform: translateX(0) !important;
+  }
+}
+

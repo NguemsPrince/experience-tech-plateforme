@@ -13,12 +13,15 @@ button#mobile-menu-button,
 #mobile-menu-button,
 button[aria-label="Menu mobile"],
 .mobile-menu-btn,
+button.mobile-menu-btn,
 header button#mobile-menu-button,
 header #mobile-menu-button,
 nav button#mobile-menu-button,
 nav #mobile-menu-button,
 header nav button#mobile-menu-button,
-header nav #mobile-menu-button {
+header nav #mobile-menu-button,
+header button.mobile-menu-btn,
+nav button.mobile-menu-btn {
   /* Styles de base ABSOLUS */
   position: relative !important;
   z-index: 10003 !important;
@@ -60,12 +63,15 @@ header nav #mobile-menu-button {
   #mobile-menu-button,
   button[aria-label="Menu mobile"],
   .mobile-menu-btn,
+  button.mobile-menu-btn,
   header button#mobile-menu-button,
   header #mobile-menu-button,
   nav button#mobile-menu-button,
   nav #mobile-menu-button,
   header nav button#mobile-menu-button,
-  header nav #mobile-menu-button {
+  header nav #mobile-menu-button,
+  header button.mobile-menu-btn,
+  nav button.mobile-menu-btn {
     display: flex !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -73,6 +79,8 @@ header nav #mobile-menu-button {
     z-index: 10003 !important;
     pointer-events: auto !important;
     cursor: pointer !important;
+    width: 48px !important;
+    height: 48px !important;
   }
 }
 
@@ -86,12 +94,15 @@ header nav #mobile-menu-button {
   #mobile-menu-button,
   button[aria-label="Menu mobile"],
   .mobile-menu-btn,
+  button.mobile-menu-btn,
   header button#mobile-menu-button,
   header #mobile-menu-button,
   nav button#mobile-menu-button,
   nav #mobile-menu-button,
   header nav button#mobile-menu-button,
-  header nav #mobile-menu-button {
+  header nav #mobile-menu-button,
+  header button.mobile-menu-btn,
+  nav button.mobile-menu-btn {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;

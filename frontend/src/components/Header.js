@@ -26,6 +26,7 @@ import '../styles/mobile-fixes.css';
 import '../styles/mobile-menu.css';
 import '../styles/mobile-menu-fixes.css';
 import '../styles/mobile-menu-guaranteed.css';
+import '../styles/mobile-menu-force.css';
 
 const Header = () => {
   const location = useLocation();
