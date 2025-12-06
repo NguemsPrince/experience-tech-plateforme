@@ -3,16 +3,37 @@ module.exports = {
   darkMode: 'class', // Enable dark mode with class strategy
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/index.html"
+    "./public/index.html",
+    // S'assurer que tous les fichiers sont scannés pour la détection des classes
+    "./src/components/**/*.{js,jsx}",
+    "./src/pages/**/*.{js,jsx}",
   ],
   // Important: Ne pas purger les classes utilisées pour le menu mobile
+  // Utilisation de patterns pour garantir que toutes les variantes sont préservées
   safelist: [
+    // Classes de visibilité responsive pour le bouton hamburger
+    {
+      pattern: /^(hidden|block|flex|inline|inline-block|inline-flex)$/,
+      variants: ['md', 'lg', 'sm', 'xl'],
+    },
+    // Classes spécifiques du bouton hamburger
+    'mobile-menu-btn',
     'md:hidden',
     'lg:hidden',
-    'flex',
-    'mobile-menu-btn',
     'md:flex',
-    'lg:flex'
+    'lg:flex',
+    'flex',
+    'hidden',
+    // Combinaisons possibles
+    'flex md:hidden lg:hidden',
+    'md:hidden lg:hidden',
+    // Classes pour le menu mobile
+    'mobile-menu-overlay',
+    'mobile-menu-panel',
+    // Classes conditionnelles avec isOpen
+    {
+      pattern: /^(block|hidden)$/,
+    },
   ],
   theme: {
     extend: {

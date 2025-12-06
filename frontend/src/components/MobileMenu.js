@@ -213,6 +213,7 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
     <>
       {/* Bouton Hamburger - TOUJOURS RENDU avec classes Tailwind + CSS + JS */}
       {/* Triple protection : Tailwind (md:hidden), CSS (!important), JS (force display) */}
+      {/* Utilisation de classes séparées pour éviter la purge Tailwind en production */}
       <button
         id="mobile-menu-button"
         className="mobile-menu-btn flex md:hidden lg:hidden"
