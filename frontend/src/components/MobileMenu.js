@@ -221,10 +221,11 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
 
   return (
     <>
-      {/* Bouton Hamburger - TOUJOURS RENDU, CSS ET JS GÈRENT LA VISIBILITÉ */}
+      {/* Bouton Hamburger - TOUJOURS RENDU avec classes Tailwind + CSS + JS */}
+      {/* Triple protection : Tailwind (md:hidden), CSS (!important), JS (force display) */}
       <button
         id="mobile-menu-button"
-        className="mobile-menu-btn"
+        className="mobile-menu-btn flex md:hidden lg:hidden"
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -240,8 +241,7 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
         type="button"
         data-mobile-only="true"
         style={{
-          // Styles inline conditionnels selon la taille d'écran
-          // Le JavaScript forcera l'affichage sur mobile uniquement
+          // Styles inline pour garantir l'affichage même si CSS ne charge pas
           position: 'relative',
           zIndex: 10003,
           minWidth: '48px',
@@ -262,19 +262,18 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
           flexShrink: 0,
           touchAction: 'manipulation',
           WebkitTapHighlightColor: 'transparent',
-          // Affichage initial basé sur la taille d'écran
-          // Le CSS avec !important prendra le dessus en production
+          // Forcer l'affichage sur mobile - le CSS avec !important prendra le dessus
           display: isMobile ? 'flex' : 'none',
           visibility: isMobile ? 'visible' : 'hidden',
           opacity: isMobile ? 1 : 0
         }}
       >
-          {isOpen ? (
-            <XMarkIcon style={{ width: '28px', height: '28px', color: 'white' }} />
-          ) : (
-            <Bars3Icon style={{ width: '28px', height: '28px', color: 'white' }} />
-          )}
-        </button>
+        {isOpen ? (
+          <XMarkIcon style={{ width: '28px', height: '28px', color: 'white' }} />
+        ) : (
+          <Bars3Icon style={{ width: '28px', height: '28px', color: 'white' }} />
+        )}
+      </button>
 
       {/* Overlay - FORCER l'affichage - S'affiche si isOpen est vrai */}
       {isOpen && (

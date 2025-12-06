@@ -25,6 +25,9 @@
   .mobile-menu-btn,
   button[aria-label="Menu mobile"],
   button[aria-label="Menu mobile"].mobile-menu-btn,
+  button.mobile-menu-btn.flex,
+  button.mobile-menu-btn.md\:hidden,
+  button.mobile-menu-btn.lg\:hidden,
   header button#mobile-menu-button,
   header #mobile-menu-button,
   nav button#mobile-menu-button,
@@ -38,7 +41,9 @@
   header nav button.mobile-menu-btn,
   .flex button#mobile-menu-button,
   .flex #mobile-menu-button,
-  .flex button.mobile-menu-btn {
+  .flex button.mobile-menu-btn,
+  div.flex button#mobile-menu-button,
+  div.flex-items-center button#mobile-menu-button {
     /* FORCER l'affichage - priorité absolue */
     display: flex !important;
     visibility: visible !important;
@@ -122,6 +127,9 @@
   button.mobile-menu-btn,
   .mobile-menu-btn,
   button[aria-label="Menu mobile"],
+  button.mobile-menu-btn.flex,
+  button.mobile-menu-btn.md\:hidden,
+  button.mobile-menu-btn.lg\:hidden,
   header button#mobile-menu-button,
   header #mobile-menu-button,
   nav button#mobile-menu-button,

@@ -5,6 +5,15 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
     "./public/index.html"
   ],
+  // Important: Ne pas purger les classes utilisées pour le menu mobile
+  safelist: [
+    'md:hidden',
+    'lg:hidden',
+    'flex',
+    'mobile-menu-btn',
+    'md:flex',
+    'lg:flex'
+  ],
   theme: {
     extend: {
       colors: {

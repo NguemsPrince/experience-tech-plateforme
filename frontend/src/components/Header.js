@@ -558,6 +558,7 @@ const Header = () => {
             </button>
 
             {/* Menu mobile - Composant dédié avec garantie 100% */}
+            {/* Le bouton hamburger est rendu dans MobileMenu avec classes Tailwind md:hidden lg:hidden */}
             <MobileMenu 
               navigation={navigation}
               newsMenu={newsMenu}
