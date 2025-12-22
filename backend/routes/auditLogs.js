@@ -6,6 +6,18 @@ const AuditLog = require('../models/AuditLog');
 
 const router = express.Router();
 
+// Debug: Log when the route file is loaded
+console.log('[AuditLogs Routes] Route file loaded successfully');
+
+// Debug: Log toutes les requêtes vers les routes d'audit
+router.use((req, res, next) => {
+  console.log(`[AuditLogs] ${req.method} ${req.path}`, {
+    query: req.query,
+    hasAuth: !!req.headers.authorization
+  });
+  next();
+});
+
 // Toutes les routes nécessitent une authentification admin
 router.use(protect);
 router.use(authorize('admin', 'super_admin'));
@@ -137,28 +149,6 @@ router.get(
 );
 
 /**
- * @route   GET /api/admin/audit-logs/:id
- * @desc    Récupérer un log d'audit spécifique
- * @access  Private/Admin
- */
-router.get('/:id', async (req, res) => {
-  try {
-    const log = await AuditLog.findById(req.params.id)
-      .populate('user', 'firstName lastName email role')
-      .lean();
-
-    if (!log) {
-      return sendErrorResponse(res, 404, 'Log d\'audit non trouvé');
-    }
-
-    sendSuccessResponse(res, 200, 'Log d\'audit récupéré', log);
-  } catch (error) {
-    console.error('Error fetching audit log:', error);
-    sendErrorResponse(res, 500, 'Erreur lors de la récupération du log d\'audit', error.message);
-  }
-});
-
-/**
  * @route   GET /api/admin/audit-logs/user/:userId
  * @desc    Récupérer les logs d'un utilisateur spécifique
  * @access  Private/Admin
@@ -191,6 +181,28 @@ router.get('/user/:userId', async (req, res) => {
   } catch (error) {
     console.error('Error fetching user audit logs:', error);
     sendErrorResponse(res, 500, 'Erreur lors de la récupération des logs', error.message);
+  }
+});
+
+/**
+ * @route   GET /api/admin/audit-logs/:id
+ * @desc    Récupérer un log d'audit spécifique
+ * @access  Private/Admin
+ */
+router.get('/:id', async (req, res) => {
+  try {
+    const log = await AuditLog.findById(req.params.id)
+      .populate('user', 'firstName lastName email role')
+      .lean();
+
+    if (!log) {
+      return sendErrorResponse(res, 404, 'Log d\'audit non trouvé');
+    }
+
+    sendSuccessResponse(res, 200, 'Log d\'audit récupéré', log);
+  } catch (error) {
+    console.error('Error fetching audit log:', error);
+    sendErrorResponse(res, 500, 'Erreur lors de la récupération du log d\'audit', error.message);
   }
 });
 
