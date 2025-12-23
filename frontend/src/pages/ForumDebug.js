@@ -71,12 +71,12 @@ const ForumDebug = () => {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-red-800 mb-2">Erreur de chargement</h2>
-            <p className="text-red-600 mb-4">{error}</p>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-blue-800 mb-2">Erreur de chargement</h2>
+            <p className="text-blue-600 mb-4">{error}</p>
             <button
               onClick={loadData}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
             >
               Réessayer
             </button>
@@ -191,7 +191,7 @@ const ForumDebug = () => {
                       </div>
                     </div>
                     <div className="flex items-center space-x-2 ml-4">
-                      <button className="p-2 text-gray-400 hover:text-red-500 transition-colors">
+                      <button className="p-2 text-gray-400 hover:text-blue-500 transition-colors">
                         <HeartIcon className="w-5 h-5" />
                       </button>
                       <button className="p-2 text-gray-400 hover:text-blue-500 transition-colors">

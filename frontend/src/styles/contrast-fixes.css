@@ -1,0 +1,213 @@
+/* ============================================
+   CONTRAST FIXES
+   Corrections de contraste pour une meilleure lisibilité
+   ============================================ */
+
+/* ========== FIXES POUR LES SECTIONS HERO ========== */
+
+/* S'assurer que le texte est toujours blanc sur les fonds sombres */
+.bg-gradient-to-br.from-gray-900.to-gray-800 h1,
+.bg-gradient-to-br.from-gray-900.to-gray-800 h2,
+.bg-gradient-to-br.from-gray-900.to-gray-800 h3,
+.bg-gradient-to-br.from-gray-900.to-gray-800 p,
+.bg-gradient-to-br.from-primary-600.to-primary-800 h1,
+.bg-gradient-to-br.from-primary-600.to-primary-800 h2,
+.bg-gradient-to-br.from-primary-600.to-primary-800 h3,
+.bg-gradient-to-br.from-primary-600.to-primary-800 p,
+.bg-gradient-to-r.from-gray-900.via-gray-800.to-gray-700 h1,
+.bg-gradient-to-r.from-gray-900.via-gray-800.to-gray-700 h2,
+.bg-gradient-to-r.from-gray-900.via-gray-800.to-gray-700 h3,
+.bg-gradient-to-r.from-gray-900.via-gray-800.to-gray-700 p,
+.bg-gradient-to-r.from-primary-600.via-primary-700.to-primary-800 h1,
+.bg-gradient-to-r.from-primary-600.via-primary-700.to-primary-800 h2,
+.bg-gradient-to-r.from-primary-600.via-primary-700.to-primary-800 h3,
+.bg-gradient-to-r.from-primary-600.via-primary-700.to-primary-800 p {
+  color: #ffffff !important;
+}
+
+/* Sections avec bg-gray-900 ou bg-primary-600 */
+section.bg-gray-900 h1,
+section.bg-gray-900 h2,
+section.bg-gray-900 h3,
+section.bg-gray-900 p,
+section.bg-primary-600 h1,
+section.bg-primary-600 h2,
+section.bg-primary-600 h3,
+section.bg-primary-600 p,
+section.bg-primary-700 h1,
+section.bg-primary-700 h2,
+section.bg-primary-700 h3,
+section.bg-primary-700 p,
+section.bg-primary-800 h1,
+section.bg-primary-800 h2,
+section.bg-primary-800 h3,
+section.bg-primary-800 p {
+  color: #ffffff !important;
+}
+
+/* ========== FIXES POUR LES TEXTES SUR FONDS SOMBRES ========== */
+
+/* S'assurer que text-white est toujours appliqué sur fonds sombres */
+.bg-gray-900 .text-gray-900,
+.bg-gray-800 .text-gray-900,
+.bg-gray-700 .text-gray-900,
+.bg-primary-600 .text-gray-900,
+.bg-primary-700 .text-gray-900,
+.bg-primary-800 .text-gray-900,
+.bg-primary-900 .text-gray-900 {
+  color: #ffffff !important;
+}
+
+.bg-gray-900 .text-gray-800,
+.bg-gray-800 .text-gray-800,
+.bg-gray-700 .text-gray-800,
+.bg-primary-600 .text-gray-800,
+.bg-primary-700 .text-gray-800,
+.bg-primary-800 .text-gray-800 {
+  color: #ffffff !important;
+}
+
+.bg-gray-900 .text-gray-700,
+.bg-gray-800 .text-gray-700,
+.bg-gray-700 .text-gray-700,
+.bg-primary-600 .text-gray-700,
+.bg-primary-700 .text-gray-700,
+.bg-primary-800 .text-gray-700 {
+  color: #e5e7eb !important;
+}
+
+.bg-gray-900 .text-black,
+.bg-gray-800 .text-black,
+.bg-gray-700 .text-black,
+.bg-primary-600 .text-black,
+.bg-primary-700 .text-black,
+.bg-primary-800 .text-black {
+  color: #ffffff !important;
+}
+
+/* ========== FIXES POUR LES GRADIENTS ========== */
+
+/* Gradients avec primary */
+[class*="from-primary"][class*="to-primary"] h1,
+[class*="from-primary"][class*="to-primary"] h2,
+[class*="from-primary"][class*="to-primary"] h3,
+[class*="from-primary"][class*="to-primary"] h4,
+[class*="from-primary"][class*="to-primary"] h5,
+[class*="from-primary"][class*="to-primary"] h6,
+[class*="from-primary"][class*="to-primary"] p,
+[class*="from-primary"][class*="to-primary"] span,
+[class*="from-primary"][class*="to-primary"] div {
+  color: #ffffff !important;
+}
+
+/* Gradients avec gray sombre */
+[class*="from-gray-900"][class*="to-gray-800"] h1,
+[class*="from-gray-900"][class*="to-gray-800"] h2,
+[class*="from-gray-900"][class*="to-gray-800"] h3,
+[class*="from-gray-900"][class*="to-gray-800"] h4,
+[class*="from-gray-900"][class*="to-gray-800"] h5,
+[class*="from-gray-900"][class*="to-gray-800"] h6,
+[class*="from-gray-900"][class*="to-gray-800"] p,
+[class*="from-gray-900"][class*="to-gray-800"] span,
+[class*="from-gray-900"][class*="to-gray-800"] div {
+  color: #ffffff !important;
+}
+
+[class*="from-gray-900"][class*="via-gray-800"][class*="to-gray-700"] h1,
+[class*="from-gray-900"][class*="via-gray-800"][class*="to-gray-700"] h2,
+[class*="from-gray-900"][class*="via-gray-800"][class*="to-gray-700"] h3,
+[class*="from-gray-900"][class*="via-gray-800"][class*="to-gray-700"] h4,
+[class*="from-gray-900"][class*="via-gray-800"][class*="to-gray-700"] h5,
+[class*="from-gray-900"][class*="via-gray-800"][class*="to-gray-700"] h6,
+[class*="from-gray-900"][class*="via-gray-800"][class*="to-gray-700"] p,
+[class*="from-gray-900"][class*="via-gray-800"][class*="to-gray-700"] span,
+[class*="from-gray-900"][class*="via-gray-800"][class*="to-gray-700"] div {
+  color: #ffffff !important;
+}
+
+/* ========== FIXES SPÉCIFIQUES POUR LES PAGES ========== */
+
+/* Page Services */
+section[class*="section-padding"][class*="bg-gradient"] h1,
+section[class*="section-padding"][class*="bg-gradient"] h2 {
+  color: #ffffff !important;
+}
+
+/* ========== FIXES POUR L'OPACITÉ ========== */
+
+/* S'assurer que les textes avec opacity sont toujours visibles */
+.text-white.opacity-90,
+.text-white.opacity-80,
+.text-white.opacity-70 {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* ========== FIXES POUR DARK MODE ========== */
+
+.dark .bg-gray-900 h1,
+.dark .bg-gray-900 h2,
+.dark .bg-gray-900 h3,
+.dark .bg-gray-900 p,
+.dark .bg-primary-600 h1,
+.dark .bg-primary-600 h2,
+.dark .bg-primary-600 h3,
+.dark .bg-primary-600 p {
+  color: #ffffff !important;
+}
+
+/* ========== FIXES POUR LES BOUTONS SUR FONDS SOMBRES ========== */
+
+.bg-gray-900 button:not(.text-white),
+.bg-gray-800 button:not(.text-white),
+.bg-primary-600 button:not(.text-white),
+.bg-primary-700 button:not(.text-white),
+.bg-primary-800 button:not(.text-white) {
+  color: #ffffff !important;
+}
+
+/* ========== FIXES POUR LES LIENS SUR FONDS SOMBRES ========== */
+
+.bg-gray-900 a:not(.text-white),
+.bg-gray-800 a:not(.text-white),
+.bg-primary-600 a:not(.text-white),
+.bg-primary-700 a:not(.text-white),
+.bg-primary-800 a:not(.text-white) {
+  color: #ffffff !important;
+}
+
+/* ========== FIXES GÉNÉRAUX ========== */
+
+/* S'assurer que les textes sont toujours lisibles */
+* {
+  text-shadow: none;
+}
+
+/* Ajouter une ombre de texte sur les fonds sombres pour améliorer la lisibilité */
+.bg-gray-900 h1,
+.bg-gray-900 h2,
+.bg-gray-900 h3,
+.bg-gray-800 h1,
+.bg-gray-800 h2,
+.bg-gray-800 h3,
+.bg-primary-600 h1,
+.bg-primary-600 h2,
+.bg-primary-600 h3,
+.bg-primary-700 h1,
+.bg-primary-700 h2,
+.bg-primary-700 h3,
+.bg-primary-800 h1,
+.bg-primary-800 h2,
+.bg-primary-800 h3 {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== FIXES POUR LES ANIMATIONS ========== */
+
+/* S'assurer que les animations ne changent pas la couleur du texte */
+[class*="animate"] h1,
+[class*="animate"] h2,
+[class*="animate"] h3,
+[class*="animate"] p {
+  color: inherit !important;
+}
+

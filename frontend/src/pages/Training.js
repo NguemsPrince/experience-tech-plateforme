@@ -374,11 +374,11 @@ const Training = () => {
       </Helmet>
 
       {/* Hero Section - Udemy Style */}
-      <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 text-white">
+      <section className="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800 text-white">
         <div className="container-custom py-16">
           <div className="max-w-4xl mx-auto text-center">
             <SolarAnimation variant="solar" delay={0.2}>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight text-white">
                 Apprenez sans limites
               </h1>
             </SolarAnimation>
@@ -784,8 +784,8 @@ const Training = () => {
 
             {/* Materials */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <DocumentArrowDownIcon className="w-10 h-10 text-red-600" />
+              <div className="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <DocumentArrowDownIcon className="w-10 h-10 text-blue-600" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 Ressources téléchargeables

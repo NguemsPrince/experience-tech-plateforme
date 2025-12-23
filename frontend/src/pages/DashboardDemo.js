@@ -93,7 +93,7 @@ const DashboardDemo = () => {
               { label: "Composants créés", value: "8", color: "from-blue-500 to-cyan-500" },
               { label: "Animations ajoutées", value: "15+", color: "from-purple-500 to-pink-500" },
               { label: "Responsive breakpoints", value: "3", color: "from-green-500 to-emerald-500" },
-              { label: "Temps de développement", value: "2h", color: "from-orange-500 to-red-500" }
+              { label: "Temps de développement", value: "2h", color: "from-orange-500 to-blue-500" }
             ].map((stat, index) => (
               <div key={stat.label} className="text-center">
                 <div className={`w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r ${stat.color} flex items-center justify-center`}>

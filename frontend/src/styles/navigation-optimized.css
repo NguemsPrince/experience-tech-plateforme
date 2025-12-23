@@ -1,0 +1,405 @@
+/* ============================================
+   NAVIGATION OPTIMISÉE - ACCESSIBILITÉ & COMPATIBILITÉ
+   ============================================ */
+
+/* Variables CSS pour maintenir la cohérence */
+:root {
+  --nav-height: 64px;
+  --nav-bg: rgba(255, 255, 255, 0.95);
+  --nav-bg-scrolled: rgba(255, 255, 255, 1);
+  --nav-text: #1f2937;
+  --nav-text-hover: #2563eb;
+  --nav-active: #2563eb;
+  --nav-active-bg: #eff6ff;
+  --nav-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --nav-shadow-scrolled: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --nav-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --touch-target-size: 44px;
+  --font-size-base: 14px;
+  --font-size-mobile: 16px;
+  --contrast-ratio: 4.5; /* WCAG AA minimum */
+}
+
+/* ============================================
+   HEADER STICKY OPTIMISÉ
+   ============================================ */
+
+header[role="banner"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 10000 !important;
+  background-color: var(--nav-bg) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow: var(--nav-shadow) !important;
+  transition: var(--nav-transition) !important;
+  will-change: background-color, box-shadow !important;
+}
+
+/* Header avec scroll - ombre plus prononcée */
+header[role="banner"].scrolled,
+header[role="banner"]:has(+ *:not(:first-child)) {
+  background-color: var(--nav-bg-scrolled) !important;
+  box-shadow: var(--nav-shadow-scrolled) !important;
+}
+
+/* Support pour les navigateurs qui ne supportent pas :has() */
+@supports not selector(:has(*)) {
+  header[role="banner"].scrolled {
+    background-color: var(--nav-bg-scrolled) !important;
+    box-shadow: var(--nav-shadow-scrolled) !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITÉ - ZONES CLIQUABLES
+   ============================================ */
+
+/* Tous les éléments interactifs doivent avoir une taille minimale de 44x44px */
+header a,
+header button,
+header [role="button"],
+header [role="link"] {
+  min-height: var(--touch-target-size) !important;
+  min-width: var(--touch-target-size) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 8px 12px !important;
+  font-size: var(--font-size-base) !important;
+  line-height: 1.5 !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: rgba(37, 99, 235, 0.1) !important;
+  cursor: pointer !important;
+}
+
+/* ============================================
+   ACCESSIBILITÉ - CONTRASTE & LISIBILITÉ
+   ============================================ */
+
+/* Contraste minimum WCAG AA pour le texte normal */
+header a,
+header button,
+header [role="button"] {
+  color: var(--nav-text) !important;
+  font-weight: 500 !important;
+}
+
+/* Contraste élevé pour les liens actifs */
+header a[aria-current="page"],
+header a.active,
+header a:focus-visible {
+  color: var(--nav-active) !important;
+  background-color: var(--nav-active-bg) !important;
+  font-weight: 600 !important;
+}
+
+/* États de focus visibles pour la navigation au clavier */
+header a:focus-visible,
+header button:focus-visible {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 2px !important;
+  border-radius: 6px !important;
+}
+
+/* États hover avec contraste suffisant */
+header a:hover:not(:disabled),
+header button:hover:not(:disabled) {
+  color: var(--nav-text-hover) !important;
+  background-color: var(--nav-active-bg) !important;
+  transition: var(--nav-transition) !important;
+}
+
+/* ============================================
+   RESPONSIVE - BREAKPOINTS OPTIMISÉS
+   ============================================ */
+
+/* Mobile First - Base styles pour mobile */
+@media screen and (max-width: 767px) {
+  :root {
+    --font-size-base: var(--font-size-mobile);
+  }
+  
+  header[role="banner"] {
+    height: var(--nav-height) !important;
+  }
+  
+  /* Cacher la navigation desktop sur mobile */
+  header .hidden-mobile,
+  header [class*="lg:flex"],
+  header [class*="md:flex"] {
+    display: none !important;
+  }
+  
+  /* Afficher le menu hamburger */
+  #mobile-menu-button {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Tablette - Transition entre mobile et desktop */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  header[role="banner"] {
+    height: var(--nav-height) !important;
+  }
+  
+  /* Cacher le menu hamburger sur tablette */
+  #mobile-menu-button {
+    display: none !important;
+  }
+  
+  /* Afficher la navigation desktop */
+  header .hidden-mobile {
+    display: flex !important;
+  }
+}
+
+/* Desktop - Navigation complète */
+@media screen and (min-width: 1024px) {
+  header[role="banner"] {
+    height: var(--nav-height) !important;
+  }
+  
+  /* Cacher définitivement le menu hamburger */
+  #mobile-menu-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+  
+  /* Navigation desktop complète */
+  header nav {
+    max-width: 1280px !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* ============================================
+   MENU MOBILE - OPTIMISATIONS
+   ============================================ */
+
+/* Overlay du menu mobile */
+#mobile-menu-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10001 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  will-change: opacity !important;
+}
+
+/* Panel du menu mobile */
+#mobile-menu-panel {
+  position: fixed !important;
+  top: var(--nav-height) !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10002 !important;
+  background-color: #ffffff !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  box-shadow: var(--nav-shadow-scrolled) !important;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  will-change: transform, opacity !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-behavior: smooth !important;
+}
+
+/* Liens dans le menu mobile */
+#mobile-menu-panel a,
+#mobile-menu-panel button {
+  min-height: var(--touch-target-size) !important;
+  min-width: 100% !important;
+  padding: 14px 16px !important;
+  font-size: var(--font-size-mobile) !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  color: var(--nav-text) !important;
+  background-color: transparent !important;
+  border-radius: 8px !important;
+  margin-bottom: 4px !important;
+  transition: var(--nav-transition) !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: rgba(37, 99, 235, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  text-decoration: none !important;
+}
+
+/* Liens actifs dans le menu mobile */
+#mobile-menu-panel a[aria-current="page"],
+#mobile-menu-panel a.active {
+  color: var(--nav-active) !important;
+  background-color: var(--nav-active-bg) !important;
+  font-weight: 600 !important;
+}
+
+/* États hover/active pour le menu mobile */
+#mobile-menu-panel a:hover,
+#mobile-menu-panel a:active,
+#mobile-menu-panel button:hover,
+#mobile-menu-panel button:active {
+  background-color: #f3f4f6 !important;
+  color: var(--nav-text-hover) !important;
+}
+
+/* ============================================
+   COMPATIBILITÉ NAVIGATEURS
+   ============================================ */
+
+/* Support pour les navigateurs plus anciens */
+@supports not (backdrop-filter: blur(10px)) {
+  header[role="banner"] {
+    background-color: var(--nav-bg-scrolled) !important;
+  }
+  
+  #mobile-menu-overlay {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+  }
+}
+
+/* Support pour Safari/iOS */
+@supports (-webkit-backdrop-filter: blur(10px)) {
+  header[role="banner"] {
+    -webkit-backdrop-filter: blur(10px) !important;
+  }
+  
+  #mobile-menu-overlay {
+    -webkit-backdrop-filter: blur(2px) !important;
+  }
+}
+
+/* Support pour Firefox */
+@-moz-document url-prefix() {
+  header[role="banner"] {
+    background-color: var(--nav-bg-scrolled) !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITÉ - REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  header[role="banner"],
+  header a,
+  header button,
+  #mobile-menu-overlay,
+  #mobile-menu-panel,
+  #mobile-menu-panel a,
+  #mobile-menu-panel button {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  header[role="banner"] {
+    will-change: auto !important;
+  }
+  
+  #mobile-menu-overlay,
+  #mobile-menu-panel {
+    will-change: auto !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITÉ - HIGH CONTRAST MODE
+   ============================================ */
+
+@media (prefers-contrast: high) {
+  header[role="banner"] {
+    border-bottom: 2px solid #000000 !important;
+  }
+  
+  header a,
+  header button {
+    border: 1px solid currentColor !important;
+  }
+  
+  header a:focus-visible,
+  header button:focus-visible {
+    outline: 3px solid #000000 !important;
+    outline-offset: 3px !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITÉ - DARK MODE
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nav-bg: rgba(17, 24, 39, 0.95);
+    --nav-bg-scrolled: rgba(17, 24, 39, 1);
+    --nav-text: #f9fafb;
+    --nav-text-hover: #93c5fd;
+    --nav-active: #93c5fd;
+    --nav-active-bg: #1e3a8a;
+  }
+  
+  header[role="banner"] {
+    background-color: var(--nav-bg) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  #mobile-menu-panel {
+    background-color: #1f2937 !important;
+    color: #f9fafb !important;
+  }
+  
+  #mobile-menu-panel a,
+  #mobile-menu-panel button {
+    color: #e5e7eb !important;
+  }
+  
+  #mobile-menu-panel a:hover,
+  #mobile-menu-panel a:active,
+  #mobile-menu-panel button:hover,
+  #mobile-menu-panel button:active {
+    background-color: #374151 !important;
+  }
+}
+
+/* ============================================
+   PERFORMANCE - OPTIMISATIONS
+   ============================================ */
+
+/* Utilisation de will-change pour les animations */
+header[role="banner"],
+#mobile-menu-overlay,
+#mobile-menu-panel {
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+}
+
+/* Prévention du layout shift */
+header[role="banner"] {
+  contain: layout style paint !important;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  header[role="banner"],
+  #mobile-menu-button,
+  #mobile-menu-overlay,
+  #mobile-menu-panel {
+    display: none !important;
+  }
+}
+

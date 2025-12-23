@@ -180,7 +180,7 @@ const CartEnhanced = () => {
 
                           <button
                             onClick={() => removeFromCart(item._id || item.id)}
-                            className="ml-auto p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
+                            className="ml-auto p-1 text-blue-600 hover:bg-blue-50 rounded transition-colors"
                             disabled={isLoading}
                           >
                             <TrashIcon className="h-4 w-4" />
@@ -194,7 +194,7 @@ const CartEnhanced = () => {
                   {cartItems.length > 0 && (
                     <button
                       onClick={clearCart}
-                      className="w-full text-sm text-red-600 hover:text-red-700 font-medium py-2"
+                      className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium py-2"
                       disabled={isLoading}
                     >
                       Vider le panier
@@ -217,7 +217,7 @@ const CartEnhanced = () => {
                         </div>
                         <button
                           onClick={removeCoupon}
-                          className="text-sm text-red-600 hover:text-red-700 font-medium"
+                          className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                         >
                           Retirer
                         </button>

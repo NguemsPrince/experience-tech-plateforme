@@ -68,7 +68,7 @@ export const AnimatedButton = ({
   
   const variantClasses = {
     solar: "bg-gray-900 text-white hover:bg-gray-800 focus:ring-gray-900 hover-solar",
-    energy: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 hover-glow",
+    energy: "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500 hover-glow",
     magnetic: "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500 hover-magnetic",
     wave: "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 focus:ring-purple-500"
   };

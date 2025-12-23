@@ -70,18 +70,18 @@ export const colorPalette = {
     900: '#78350f'
   },
   
-  // Couleurs d'erreur (rouge)
+  // Couleurs d'erreur (bleu - remplacé depuis rouge)
   error: {
-    50: '#fef2f2',
-    100: '#fee2e2',
-    200: '#fecaca',
-    300: '#fca5a5',
-    400: '#f87171',
-    500: '#ef4444',
-    600: '#dc2626',
-    700: '#b91c1c',
-    800: '#991b1b',
-    900: '#7f1d1d'
+    50: '#eff6ff',
+    100: '#dbeafe',
+    200: '#bfdbfe',
+    300: '#93c5fd',
+    400: '#60a5fa',
+    500: '#3b82f6',
+    600: '#2563eb',
+    700: '#1d4ed8',
+    800: '#1e40af',
+    900: '#1e3a8a'
   },
   
   // Couleurs d'information (cyan)
@@ -102,10 +102,10 @@ export const colorPalette = {
 // Gradients prédéfinis
 export const gradients = {
   primary: 'linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%)',
-  secondary: 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)',
+  secondary: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)',
   success: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
   warning: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
-  error: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+  error: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)',
   info: 'linear-gradient(135deg, #06B6D4 0%, #0891B2 100%)',
   
   // Gradients spéciaux
@@ -123,7 +123,7 @@ export const gradients = {
   buttonSecondary: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
   buttonSuccess: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
   buttonWarning: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
-  buttonError: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)'
+  buttonError: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)'
 };
 
 // Configuration des thèmes
@@ -189,7 +189,7 @@ export const shadows = {
   secondary: '0 10px 15px -3px rgba(59, 130, 246, 0.1), 0 4px 6px -2px rgba(59, 130, 246, 0.05)',
   success: '0 10px 15px -3px rgba(16, 185, 129, 0.1), 0 4px 6px -2px rgba(16, 185, 129, 0.05)',
   warning: '0 10px 15px -3px rgba(245, 158, 11, 0.1), 0 4px 6px -2px rgba(245, 158, 11, 0.05)',
-  error: '0 10px 15px -3px rgba(239, 68, 68, 0.1), 0 4px 6px -2px rgba(239, 68, 68, 0.05)',
+  error: '0 10px 15px -3px rgba(59, 130, 246, 0.1), 0 4px 6px -2px rgba(59, 130, 246, 0.05)',
   
   // Ombres pour le mode sombre
   dark: {

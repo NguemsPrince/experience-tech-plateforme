@@ -44,8 +44,8 @@ const ReputationCard = ({ reputation, showDetails = true }) => {
       icon: HeartIcon,
       label: 'Likes reçus',
       value: stats?.likesReceived || 0,
-      color: 'text-red-600',
-      bgColor: 'bg-red-50'
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50'
     },
     {
       icon: CheckCircleIcon,

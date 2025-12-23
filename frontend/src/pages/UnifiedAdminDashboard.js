@@ -38,6 +38,8 @@ import ModernCharts from '../components/Dashboard/ModernCharts';
 import QuickActions from '../components/Dashboard/QuickActions';
 import RecentActivity from '../components/Dashboard/RecentActivity';
 import NotificationPanel from '../components/Dashboard/NotificationPanel';
+import Breadcrumb from '../components/Breadcrumb';
+import { showErrorToast } from '../utils/errorMessages';
 import UserManagement from '../components/Dashboard/UserManagement';
 import OrderManagement from '../components/Dashboard/OrderManagement';
 import ProductManagement from '../components/Dashboard/ProductManagement';
@@ -64,6 +66,7 @@ import adminService from '../services/adminService';
 import { useAuth } from '../hooks/useAuth';
 import LoadingSpinner from '../components/LoadingSpinner';
 import SkeletonLoader from '../components/SkeletonLoader';
+import toast from 'react-hot-toast';
 
 function UnifiedAdminDashboard() {
   const { t } = useTranslation();
@@ -288,9 +291,11 @@ function UnifiedAdminDashboard() {
       if (result.success) {
         console.log('Action exécutée avec succès:', result.message);
       }
-    } catch (error) {
-      console.error('Erreur lors de l\'exécution de l\'action:', error);
-    }
+      } catch (error) {
+        console.error('Erreur lors de l\'exécution de l\'action:', error);
+        const errorMessage = showErrorToast(error, 'Erreur lors de l\'exécution de l\'action');
+        toast.error(errorMessage);
+      }
   };
 
   const handleSearch = async (query) => {
@@ -298,8 +303,17 @@ function UnifiedAdminDashboard() {
       try {
         const results = await dashboardService.searchDashboard(query);
         console.log('Résultats de recherche:', results);
+        
+        // Si des résultats sont trouvés, afficher une notification
+        if (results && (results.length > 0 || Object.keys(results).length > 0)) {
+          toast.success(`${Object.keys(results).reduce((sum, key) => sum + (results[key]?.length || 0), 0)} résultat(s) trouvé(s)`);
+        } else {
+          toast.info('Aucun résultat trouvé');
+        }
       } catch (error) {
         console.error('Erreur lors de la recherche:', error);
+        const errorMessage = showErrorToast(error, 'Erreur lors de la recherche');
+        toast.error(errorMessage);
       }
     }
   };
@@ -344,6 +358,7 @@ function UnifiedAdminDashboard() {
     { id: 'dashboard', name: t('admin.dashboard.title') || t('admin.dashboard') || 'Dashboard', icon: ChartBarIcon, active: true },
     { id: 'users', name: t('admin.users') || 'Utilisateurs', icon: UsersIcon },
     { id: 'orders', name: t('admin.orders') || 'Commandes', icon: ShoppingBagIcon },
+    { id: 'payment-methods', name: t('admin.paymentMethods') || 'Moyens de paiement', icon: CreditCardIcon },
     { id: 'products', name: t('admin.products') || 'Produits', icon: CubeIcon },
     { id: 'training', name: t('admin.training') || 'Formations', icon: AcademicCapIcon },
     { id: 'content', name: t('admin.content') || 'Contenu', icon: DocumentTextIcon },
@@ -353,7 +368,6 @@ function UnifiedAdminDashboard() {
     { id: 'job-applications', name: t('admin.jobApplications') || 'Candidatures', icon: BriefcaseIcon },
     { id: 'support', name: t('admin.support') || 'Support', icon: LifebuoyIcon },
     { id: 'notifications', name: t('admin.notifications') || 'Notifications', icon: BellIcon },
-    { id: 'payment-methods', name: t('admin.paymentMethods') || 'Moyens de paiement', icon: CreditCardIcon },
     { id: 'advanced', name: 'Fonctions avancées', icon: CommandLineIcon },
     { id: 'settings', name: t('admin.settings') || 'Paramètres', icon: CogIcon }
   ];
@@ -374,11 +388,11 @@ function UnifiedAdminDashboard() {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      darkMode 
-        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
-        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
-    }`}>
+    <div className={`dashboard min-h-screen transition-colors duration-300 ${
+        darkMode 
+          ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
+          : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
+      }`}>
       {/* Modern Sidebar */}
       <ModernSidebar 
         isOpen={sidebarOpen}
@@ -391,7 +405,7 @@ function UnifiedAdminDashboard() {
       />
 
       {/* Main Content */}
-      <div className={`transition-all duration-300 ${
+      <div className={`transition-all duration-300 max-w-[100vw] overflow-x-hidden ${
         sidebarOpen ? 'lg:ml-80' : 'lg:ml-20'
       }`}>
         {/* Modern Header */}
@@ -411,6 +425,15 @@ function UnifiedAdminDashboard() {
 
         {/* Main Dashboard Content */}
         <main className="p-6">
+          {/* Breadcrumb Navigation */}
+          <Breadcrumb 
+            items={[
+              { label: 'Admin', path: '/admin' },
+              { label: sidebarItems.find(item => item.id === activeView)?.name || 'Dashboard', path: '#' }
+            ]}
+            darkMode={darkMode}
+          />
+
           {/* Vue Dashboard - Vue d'ensemble */}
           {activeView === 'dashboard' && (
             <motion.div
@@ -681,16 +704,14 @@ function UnifiedAdminDashboard() {
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        onClick={() => {
-          // Ouvrir la vue appropriée selon le contexte
-          if (activeView === 'products') {
-            // Logique pour créer un produit
-          } else if (activeView === 'training') {
-            // Logique pour créer une formation
-          }
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleAddClick();
         }}
-        className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full shadow-lg flex items-center justify-center text-white hover:shadow-xl transition-all duration-300 z-40"
+        className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full shadow-lg flex items-center justify-center text-white hover:shadow-xl transition-all duration-300 z-40 min-w-[56px] min-h-[56px] touch-target"
         aria-label="Action rapide"
+        type="button"
       >
         <PlusIcon className="w-6 h-6" />
       </motion.button>

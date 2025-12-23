@@ -52,7 +52,7 @@ const HeaderDemo = () => {
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
             <h3 className="text-xl font-semibold text-white mb-4">Bouton de Déconnexion</h3>
             <motion.button
-              className="flex items-center space-x-2 px-4 py-2.5 bg-red-500/20 backdrop-blur-sm border border-red-400/30 text-red-100 hover:bg-red-500/30 hover:border-red-400/50 transition-all duration-300 rounded-xl shadow-lg hover:shadow-xl group"
+              className="flex items-center space-x-2 px-4 py-2.5 bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 text-blue-100 hover:bg-blue-500/30 hover:border-blue-400/50 transition-all duration-300 rounded-xl shadow-lg hover:shadow-xl group"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -75,7 +75,7 @@ const HeaderDemo = () => {
                 <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
               </svg>
               <motion.span 
-                className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center shadow-lg notification-badge"
+                className="absolute -top-1 -right-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center shadow-lg notification-badge"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 0.5, repeat: Infinity }}
               >

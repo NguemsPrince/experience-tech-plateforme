@@ -231,14 +231,14 @@ const ProductsDashboard = ({ userRole = 'user' }) => {
           <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
             {stats.totalRevenue ? `${(stats.totalRevenue / 1000).toFixed(0)}k` : '0'}
           </div>
-          <div className="text-sm text-gray-500 dark:text-gray-400">Revenus (€)</div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">Revenus (F CFA)</div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{stats.averageRating || 0}/5</div>
           <div className="text-sm text-gray-500 dark:text-gray-400">Note moyenne</div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-          <div className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.soldOut || 0}</div>
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.soldOut || 0}</div>
           <div className="text-sm text-gray-500 dark:text-gray-400">Rupture stock</div>
         </div>
       </div>
@@ -349,7 +349,7 @@ const ProductsDashboard = ({ userRole = 'user' }) => {
                       </button>
                       <button
                         onClick={() => handleDelete(product.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                        className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                         title="Supprimer"
                       >
                         <TrashIcon className="w-4 h-4" />
@@ -429,7 +429,7 @@ const ProductsDashboard = ({ userRole = 'user' }) => {
                   <div className="flex items-center space-x-1">
                     <CurrencyDollarIcon className="w-5 h-5 text-green-600" />
                     <span className="text-xl font-bold text-gray-900 dark:text-white">
-                      {product.price}€
+                      {product.price?.toLocaleString('fr-FR')} FCFA
                     </span>
                   </div>
                   <div className="flex space-x-2">

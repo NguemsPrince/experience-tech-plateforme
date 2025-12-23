@@ -16,7 +16,7 @@ const StatCard = ({ title, value, change, icon: Icon, color = 'blue', trend = 'u
     green: 'from-green-500 to-green-600',
     purple: 'from-purple-500 to-purple-600',
     orange: 'from-orange-500 to-orange-600',
-    red: 'from-red-500 to-red-600',
+    red: 'from-blue-500 to-blue-600',
     indigo: 'from-indigo-500 to-indigo-600'
   };
 
@@ -35,7 +35,7 @@ const StatCard = ({ title, value, change, icon: Icon, color = 'blue', trend = 'u
             <p className="text-3xl font-bold text-gray-900">{value}</p>
             {change && (
               <div className={`flex items-center mt-2 text-sm ${
-                trend === 'up' ? 'text-green-600' : 'text-red-600'
+                trend === 'up' ? 'text-green-600' : 'text-blue-600'
               }`}>
                 <span className="font-medium">{change}</span>
                 <span className="ml-1">
@@ -112,7 +112,7 @@ const DashboardStats = ({ stats, loading }) => {
         value={pendingInvoices}
         change={pendingInvoices > 0 ? "Action requise" : "À jour"}
         icon={pendingInvoices > 0 ? ExclamationTriangleIcon : DocumentTextIcon}
-        color={pendingInvoices > 0 ? "red" : "green"}
+        color={pendingInvoices > 0 ? "blue" : "green"}
         trend={pendingInvoices > 0 ? "down" : "up"}
       />
     </div>

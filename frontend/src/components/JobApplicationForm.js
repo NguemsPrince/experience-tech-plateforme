@@ -396,7 +396,7 @@ const JobApplicationForm = ({ isOpen, onClose, jobTitle = "Poste" }) => {
                 <div className={`mb-6 p-4 rounded-lg ${
                   submitStatus === 'success' 
                     ? 'bg-green-100 text-green-800 border border-green-200' 
-                    : 'bg-red-100 text-red-800 border border-red-200'
+                    : 'bg-blue-100 text-blue-800 border border-blue-200'
                 }`}>
                   {submitStatus === 'success' ? (
                     <div className="flex items-center">
@@ -405,7 +405,7 @@ const JobApplicationForm = ({ isOpen, onClose, jobTitle = "Poste" }) => {
                     </div>
                   ) : (
                     <div className="flex items-center">
-                      <span className="text-red-600 mr-2">✗</span>
+                      <span className="text-blue-600 mr-2">✗</span>
                       Erreur lors de l'envoi. Veuillez réessayer.
                     </div>
                   )}

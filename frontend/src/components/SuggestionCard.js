@@ -25,7 +25,7 @@ const SuggestionCard = ({ suggestion, onVote, onComment, userRole = 'user' }) =>
   const suggestionTypes = {
     feature: { icon: LightBulbIcon, color: 'bg-blue-500', label: 'Fonctionnalité' },
     improvement: { icon: StarIcon, color: 'bg-green-500', label: 'Amélioration' },
-    bug: { icon: BugAntIcon, color: 'bg-red-500', label: 'Bug' },
+    bug: { icon: BugAntIcon, color: 'bg-blue-500', label: 'Bug' },
     ui: { icon: CogIcon, color: 'bg-purple-500', label: 'Interface' }
   };
 
@@ -42,7 +42,7 @@ const SuggestionCard = ({ suggestion, onVote, onComment, userRole = 'user' }) =>
     },
     rejected: { 
       icon: XCircleIcon, 
-      color: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+      color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
       label: 'Rejeté' 
     },
     in_progress: { 
@@ -61,7 +61,7 @@ const SuggestionCard = ({ suggestion, onVote, onComment, userRole = 'user' }) =>
     low: { color: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300', label: 'Faible' },
     medium: { color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200', label: 'Moyenne' },
     high: { color: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200', label: 'Élevée' },
-    critical: { color: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200', label: 'Critique' }
+    critical: { color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200', label: 'Critique' }
   };
 
   const handleVote = async (voteType) => {
@@ -117,7 +117,7 @@ const SuggestionCard = ({ suggestion, onVote, onComment, userRole = 'user' }) =>
                   <button className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors" title="Approuver">
                     <CheckCircleIcon className="w-5 h-5" />
                   </button>
-                  <button className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Rejeter">
+                  <button className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors" title="Rejeter">
                     <XCircleIcon className="w-5 h-5" />
                   </button>
                 </>
@@ -195,7 +195,7 @@ const SuggestionCard = ({ suggestion, onVote, onComment, userRole = 'user' }) =>
                 disabled={isVoting}
                 className={`p-2 rounded-lg transition-colors ${
                   userVote === 'down'
-                    ? 'text-red-600 bg-red-50 dark:bg-red-900/20'
+                    ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20'
                     : 'text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
               >

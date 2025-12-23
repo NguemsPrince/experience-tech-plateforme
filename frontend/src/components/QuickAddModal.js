@@ -75,7 +75,7 @@ const QuickAddModal = ({ isOpen, onClose, onSuccess, type = 'project' }) => {
             { key: 'name', label: 'Titre de la formation', placeholder: 'Ex: React Avancé', required: true },
             { key: 'instructor', label: 'Instructeur', placeholder: 'Nom de l\'instructeur', required: true },
             { key: 'duration', label: 'Durée', placeholder: 'Ex: 3 jours', required: true },
-            { key: 'price', label: 'Prix (€)', placeholder: 'Ex: 899', type: 'number', required: true },
+            { key: 'price', label: 'Prix (F CFA)', placeholder: 'Ex: 899', type: 'number', required: true },
             { key: 'level', label: 'Niveau', type: 'select', options: ['débutant', 'intermédiaire', 'avancé', 'expert'] },
             { key: 'description', label: 'Description', type: 'textarea', placeholder: 'Description de la formation...' }
           ]
@@ -88,7 +88,7 @@ const QuickAddModal = ({ isOpen, onClose, onSuccess, type = 'project' }) => {
           fields: [
             { key: 'name', label: 'Nom du produit', placeholder: 'Ex: Application Web E-commerce', required: true },
             { key: 'category', label: 'Catégorie', placeholder: 'Ex: Application, Template, API', required: true },
-            { key: 'price', label: 'Prix (€)', placeholder: 'Ex: 2499', type: 'number', required: true },
+            { key: 'price', label: 'Prix (F CFA)', placeholder: 'Ex: 2499', type: 'number', required: true },
             { key: 'description', label: 'Description', type: 'textarea', placeholder: 'Description du produit...', required: true }
           ]
         };
@@ -159,7 +159,7 @@ const QuickAddModal = ({ isOpen, onClose, onSuccess, type = 'project' }) => {
             {config.fields.map((field) => (
               <div key={field.key}>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  {field.label} {field.required && <span className="text-red-500">*</span>}
+                  {field.label} {field.required && <span className="text-blue-500">*</span>}
                 </label>
                 {field.type === 'textarea' ? (
                   <textarea

@@ -233,7 +233,7 @@ const News = () => {
                   }
                 }}
                 className={`flex-1 px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-white focus:outline-none ${
-                  email && !isValidEmail(email) ? 'border-2 border-red-500' : ''
+                  email && !isValidEmail(email) ? 'border-2 border-blue-500' : ''
                 }`}
                 disabled={isSubscribed || isSubscribing}
               />
@@ -255,7 +255,7 @@ const News = () => {
               </button>
             </div>
             {email && !isValidEmail(email) && (
-              <p className="text-red-300 text-sm mt-2">Veuillez entrer une adresse email valide</p>
+              <p className="text-blue-300 text-sm mt-2">Veuillez entrer une adresse email valide</p>
             )}
             {isSubscribed && (
               <p className="text-green-300 text-sm mt-2 flex items-center justify-center">

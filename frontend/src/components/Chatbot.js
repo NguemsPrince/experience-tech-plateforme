@@ -154,7 +154,7 @@ const Chatbot = () => {
       text: "Nous contacter", 
       action: "contact", 
       icon: PhoneIcon,
-      color: "red",
+      color: "blue",
       description: "Coordonnées et contact"
     }
   ];
@@ -640,7 +640,7 @@ const Chatbot = () => {
                         {message.status && (
                           <div className="flex items-center space-x-1">
                             {message.status === 'delivered' && <CheckCircleIcon className="w-3 h-3 text-green-500" />}
-                            {message.status === 'error' && <ExclamationTriangleIcon className="w-3 h-3 text-red-500" />}
+                            {message.status === 'error' && <ExclamationTriangleIcon className="w-3 h-3 text-blue-500" />}
                             {message.status === 'info' && <InformationCircleIcon className="w-3 h-3 text-blue-500" />}
                           </div>
                         )}
@@ -711,7 +711,7 @@ const Chatbot = () => {
                         action.color === 'orange' ? 'bg-orange-50 hover:bg-orange-100 border-orange-200 text-orange-700' :
                         action.color === 'purple' ? 'bg-purple-50 hover:bg-purple-100 border-purple-200 text-purple-700' :
                         action.color === 'indigo' ? 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-indigo-700' :
-                        'bg-red-50 hover:bg-red-100 border-red-200 text-red-700'
+                        'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700'
                       }`}
                     >
                       <action.icon className="w-3 h-3 mr-2" />
@@ -775,7 +775,7 @@ const Chatbot = () => {
                       }}
                       className={`p-2 rounded-lg transition-colors ${
                         isRecording 
-                          ? 'bg-red-100 text-red-600 hover:bg-red-200' 
+                          ? 'bg-blue-100 text-blue-600 hover:bg-blue-200' 
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                       title={isRecording ? 'Arrêter l\'enregistrement' : 'Enregistrer un message vocal'}
@@ -803,7 +803,7 @@ const Chatbot = () => {
                 <div className="flex items-center justify-between mt-2 text-xs">
                   <div className="flex items-center space-x-1">
                     <div className={`w-2 h-2 rounded-full ${
-                      connectionStatus === 'online' ? 'bg-green-400' : 'bg-red-400'
+                      connectionStatus === 'online' ? 'bg-green-400' : 'bg-blue-400'
                     }`}></div>
                     <span className="text-gray-500">
                       {connectionStatus === 'online' ? 'Connecté' : 'Hors ligne'}

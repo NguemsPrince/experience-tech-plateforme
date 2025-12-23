@@ -76,7 +76,7 @@ const AdminNotifications = ({ darkMode = false }) => {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'high':
-        return 'border-l-red-500 bg-red-50 dark:bg-red-900/10';
+        return 'border-l-blue-500 bg-blue-50 dark:bg-blue-900/10';
       case 'medium':
         return 'border-l-yellow-500 bg-yellow-50 dark:bg-yellow-900/10';
       case 'low':
@@ -111,7 +111,7 @@ const AdminNotifications = ({ darkMode = false }) => {
       >
         <BellIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+          <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
             {unreadCount}
           </span>
         )}

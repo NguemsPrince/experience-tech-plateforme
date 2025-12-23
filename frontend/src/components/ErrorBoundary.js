@@ -38,8 +38,8 @@ const ErrorBoundary = ({ error, onRetry, onDismiss, maxRetries = 3 }) => {
     const configs = {
       network: {
         icon: ExclamationTriangleIcon,
-        color: 'text-red-500',
-        bgColor: 'bg-red-50 dark:bg-red-900/20',
+        color: 'text-blue-500',
+        bgColor: 'bg-blue-50 dark:bg-blue-900/20',
         title: 'Problème de connexion',
         message: 'Impossible de se connecter au serveur. Vérifiez votre connexion internet.',
         canRetry: true
@@ -54,8 +54,8 @@ const ErrorBoundary = ({ error, onRetry, onDismiss, maxRetries = 3 }) => {
       },
       server: {
         icon: ExclamationTriangleIcon,
-        color: 'text-red-500',
-        bgColor: 'bg-red-50 dark:bg-red-900/20',
+        color: 'text-blue-500',
+        bgColor: 'bg-blue-50 dark:bg-blue-900/20',
         title: 'Erreur serveur',
         message: 'Le serveur a rencontré une erreur. Veuillez réessayer plus tard.',
         canRetry: true
@@ -100,8 +100,8 @@ const ErrorBoundary = ({ error, onRetry, onDismiss, maxRetries = 3 }) => {
         </p>
         
         {retryCount >= maxRetries && (
-          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/20 rounded-md">
-            <p className="text-red-700 dark:text-red-300 text-sm">
+          <div className="mb-4 p-3 bg-blue-100 dark:bg-blue-900/20 rounded-md">
+            <p className="text-blue-700 dark:text-blue-300 text-sm">
               Nombre maximum de tentatives atteint. Veuillez contacter le support.
             </p>
           </div>

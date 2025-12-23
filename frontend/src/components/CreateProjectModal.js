@@ -35,11 +35,11 @@ const CreateProjectModal = ({ isOpen, onClose, onSuccess }) => {
             type="text"
             id="name"
             {...register('name', { required: 'Le nom du projet est requis' })}
-            className={`input-field ${errors.name ? 'border-red-500' : ''}`}
+            className={`input-field ${errors.name ? 'border-blue-500' : ''}`}
             placeholder="Nom de votre projet"
           />
           {errors.name && (
-            <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+            <p className="mt-1 text-sm text-blue-600">{errors.name.message}</p>
           )}
         </div>
 
@@ -51,11 +51,11 @@ const CreateProjectModal = ({ isOpen, onClose, onSuccess }) => {
             id="description"
             rows={4}
             {...register('description', { required: 'La description est requise' })}
-            className={`input-field ${errors.description ? 'border-red-500' : ''}`}
+            className={`input-field ${errors.description ? 'border-blue-500' : ''}`}
             placeholder="Décrivez votre projet en détail..."
           />
           {errors.description && (
-            <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+            <p className="mt-1 text-sm text-blue-600">{errors.description.message}</p>
           )}
         </div>
 
@@ -66,7 +66,7 @@ const CreateProjectModal = ({ isOpen, onClose, onSuccess }) => {
           <select
             id="type"
             {...register('type', { required: 'Le type de projet est requis' })}
-            className={`input-field ${errors.type ? 'border-red-500' : ''}`}
+            className={`input-field ${errors.type ? 'border-blue-500' : ''}`}
           >
             <option value="">Sélectionnez un type</option>
             <option value="web">Site Web</option>
@@ -76,7 +76,7 @@ const CreateProjectModal = ({ isOpen, onClose, onSuccess }) => {
             <option value="other">Autre</option>
           </select>
           {errors.type && (
-            <p className="mt-1 text-sm text-red-600">{errors.type.message}</p>
+            <p className="mt-1 text-sm text-blue-600">{errors.type.message}</p>
           )}
         </div>
 

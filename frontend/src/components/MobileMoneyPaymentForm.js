@@ -42,9 +42,9 @@ const MobileMoneyPaymentForm = ({
       id: 'airtel_money',
       name: 'Airtel Money',
       logo: '📱',
-      color: 'bg-red-600',
-      borderColor: 'border-red-500',
-      bgColor: 'bg-red-50',
+      color: 'bg-blue-600',
+      borderColor: 'border-blue-500',
+      bgColor: 'bg-blue-50',
       pattern: /^(6[2-3]|7[7-9])/,
       prefix: '62, 63, 77, 78, 79',
       description: 'Airtel Money Tchad',
@@ -250,7 +250,7 @@ const MobileMoneyPaymentForm = ({
         </p>
         <div className={`${
           provider?.id === 'moov_money' ? 'bg-blue-50 border-blue-500' : 
-          provider?.id === 'airtel_money' ? 'bg-red-50 border-red-500' : 
+          provider?.id === 'airtel_money' ? 'bg-blue-50 border-blue-500' : 
           'bg-gray-50 border-gray-300'
         } border rounded-lg p-4 mb-4`}>
           <p className="text-sm text-gray-700">
@@ -296,7 +296,7 @@ const MobileMoneyPaymentForm = ({
   if (paymentStatus === 'failed') {
     return (
       <div className="text-center py-8">
-        <XCircleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" />
+        <XCircleIcon className="w-16 h-16 text-blue-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold text-gray-900 mb-2">
           Paiement échoué
         </h3>
@@ -341,7 +341,7 @@ const MobileMoneyPaymentForm = ({
                 selectedProvider === provider.id
                   ? (provider.id === 'moov_money' 
                       ? 'border-blue-500 bg-blue-50' 
-                      : 'border-red-500 bg-red-50')
+                      : 'border-blue-500 bg-blue-50')
                   : 'border-gray-300 hover:border-gray-400'
               }`}
             >
@@ -387,8 +387,8 @@ const MobileMoneyPaymentForm = ({
         const currentProvider = providers.find(p => p.id === selectedProvider);
         if (!currentProvider) return null;
         
-        const bgClass = currentProvider.id === 'moov_money' ? 'bg-blue-50' : 'bg-red-50';
-        const borderClass = currentProvider.id === 'moov_money' ? 'border-blue-500' : 'border-red-500';
+        const bgClass = currentProvider.id === 'moov_money' ? 'bg-blue-50' : 'bg-blue-50';
+        const borderClass = currentProvider.id === 'moov_money' ? 'border-blue-500' : 'border-blue-500';
         
         return (
           <div className={`p-4 rounded-lg ${bgClass} border ${borderClass}`}>
@@ -401,10 +401,10 @@ const MobileMoneyPaymentForm = ({
 
       {/* Error Display */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <div className="flex items-center">
-            <ExclamationTriangleIcon className="w-5 h-5 text-red-600 mr-2" />
-            <span className="text-red-800 text-sm">{error}</span>
+            <ExclamationTriangleIcon className="w-5 h-5 text-blue-600 mr-2" />
+            <span className="text-blue-800 text-sm">{error}</span>
           </div>
         </div>
       )}

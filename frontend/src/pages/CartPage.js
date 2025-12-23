@@ -192,7 +192,7 @@ const CartPage = () => {
                         }
                       </p>
                       {item.type === 'product' && item.stock !== undefined && (
-                        <p className={`text-sm mb-2 ${item.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        <p className={`text-sm mb-2 ${item.stock > 0 ? 'text-green-600' : 'text-blue-600'}`}>
                           Stock: {item.stock} disponible{item.stock > 1 ? 's' : ''}
                         </p>
                       )}
@@ -232,7 +232,7 @@ const CartPage = () => {
                             removeFromCart(item._id, item.type);
                             toast.success('Article supprimé du panier');
                           }}
-                          className="text-red-600 hover:text-red-700 transition-colors"
+                          className="text-blue-600 hover:text-blue-700 transition-colors"
                           title="Supprimer"
                         >
                           <TrashIcon className="w-5 h-5" />

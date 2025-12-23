@@ -21,7 +21,7 @@ const ToastProvider = () => {
         error: {
           duration: 5000,
           iconTheme: {
-            primary: '#EF4444',
+            primary: '#3B82F6',
             secondary: '#fff',
           },
         },

@@ -31,7 +31,7 @@ const AdminSidebar = ({
     { id: 'content', name: 'Contenu', icon: DocumentTextIcon, color: 'purple' },
     { id: 'projects', name: 'Projets', icon: CubeIcon, color: 'orange' },
     { id: 'trainings', name: 'Formations', icon: AcademicCapIcon, color: 'indigo' },
-    { id: 'support', name: 'Support', icon: ChatBubbleLeftRightIcon, color: 'red' },
+    { id: 'support', name: 'Support', icon: ChatBubbleLeftRightIcon, color: 'blue' },
     { id: 'analytics', name: 'Analytics', icon: ChartBarIcon, color: 'teal' },
     { id: 'security', name: 'Sécurité', icon: ShieldCheckIcon, color: 'yellow' },
     { id: 'settings', name: 'Paramètres', icon: CogIcon, color: 'gray' }
@@ -44,7 +44,7 @@ const AdminSidebar = ({
       purple: isActive ? 'bg-purple-100 text-purple-700 border-purple-200' : 'hover:bg-purple-50 text-purple-600',
       orange: isActive ? 'bg-orange-100 text-orange-700 border-orange-200' : 'hover:bg-orange-50 text-orange-600',
       indigo: isActive ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'hover:bg-indigo-50 text-indigo-600',
-      red: isActive ? 'bg-red-100 text-red-700 border-red-200' : 'hover:bg-red-50 text-red-600',
+      red: isActive ? 'bg-blue-100 text-blue-700 border-blue-200' : 'hover:bg-blue-50 text-blue-600',
       teal: isActive ? 'bg-teal-100 text-teal-700 border-teal-200' : 'hover:bg-teal-50 text-teal-600',
       yellow: isActive ? 'bg-yellow-100 text-yellow-700 border-yellow-200' : 'hover:bg-yellow-50 text-yellow-600',
       gray: isActive ? 'bg-gray-100 text-gray-700 border-gray-200' : 'hover:bg-gray-50 text-gray-600'
@@ -114,7 +114,7 @@ const AdminSidebar = ({
                 <span className="font-medium">{tab.name}</span>
               )}
               {!isCollapsed && tab.id === 'support' && notifications > 0 && (
-                <span className="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                <span className="ml-auto bg-blue-500 text-white text-xs rounded-full px-2 py-1">
                   {notifications}
                 </span>
               )}
@@ -152,7 +152,7 @@ const AdminSidebar = ({
               </span>
             )}
             {notifications > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 {notifications}
               </span>
             )}

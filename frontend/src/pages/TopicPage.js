@@ -390,7 +390,7 @@ const TopicPage = () => {
                     </span>
                   )}
                   {post.isLocked && (
-                    <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
                       🔒 Verrouillé
                     </span>
                   )}
@@ -662,7 +662,7 @@ const TopicPage = () => {
                     <div className="flex gap-1">
                       <button
                         onClick={() => handleLikeComment(comment._id)}
-                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-500 hover:text-red-500"
+                        className="flex items-center gap-1 px-2 py-1 text-sm text-gray-500 hover:text-blue-500"
                         title="Like"
                       >
                         <HeartIcon className="w-4 h-4" />
@@ -734,7 +734,7 @@ const TopicPage = () => {
                           {(comment.author._id === user.id || user.role === 'admin') && (
                             <button
                               onClick={() => handleDeleteComment(comment._id)}
-                              className="px-2 py-1 text-sm text-red-600 hover:text-red-700"
+                              className="px-2 py-1 text-sm text-blue-600 hover:text-blue-700"
                               title="Supprimer"
                             >
                               <TrashIcon className="w-4 h-4" />
@@ -743,7 +743,7 @@ const TopicPage = () => {
                           
                           <button
                             onClick={() => handleReportComment(comment._id)}
-                            className="px-2 py-1 text-sm text-gray-500 hover:text-red-600"
+                            className="px-2 py-1 text-sm text-gray-500 hover:text-blue-600"
                             title="Signaler"
                           >
                             <FlagIcon className="w-4 h-4" />

@@ -123,8 +123,11 @@
 
 /* Amélioration du scroll sur iOS */
 #mobile-menu-panel {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+  overflow: hidden !important;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: none;
+  scroll-behavior: auto;
 }
 
 /* Empêcher le pull-to-refresh sur mobile quand le menu est ouvert */

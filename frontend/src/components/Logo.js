@@ -57,7 +57,7 @@ const Logo = ({
             Expérience Tech
           </span>
           {showTagline && (
-            <span className={`${currentSize.tagline} text-red-700 font-medium`}>
+            <span className={`${currentSize.tagline} text-blue-700 font-medium`}>
               Inspirer - Oser - Innover
             </span>
           )}

@@ -385,7 +385,7 @@ const HeroSlider = () => {
                 </div>
                 <motion.button
                   type="submit"
-                  className="bg-red-500 hover:bg-red-600 text-white p-3 rounded-full mr-2 transition-colors duration-200 flex items-center"
+                  className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full mr-2 transition-colors duration-200 flex items-center"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.9 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}

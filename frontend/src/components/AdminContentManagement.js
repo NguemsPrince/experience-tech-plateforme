@@ -350,7 +350,7 @@ const AdminContentManagement = () => {
               )}
               <button
                 onClick={() => handleContentAction('delete', article.id)}
-                className="text-red-600 hover:text-red-900"
+                className="text-blue-600 hover:text-blue-900"
                 title="Supprimer"
               >
                 <TrashIcon className="w-4 h-4" />
@@ -404,7 +404,7 @@ const AdminContentManagement = () => {
                 </button>
                 <button
                   onClick={() => handleContentAction('delete', slide.id)}
-                  className="text-red-600 hover:text-red-900"
+                  className="text-blue-600 hover:text-blue-900"
                 >
                   <TrashIcon className="w-4 h-4" />
                 </button>
@@ -441,7 +441,7 @@ const AdminContentManagement = () => {
             {media.type === 'image' ? (
               <PhotoIcon className="w-6 h-6 text-blue-600" />
             ) : (
-              <VideoCameraIcon className="w-6 h-6 text-red-600" />
+              <VideoCameraIcon className="w-6 h-6 text-blue-600" />
             )}
           </div>
           <h4 className="text-sm font-medium text-gray-900 truncate">{media.name}</h4>
@@ -455,7 +455,7 @@ const AdminContentManagement = () => {
             </span>
             <button
               onClick={() => handleContentAction('delete', media.id)}
-              className="text-red-600 hover:text-red-900"
+              className="text-blue-600 hover:text-blue-900"
             >
               <TrashIcon className="w-4 h-4" />
             </button>
@@ -814,7 +814,7 @@ const AdminContentManagement = () => {
                     onClick={handleExportPDF}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    <DocumentIcon className="w-4 h-4 mr-3 text-red-600" />
+                    <DocumentIcon className="w-4 h-4 mr-3 text-blue-600" />
                     Exporter en PDF
                   </button>
                   <button
@@ -914,7 +914,7 @@ const AdminContentManagement = () => {
               </button>
               <button
                 onClick={() => handleBulkAction('delete')}
-                className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700"
+                className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
               >
                 Supprimer
               </button>

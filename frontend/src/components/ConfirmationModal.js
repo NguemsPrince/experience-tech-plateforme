@@ -33,10 +33,10 @@ const ConfirmationModal = ({
     },
     danger: {
       icon: ExclamationTriangleIcon,
-      iconColor: "text-red-500",
-      bgColor: "bg-red-50",
-      buttonColor: "bg-red-600 hover:bg-red-700 focus:ring-red-500",
-      borderColor: "border-red-200"
+      iconColor: "text-blue-500",
+      bgColor: "bg-blue-50",
+      buttonColor: "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500",
+      borderColor: "border-blue-200"
     },
     success: {
       icon: CheckCircleIcon,

@@ -35,6 +35,9 @@ const CourseProgress = ({
   const handleLessonClick = (lesson) => {
     if (enrollment || lesson.isPreview) {
       onLessonClick(lesson);
+    } else {
+      // Afficher un message si la leçon est verrouillée
+      onLessonClick(lesson); // Le parent gérera l'affichage du message
     }
   };
 
@@ -71,6 +74,9 @@ const CourseProgress = ({
     }
     if (lesson.isPreview) {
       return 'preview';
+    }
+    if (lesson.isLocked) {
+      return 'locked';
     }
     return 'locked';
   };
@@ -162,8 +168,8 @@ const CourseProgress = ({
                               <div className="flex items-center">
                                 <span className="text-sm font-medium">{lesson.title}</span>
                                 {lesson.isPreview && (
-                                  <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
-                                    Aperçu
+                                  <span className="ml-2 text-xs bg-green-500 text-white px-2 py-0.5 rounded font-semibold">
+                                    Échantillon gratuit
                                   </span>
                                 )}
                               </div>
@@ -294,8 +300,8 @@ const CourseProgress = ({
                             <div className="flex items-center">
                               <h5 className="font-medium text-gray-900">{lesson.title}</h5>
                               {lesson.isPreview && (
-                                <span className="ml-3 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                                  Aperçu
+                                <span className="ml-3 text-xs bg-green-500 text-white px-2 py-1 rounded font-semibold">
+                                  Échantillon gratuit
                                 </span>
                               )}
                             </div>

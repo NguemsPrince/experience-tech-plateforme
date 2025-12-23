@@ -52,6 +52,10 @@ const GeolocationPage = () => {
                 height="600px"
                 zoom={15}
                 showControls={true}
+                enableTracking={true}
+                enableHighAccuracy={false}
+                showAddress={true}
+                showHistory={true}
                 onLocationUpdate={handleLocationUpdate}
                 className="w-full"
               />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import Breadcrumb from '../components/Breadcrumb';
 
 const AddProject = () => {
   const navigate = useNavigate();
@@ -47,13 +48,13 @@ const AddProject = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <button
-            onClick={() => navigate('/admin')}
-            className="mb-4 p-2 hover:bg-gray-200 rounded-lg"
-          >
-            ← Retour
-          </button>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <Breadcrumb 
+            items={[
+              { label: 'Admin', path: '/admin' },
+              { label: 'Nouveau projet', path: '#' }
+            ]}
+          />
+          <h1 className="text-3xl font-bold text-gray-900 mt-4">
             Nouveau projet
           </h1>
           <p className="text-gray-600">
@@ -134,7 +135,7 @@ const AddProject = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Budget (€)
+                  Budget (F CFA)
                 </label>
                 <input
                   type="number"

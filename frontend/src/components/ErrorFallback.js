@@ -8,9 +8,9 @@ const ErrorFallback = ({ error, resetError }) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
       <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 dark:bg-red-900 rounded-full mb-4">
+        <div className="flex items-center justify-center w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900 rounded-full mb-4">
           <svg
-            className="w-6 h-6 text-red-600 dark:text-red-400"
+            className="w-6 h-6 text-blue-600 dark:text-blue-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -33,8 +33,8 @@ const ErrorFallback = ({ error, resetError }) => {
         </p>
         
         {process.env.NODE_ENV === 'development' && error && (
-          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 rounded border border-red-200 dark:border-red-800">
-            <p className="text-sm text-red-800 dark:text-red-200 font-mono break-all">
+          <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
+            <p className="text-sm text-blue-800 dark:text-blue-200 font-mono break-all">
               {error.toString()}
             </p>
           </div>

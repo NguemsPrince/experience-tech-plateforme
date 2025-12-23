@@ -2,8 +2,32 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* Enhanced Design System */
+@import './styles/design-system-enhanced.css';
+
+/* Enhanced Dark Mode */
+@import './styles/dark-mode-enhanced.css';
+
+/* Global Enhancements */
+@import './styles/global-enhancements.css';
+
+/* Responsive Enhancements */
+@import './styles/responsive-enhancements.css';
+
+/* Contrast Fixes */
+@import './styles/contrast-fixes.css';
+
+/* Modern Design System */
+@import './styles/modern-design-system.css';
+
 /* Custom Animations */
 @import './styles/animations.css';
+
+/* Responsive Design System */
+@import './styles/responsive.css';
+@import './styles/pages-responsive.css';
+@import './styles/dashboard-buttons-fix.css';
+@import './styles/sidebar-overflow-fix.css';
 
 /* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -72,7 +96,7 @@
 /* Component styles */
 @layer components {
   .btn-primary {
-    @apply bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+    @apply bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
   }
   
   .btn-secondary {
@@ -80,7 +104,7 @@
   }
   
   .btn-outline {
-    @apply border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+    @apply border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
   }
   
   .card {
@@ -92,7 +116,7 @@
   }
   
   .input-field {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200;
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200;
   }
   
   .section-padding {
@@ -116,11 +140,11 @@
   }
   
   .gradient-bg {
-    background: linear-gradient(135deg, theme('colors.red.500') 0%, theme('colors.red.600') 100%);
+    background: linear-gradient(135deg, theme('colors.blue.500') 0%, theme('colors.blue.600') 100%);
   }
   
   .text-gradient {
-    background: linear-gradient(135deg, theme('colors.red.500') 0%, theme('colors.red.600') 100%);
+    background: linear-gradient(135deg, theme('colors.blue.500') 0%, theme('colors.blue.600') 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

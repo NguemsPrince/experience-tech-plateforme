@@ -13,7 +13,10 @@ import {
 
 const VideoPlayer = ({ 
   src, 
-  title, 
+  title,
+  courseId,
+  lessonId,
+  onProgressSave, // Callback pour sauvegarder la progression
   playbackRate = 1, 
   volume = 1, 
   isMuted = false,
@@ -59,13 +62,29 @@ const VideoPlayer = ({
       video.addEventListener('loadedmetadata', updateDuration);
       video.addEventListener('progress', updateBuffered);
 
+      // Sauvegarder la progression toutes les 10 secondes
+      let lastSaveTime = 0;
+      const saveProgress = () => {
+        if (onProgressSave && courseId && lessonId && video.currentTime) {
+          const now = Date.now();
+          // Sauvegarder toutes les 10 secondes
+          if (now - lastSaveTime > 10000) {
+            onProgressSave(courseId, lessonId, video.currentTime);
+            lastSaveTime = now;
+          }
+        }
+      };
+
+      video.addEventListener('timeupdate', saveProgress);
+
       return () => {
         video.removeEventListener('timeupdate', updateTime);
         video.removeEventListener('loadedmetadata', updateDuration);
         video.removeEventListener('progress', updateBuffered);
+        video.removeEventListener('timeupdate', saveProgress);
       };
     }
-  }, []);
+  }, [courseId, lessonId, onProgressSave]);
 
   const togglePlay = () => {
     const video = videoRef.current;

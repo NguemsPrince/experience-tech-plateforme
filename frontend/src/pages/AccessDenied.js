@@ -59,7 +59,7 @@ const AccessDenied = () => {
           </div>
           
           {/* Icon */}
-          <div className="mx-auto h-20 w-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center shadow-lg">
+          <div className="mx-auto h-20 w-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
             <ShieldExclamationIcon className="h-10 w-10 text-white" />
           </div>
           
@@ -74,7 +74,7 @@ const AccessDenied = () => {
         <div className="bg-white p-8 rounded-xl shadow-xl border border-gray-200">
           <div className="text-center space-y-6">
             {/* Error badge */}
-            <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+            <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg">
               <div className="flex items-center justify-center space-x-2">
                 <ShieldExclamationIcon className="h-5 w-5" />
                 <div>

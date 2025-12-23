@@ -45,7 +45,7 @@ const LocationsPage = () => {
       lat: 12.1500,
       lng: 15.0800,
       type: 'printing',
-      icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+      icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
     },
     {
       id: 4,
@@ -91,7 +91,7 @@ const LocationsPage = () => {
     const colors = {
       office: 'bg-blue-100 text-blue-800',
       training: 'bg-green-100 text-green-800',
-      printing: 'bg-red-100 text-red-800',
+      printing: 'bg-blue-100 text-blue-800',
       partner: 'bg-yellow-100 text-yellow-800'
     };
     return colors[type] || 'bg-gray-100 text-gray-800';

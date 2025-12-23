@@ -1,0 +1,486 @@
+/* ============================================
+   MODERN DESIGN SYSTEM - Expérience Tech
+   ============================================ */
+
+:root {
+  /* Modern Color Palette */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  /* Modern Accent Colors */
+  --color-accent-blue: #3b82f6;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-green: #10b981;
+  --color-accent-amber: #f59e0b;
+
+  /* Neutral Colors */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Spacing Scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slower: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-arabic: 'Noto Sans Arabic', system-ui, sans-serif;
+  
+  /* Line Heights */
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-header: 9999;
+}
+
+/* ============================================
+   MODERN BUTTON STYLES
+   ============================================ */
+
+.btn-modern {
+  @apply inline-flex items-center justify-center;
+  @apply px-6 py-3;
+  @apply font-semibold text-sm;
+  @apply rounded-xl;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply transform active:scale-95;
+}
+
+.btn-modern-primary {
+  @apply btn-modern;
+  @apply bg-gradient-to-r from-blue-500 to-blue-600;
+  @apply text-white;
+  @apply shadow-lg shadow-blue-500/25;
+  @apply hover:shadow-xl hover:shadow-blue-500/30;
+  @apply hover:from-blue-600 hover:to-blue-700;
+  @apply focus:ring-blue-500;
+}
+
+.btn-modern-secondary {
+  @apply btn-modern;
+  @apply bg-white text-gray-700;
+  @apply border-2 border-gray-300;
+  @apply shadow-md;
+  @apply hover:bg-gray-50 hover:border-gray-400;
+  @apply hover:shadow-lg;
+  @apply focus:ring-gray-500;
+}
+
+.btn-modern-outline {
+  @apply btn-modern;
+  @apply bg-transparent text-blue-600;
+  @apply border-2 border-blue-500;
+  @apply hover:bg-blue-500 hover:text-white;
+  @apply hover:shadow-lg hover:shadow-blue-500/25;
+  @apply focus:ring-blue-500;
+}
+
+.btn-modern-ghost {
+  @apply btn-modern;
+  @apply bg-transparent text-gray-700;
+  @apply hover:bg-gray-100;
+  @apply focus:ring-gray-500;
+}
+
+.btn-modern-sm {
+  @apply px-4 py-2 text-xs;
+}
+
+.btn-modern-lg {
+  @apply px-8 py-4 text-base;
+}
+
+/* ============================================
+   MODERN CARD STYLES
+   ============================================ */
+
+.card-modern {
+  @apply bg-white rounded-2xl;
+  @apply shadow-md border border-gray-100;
+  @apply transition-all duration-300;
+  @apply overflow-hidden;
+}
+
+.card-modern-hover {
+  @apply card-modern;
+  @apply hover:shadow-xl hover:-translate-y-1;
+  @apply hover:border-gray-200;
+}
+
+.card-modern-gradient {
+  @apply card-modern;
+  @apply bg-gradient-to-br from-white to-gray-50;
+}
+
+/* ============================================
+   MODERN FORM STYLES
+   ============================================ */
+
+.input-modern {
+  @apply w-full px-4 py-3;
+  @apply border-2 border-gray-300 rounded-xl;
+  @apply bg-white text-gray-900;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  @apply placeholder:text-gray-400;
+  @apply disabled:bg-gray-100 disabled:cursor-not-allowed;
+}
+
+.input-modern:focus {
+  @apply shadow-lg shadow-blue-500/10;
+}
+
+.input-modern-error {
+  @apply border-blue-500 focus:ring-blue-500;
+}
+
+.input-modern-success {
+  @apply border-green-500 focus:ring-green-500;
+}
+
+.textarea-modern {
+  @apply input-modern;
+  @apply min-h-[120px] resize-y;
+}
+
+.select-modern {
+  @apply input-modern;
+  @apply cursor-pointer;
+}
+
+/* ============================================
+   MODERN NAVIGATION STYLES
+   ============================================ */
+
+.nav-link-modern {
+  @apply relative px-4 py-2;
+  @apply text-gray-700 font-medium;
+  @apply transition-all duration-200;
+  @apply rounded-lg;
+  @apply hover:text-blue-600 hover:bg-blue-50;
+}
+
+.nav-link-modern-active {
+  @apply nav-link-modern;
+  @apply text-blue-600 bg-blue-50;
+  @apply font-semibold;
+}
+
+.nav-link-modern-active::after {
+  content: '';
+  @apply absolute bottom-0 left-0 right-0;
+  @apply h-0.5 bg-blue-600;
+  @apply rounded-full;
+}
+
+/* ============================================
+   MODERN BADGE STYLES
+   ============================================ */
+
+.badge-modern {
+  @apply inline-flex items-center px-3 py-1;
+  @apply text-xs font-semibold;
+  @apply rounded-full;
+  @apply transition-all duration-200;
+}
+
+.badge-modern-primary {
+  @apply badge-modern;
+  @apply bg-blue-100 text-blue-800;
+}
+
+.badge-modern-success {
+  @apply badge-modern;
+  @apply bg-green-100 text-green-800;
+}
+
+.badge-modern-warning {
+  @apply badge-modern;
+  @apply bg-amber-100 text-amber-800;
+}
+
+.badge-modern-info {
+  @apply badge-modern;
+  @apply bg-blue-100 text-blue-800;
+}
+
+/* ============================================
+   MODERN ANIMATIONS
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.5s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s ease-out;
+}
+
+/* ============================================
+   MODERN GRADIENT BACKGROUNDS
+   ============================================ */
+
+.gradient-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.gradient-purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+.gradient-green {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================
+   MODERN GLASSMORPHISM
+   ============================================ */
+
+.glass {
+  @apply bg-white/80 backdrop-blur-lg;
+  @apply border border-white/20;
+  @apply shadow-xl;
+}
+
+.glass-dark {
+  @apply bg-gray-900/80 backdrop-blur-lg;
+  @apply border border-gray-700/20;
+  @apply shadow-xl;
+}
+
+/* ============================================
+   MODERN RESPONSIVE UTILITIES
+   ============================================ */
+
+.container-modern {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.section-modern {
+  @apply py-16 md:py-20 lg:py-24;
+}
+
+.grid-modern {
+  @apply grid gap-6 md:gap-8;
+}
+
+/* ============================================
+   MODERN SCROLLBAR
+   ============================================ */
+
+.scrollbar-modern::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-modern::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+.scrollbar-modern::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+  @apply hover:bg-gray-400;
+  @apply transition-colors duration-200;
+}
+
+.scrollbar-modern::-webkit-scrollbar-thumb:hover {
+  @apply bg-blue-500;
+}
+
+/* ============================================
+   MODERN FOCUS STYLES
+   ============================================ */
+
+.focus-modern {
+  @apply focus:outline-none;
+  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply focus:ring-offset-white;
+}
+
+.focus-modern-dark {
+  @apply focus:outline-none;
+  @apply focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  @apply focus:ring-offset-gray-900;
+}
+
+/* ============================================
+   MODERN LOADING STATES
+   ============================================ */
+
+.skeleton {
+  @apply animate-pulse bg-gray-200 rounded;
+}
+
+.skeleton-text {
+  @apply skeleton h-4;
+}
+
+.skeleton-title {
+  @apply skeleton h-6;
+}
+
+.skeleton-avatar {
+  @apply skeleton rounded-full;
+}
+
+/* ============================================
+   MODERN MOBILE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 640px) {
+  .btn-modern {
+    @apply px-4 py-2.5 text-sm;
+  }
+  
+  .card-modern {
+    @apply rounded-xl;
+  }
+  
+  .input-modern {
+    @apply px-3 py-2.5 text-sm;
+  }
+}
+
+/* ============================================
+   MODERN ACCESSIBILITY
+   ============================================ */
+
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden;
+  @apply whitespace-nowrap border-0;
+  clip: rect(0, 0, 0, 0);
+}
+
+.skip-link {
+  @apply absolute -top-10 left-0 z-50;
+  @apply bg-blue-600 text-white px-4 py-2;
+  @apply focus:top-0;
+}
+

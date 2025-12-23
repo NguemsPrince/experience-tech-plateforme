@@ -27,7 +27,7 @@ const SuggestionModal = ({ isOpen, onClose, onSuccess }) => {
   const suggestionTypes = [
     { id: 'feature', name: 'Nouvelle Fonctionnalité', icon: LightBulbIcon, color: 'bg-blue-500' },
     { id: 'improvement', name: 'Amélioration', icon: StarIcon, color: 'bg-green-500' },
-    { id: 'bug', name: 'Rapport de Bug', icon: BugAntIcon, color: 'bg-red-500' },
+    { id: 'bug', name: 'Rapport de Bug', icon: BugAntIcon, color: 'bg-blue-500' },
     { id: 'ui', name: 'Interface Utilisateur', icon: CogIcon, color: 'bg-purple-500' }
   ];
 
@@ -35,7 +35,7 @@ const SuggestionModal = ({ isOpen, onClose, onSuccess }) => {
     { id: 'low', name: 'Faible', color: 'bg-gray-100 text-gray-800' },
     { id: 'medium', name: 'Moyenne', color: 'bg-yellow-100 text-yellow-800' },
     { id: 'high', name: 'Élevée', color: 'bg-orange-100 text-orange-800' },
-    { id: 'critical', name: 'Critique', color: 'bg-red-100 text-red-800' }
+    { id: 'critical', name: 'Critique', color: 'bg-blue-100 text-blue-800' }
   ];
 
   const categories = [

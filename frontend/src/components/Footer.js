@@ -41,7 +41,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white footer-content">
+    <footer className="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white footer-content border-t border-gray-700">
       {/* Main Footer Content */}
       <div className="container-custom section-padding">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -63,12 +63,12 @@ const Footer = () => {
                   <span className="text-white font-bold text-xl">ET</span>
                 </div>
               </div>
-              <span className="text-xl font-bold">Expérience Tech</span>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent">Expérience Tech</span>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed">
               {t('footer.description')}
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
@@ -81,7 +81,7 @@ const Footer = () => {
                   onTouchStart={(e) => {
                     e.stopPropagation();
                   }}
-                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary-600 active:bg-primary-700 transition-colors duration-200 min-w-[44px] min-h-[44px]"
+                  className="w-11 h-11 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-blue-500 hover:to-blue-600 active:scale-95 transition-all duration-200 min-w-[44px] min-h-[44px] shadow-md hover:shadow-lg hover:shadow-blue-500/25 transform hover:scale-110"
                   aria-label={social.name}
                   style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
                 >
@@ -93,8 +93,8 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6">{t('footer.quickLinks')}</h3>
-            <ul className="space-y-3">
+            <h3 className="text-lg font-semibold mb-6 text-white">{t('footer.quickLinks')}</h3>
+            <ul className="space-y-2.5">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <Link

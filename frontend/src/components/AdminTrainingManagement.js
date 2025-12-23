@@ -62,8 +62,13 @@ const AdminTrainingManagement = () => {
     startDate: '',
     endDate: '',
     language: 'Français',
-    image: ''
+    image: '',
+    introVideo: ''
   });
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [videoPreview, setVideoPreview] = useState(null);
 
   // Mock data pour les formations
   const mockCourses = [
@@ -534,7 +539,7 @@ const AdminTrainingManagement = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
-      case 'inactive': return 'bg-red-100 text-red-800';
+      case 'inactive': return 'bg-blue-100 text-blue-800';
       case 'draft': return 'bg-yellow-100 text-yellow-800';
       default: return 'bg-gray-100 text-gray-800';
     }
@@ -544,7 +549,7 @@ const AdminTrainingManagement = () => {
     switch (level) {
       case 'Débutant': return 'bg-blue-100 text-blue-800';
       case 'Intermédiaire': return 'bg-orange-100 text-orange-800';
-      case 'Avancé': return 'bg-red-100 text-red-800';
+      case 'Avancé': return 'bg-blue-100 text-blue-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -555,6 +560,87 @@ const AdminTrainingManagement = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Type de fichier non autorisé. Formats acceptés: JPEG, PNG, WebP, GIF');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('Le fichier est trop volumineux. Taille maximale: 10MB');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+
+    setUploadingImage(true);
+    try {
+      const response = await trainingService.uploadCourseFile(file, 'image');
+      if (response && (response.success || response.data)) {
+        const fileUrl = response.data?.url || response.url;
+        setCreateFormData(prev => ({
+          ...prev,
+          image: fileUrl
+        }));
+        toast.success('Image uploadée avec succès !');
+      } else {
+        toast.error('Erreur lors de l\'upload de l\'image');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error(error.response?.data?.message || 'Erreur lors de l\'upload de l\'image');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleVideoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Type de fichier non autorisé. Formats acceptés: MP4, WebM, OGG, QuickTime');
+      return;
+    }
+
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error('Le fichier est trop volumineux. Taille maximale: 50MB');
+      return;
+    }
+
+    const videoUrl = URL.createObjectURL(file);
+    setVideoPreview(videoUrl);
+
+    setUploadingVideo(true);
+    try {
+      const response = await trainingService.uploadCourseFile(file, 'video');
+      if (response && (response.success || response.data)) {
+        const fileUrl = response.data?.url || response.url;
+        setCreateFormData(prev => ({
+          ...prev,
+          introVideo: fileUrl
+        }));
+        toast.success('Vidéo uploadée avec succès !');
+      } else {
+        toast.error('Erreur lors de l\'upload de la vidéo');
+      }
+    } catch (error) {
+      console.error('Error uploading video:', error);
+      toast.error(error.response?.data?.message || 'Erreur lors de l\'upload de la vidéo');
+    } finally {
+      setUploadingVideo(false);
+    }
   };
 
   const handleCreateSubmit = async (e) => {
@@ -606,7 +692,11 @@ const AdminTrainingManagement = () => {
         startDate: createFormData.startDate,
         endDate: createFormData.endDate || undefined,
         language: createFormData.language,
-        image: createFormData.image || '/images/default-course.jpg'
+        image: createFormData.image || '/images/default-course.jpg',
+        introVideo: createFormData.introVideo ? {
+          url: createFormData.introVideo,
+          thumbnail: createFormData.image || '/images/default-course.jpg'
+        } : undefined
       };
 
       const response = await trainingService.createCourse(courseData);
@@ -632,8 +722,11 @@ const AdminTrainingManagement = () => {
           startDate: '',
           endDate: '',
           language: 'Français',
-          image: ''
+          image: '',
+          introVideo: ''
         });
+        setImagePreview(null);
+        setVideoPreview(null);
         
         // Recharger la liste des formations
         await loadCourses();
@@ -900,16 +993,92 @@ const AdminTrainingManagement = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Image URL
+                Image de la formation *
               </label>
-              <input
-                type="url"
-                name="image"
-                value={createFormData.image}
-                onChange={handleCreateFormChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="https://example.com/image.jpg"
-              />
+              <div className="space-y-2">
+                <input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                  onChange={handleImageUpload}
+                  disabled={uploadingImage}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+                />
+                {uploadingImage && (
+                  <div className="text-sm text-blue-600">Upload en cours...</div>
+                )}
+                {imagePreview && (
+                  <div className="mt-2">
+                    <img 
+                      src={imagePreview} 
+                      alt="Preview" 
+                      className="w-full h-48 object-cover rounded-lg border border-gray-300"
+                    />
+                  </div>
+                )}
+                {createFormData.image && !imagePreview && (
+                  <div className="mt-2">
+                    <img 
+                      src={createFormData.image} 
+                      alt="Course" 
+                      className="w-full h-48 object-cover rounded-lg border border-gray-300"
+                      onError={(e) => {
+                        e.target.src = '/images/default-course.jpg';
+                      }}
+                    />
+                  </div>
+                )}
+                <input
+                  type="text"
+                  name="image"
+                  value={createFormData.image}
+                  onChange={handleCreateFormChange}
+                  placeholder="Ou entrez une URL d'image"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Vidéo d'introduction (optionnel)
+              </label>
+              <div className="space-y-2">
+                <input
+                  type="file"
+                  accept="video/mp4,video/webm,video/ogg,video/quicktime"
+                  onChange={handleVideoUpload}
+                  disabled={uploadingVideo}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+                />
+                {uploadingVideo && (
+                  <div className="text-sm text-blue-600">Upload en cours...</div>
+                )}
+                {videoPreview && (
+                  <div className="mt-2">
+                    <video 
+                      src={videoPreview} 
+                      controls
+                      className="w-full h-48 rounded-lg border border-gray-300"
+                    />
+                  </div>
+                )}
+                {createFormData.introVideo && !videoPreview && (
+                  <div className="mt-2">
+                    <video 
+                      src={createFormData.introVideo} 
+                      controls
+                      className="w-full h-48 rounded-lg border border-gray-300"
+                    />
+                  </div>
+                )}
+                <input
+                  type="text"
+                  name="introVideo"
+                  value={createFormData.introVideo}
+                  onChange={handleCreateFormChange}
+                  placeholder="Ou entrez une URL de vidéo"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+              </div>
             </div>
           </div>
 
@@ -1003,7 +1172,7 @@ const AdminTrainingManagement = () => {
                     onClick={handleExportPDF}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    <DocumentTextIcon className="w-4 h-4 mr-3 text-red-600" />
+                    <DocumentTextIcon className="w-4 h-4 mr-3 text-blue-600" />
                     Exporter en PDF
                   </button>
                   <button
@@ -1136,7 +1305,7 @@ const AdminTrainingManagement = () => {
               </button>
               <button
                 onClick={() => handleBulkAction('delete')}
-                className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700"
+                className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
               >
                 Supprimer
               </button>
@@ -1249,7 +1418,7 @@ const AdminTrainingManagement = () => {
                 )}
                 <button
                   onClick={() => handleCourseAction('delete', getCourseId(course))}
-                  className="text-red-600 hover:text-red-900"
+                  className="text-blue-600 hover:text-blue-900"
                   title="Supprimer"
                 >
                   <TrashIcon className="w-4 h-4" />

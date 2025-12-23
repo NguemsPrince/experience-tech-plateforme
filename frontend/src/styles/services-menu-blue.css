@@ -1,0 +1,71 @@
+/* Styles pour forcer le bleu dans le menu Services */
+
+/* Menu Services - Bouton */
+.services-menu-trigger,
+button.services-menu-trigger {
+  color: #93c5fd !important; /* blue-300 */
+}
+
+.services-menu-trigger:hover {
+  color: white !important;
+  background-color: rgba(37, 99, 235, 0.5) !important; /* blue-600/50 */
+}
+
+.services-menu-trigger[aria-expanded="true"],
+.services-menu-trigger.bg-blue-600 {
+  color: white !important;
+  background-color: #2563eb !important; /* blue-600 */
+}
+
+/* Menu Services - Contenu déroulant - Cibler le motion.div qui suit le bouton */
+.services-menu-trigger ~ div[class*="motion"],
+.services-menu-trigger + div[class*="motion"],
+.services-menu-trigger ~ div[class*="absolute"],
+.services-menu-trigger + div[class*="absolute"],
+.dropdown-menu:has(.services-menu-trigger) > div[class*="motion"],
+.dropdown-menu:has(.services-menu-trigger) > div[class*="absolute"] {
+  background-color: white !important;
+}
+
+/* Liens dans le menu Services */
+.services-menu-trigger ~ div a,
+.services-menu-trigger + div a,
+.services-menu-trigger ~ div[class*="motion"] a,
+.services-menu-trigger ~ div[class*="absolute"] a,
+.dropdown-menu:has(.services-menu-trigger) a {
+  color: #374151 !important; /* gray-700 */
+}
+
+.services-menu-trigger ~ div a:hover,
+.services-menu-trigger + div a:hover,
+.services-menu-trigger ~ div[class*="motion"] a:hover,
+.services-menu-trigger ~ div[class*="absolute"] a:hover,
+.dropdown-menu:has(.services-menu-trigger) a:hover {
+  background-color: #eff6ff !important; /* blue-50 */
+  color: #2563eb !important; /* blue-600 */
+}
+
+.services-menu-trigger ~ div a[aria-current="page"],
+.services-menu-trigger + div a[aria-current="page"],
+.services-menu-trigger ~ div[class*="motion"] a[aria-current="page"],
+.services-menu-trigger ~ div[class*="absolute"] a[aria-current="page"],
+.dropdown-menu:has(.services-menu-trigger) a[aria-current="page"] {
+  background-color: #eff6ff !important; /* blue-50 */
+  color: #2563eb !important; /* blue-600 */
+  border-left-color: #2563eb !important; /* blue-600 */
+}
+
+/* Forcer le bleu sur tous les éléments du menu Services */
+.dropdown-menu:has(.services-menu-trigger) * {
+  --tw-text-opacity: 1;
+}
+
+.dropdown-menu:has(.services-menu-trigger) a.hover\:bg-blue-50:hover {
+  background-color: #eff6ff !important;
+  color: #2563eb !important;
+}
+
+.dropdown-menu:has(.services-menu-trigger) a.hover\:text-blue-600:hover {
+  color: #2563eb !important;
+}
+

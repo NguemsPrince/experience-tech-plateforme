@@ -96,11 +96,12 @@ div[id="mobile-menu-panel"] {
   z-index: 10002 !important;
   background-color: white !important;
   border-top: 1px solid #e5e7eb !important;
-  overflow-y: auto !important;
+  overflow: hidden !important;
+  overflow-y: hidden !important;
   overflow-x: hidden !important;
   max-height: calc(100vh - 4rem) !important;
-  -webkit-overflow-scrolling: touch !important;
-  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: none !important;
+  touch-action: none !important;
   overscroll-behavior: contain !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
   will-change: transform, opacity !important;

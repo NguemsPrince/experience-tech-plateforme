@@ -230,12 +230,12 @@ const CreatePostPage = () => {
                   onChange={handleInputChange}
                   placeholder="Donnez un titre clair et descriptif à votre sujet..."
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.title ? 'border-red-300' : 'border-gray-300'
+                    errors.title ? 'border-blue-300' : 'border-gray-300'
                   }`}
                   maxLength={200}
                 />
                 {errors.title && (
-                  <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+                  <p className="mt-1 text-sm text-blue-600">{errors.title}</p>
                 )}
                 <p className="mt-1 text-xs text-gray-500">
                   {formData.title.length}/200 caractères
@@ -253,7 +253,7 @@ const CreatePostPage = () => {
                   value={formData.category}
                   onChange={handleInputChange}
                   className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.category ? 'border-red-300' : 'border-gray-300'
+                    errors.category ? 'border-blue-300' : 'border-gray-300'
                   }`}
                 >
                   <option value="">Sélectionnez une catégorie</option>
@@ -264,7 +264,7 @@ const CreatePostPage = () => {
                   ))}
                 </select>
                 {errors.category && (
-                  <p className="mt-1 text-sm text-red-600">{errors.category}</p>
+                  <p className="mt-1 text-sm text-blue-600">{errors.category}</p>
                 )}
               </div>
 
@@ -334,7 +334,7 @@ const CreatePostPage = () => {
                   maxHeight="600px"
                 />
                 {errors.content && (
-                  <p className="mt-1 text-sm text-red-600">{errors.content}</p>
+                  <p className="mt-1 text-sm text-blue-600">{errors.content}</p>
                 )}
                 <p className="mt-1 text-xs text-gray-500">
                   Minimum 10 caractères. Utilisez le Markdown pour formater votre texte (gras, italique, code, liens, etc.).

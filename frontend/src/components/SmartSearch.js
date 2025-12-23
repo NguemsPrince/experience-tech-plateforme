@@ -154,7 +154,7 @@ const SmartSearch = ({ onClose }) => {
             onClick={handleVoiceSearch}
             className={`p-2 rounded-lg transition-colors ${
               isListening 
-                ? 'bg-red-500 text-white animate-pulse' 
+                ? 'bg-blue-500 text-white animate-pulse' 
                 : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
             }`}
             title="Recherche vocale"

@@ -135,7 +135,7 @@ const RatingSystem = ({
           animate={{ opacity: 1 }}
           className="flex items-center space-x-1"
         >
-          <div className="w-4 h-4 border-2 border-gray-300 border-t-red-500 rounded-full animate-spin"></div>
+          <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
           <span className="text-xs text-gray-600">Enregistrement...</span>
         </motion.div>
       )}

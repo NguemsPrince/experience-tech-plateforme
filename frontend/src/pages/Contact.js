@@ -82,11 +82,11 @@ const Contact = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+      <section className="section-padding bg-gradient-to-br from-primary-600 to-primary-800 text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
             <SolarAnimation variant="solar" delay={0.2}>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Contactez-nous
               </h1>
             </SolarAnimation>
@@ -119,11 +119,11 @@ const Contact = () => {
                       type="text"
                       id="name"
                       {...register('name', { required: 'Le nom est requis' })}
-                      className={`input-field ${errors.name ? 'border-red-500' : ''}`}
+                      className={`input-field ${errors.name ? 'border-blue-500' : ''}`}
                       placeholder={t('common.votreNomComplet')}
                     />
                     {errors.name && (
-                      <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                      <p className="mt-1 text-sm text-blue-600">{errors.name.message}</p>
                     )}
                   </div>
 
@@ -141,11 +141,11 @@ const Contact = () => {
                           message: 'Email invalide'
                         }
                       })}
-                      className={`input-field ${errors.email ? 'border-red-500' : ''}`}
+                      className={`input-field ${errors.email ? 'border-blue-500' : ''}`}
                       placeholder="votre@email.com"
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                      <p className="mt-1 text-sm text-blue-600">{errors.email.message}</p>
                     )}
                   </div>
                 </div>
@@ -170,7 +170,7 @@ const Contact = () => {
                   <select
                     id="subject"
                     {...register('subject', { required: 'Le sujet est requis' })}
-                    className={`input-field ${errors.subject ? 'border-red-500' : ''}`}
+                    className={`input-field ${errors.subject ? 'border-blue-500' : ''}`}
                   >
                     <option value="">Sélectionnez un sujet</option>
                     <option value="services">Demande de services</option>
@@ -182,7 +182,7 @@ const Contact = () => {
                     <option value="autre">Autre</option>
                   </select>
                   {errors.subject && (
-                    <p className="mt-1 text-sm text-red-600">{errors.subject.message}</p>
+                    <p className="mt-1 text-sm text-blue-600">{errors.subject.message}</p>
                   )}
                 </div>
 
@@ -194,11 +194,11 @@ const Contact = () => {
                     id="message"
                     rows={6}
                     {...register('message', { required: 'Le message est requis' })}
-                    className={`input-field ${errors.message ? 'border-red-500' : ''}`}
+                    className={`input-field ${errors.message ? 'border-blue-500' : ''}`}
                     placeholder={t('common.decrireDemande')}
                   />
                   {errors.message && (
-                    <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
+                    <p className="mt-1 text-sm text-blue-600">{errors.message.message}</p>
                   )}
                 </div>
 

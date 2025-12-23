@@ -39,6 +39,10 @@ import CourseDiscussion from '../components/CourseDiscussion';
 import CourseReviews from '../components/CourseReviews';
 import CourseMaterials from '../components/CourseMaterials';
 import CourseProgress from '../components/CourseProgress';
+import CourseCurriculumSidebar from '../components/CourseCurriculumSidebar';
+import PaymentModal from '../components/PaymentModal';
+import settingsService from '../services/settingsService';
+import CourseCard from '../components/CourseCard';
 
 const CourseDetail = () => {
   const { t } = useTranslation();
@@ -60,13 +64,29 @@ const CourseDetail = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [showSubtitles, setShowSubtitles] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentSettings, setPaymentSettings] = useState(null);
+  const [completedLessons, setCompletedLessons] = useState(new Set());
+  const [showCurriculumSidebar, setShowCurriculumSidebar] = useState(true);
 
   useEffect(() => {
     fetchCourseDetails();
     if (isAuthenticated) {
       fetchEnrollment();
     }
+    loadPaymentSettings();
   }, [id, isAuthenticated]);
+
+  const loadPaymentSettings = async () => {
+    try {
+      const response = await settingsService.getPaymentSettings();
+      if (response && response.data) {
+        setPaymentSettings(response.data.payment);
+      }
+    } catch (error) {
+      console.error('Error loading payment settings:', error);
+    }
+  };
 
   const fetchCourseDetails = async () => {
     try {
@@ -186,6 +206,38 @@ const CourseDetail = () => {
     try {
       const response = await trainingService.getEnrollmentByCourse(id);
       setEnrollment(response.data.enrollment);
+      
+      // Charger les leçons complétées
+      if (response.data.enrollment) {
+        try {
+          const detailsResponse = await trainingService.getEnrollmentDetails(id);
+          if (detailsResponse.data?.completedLessonsIds) {
+            setCompletedLessons(new Set(detailsResponse.data.completedLessonsIds));
+          }
+          // Restaurer la leçon actuelle si disponible
+          if (detailsResponse.data?.currentLesson) {
+            const currentLessonData = detailsResponse.data.currentLesson;
+            // Trouver la leçon dans le curriculum
+            if (course?.curriculum) {
+              for (const section of course.curriculum) {
+                if (section.lessons) {
+                  const foundLesson = section.lessons.find(
+                    l => (l._id && l._id.toString() === currentLessonData.lessonId) ||
+                         l.title === currentLessonData.lessonId ||
+                         l.title === currentLessonData.lessonTitle
+                  );
+                  if (foundLesson) {
+                    setCurrentLesson(foundLesson);
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        } catch (detailsError) {
+          console.error('Error fetching enrollment details:', detailsError);
+        }
+      }
     } catch (error) {
       console.error('Error fetching enrollment:', error);
       // Don't show error for 404 (user not enrolled) - this is normal
@@ -195,24 +247,28 @@ const CourseDetail = () => {
     }
   };
 
-  const handleEnroll = async () => {
+  const handleEnroll = () => {
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
+    // Ouvrir le modal de paiement au lieu d'inscrire directement
+    setShowPaymentModal(true);
+  };
 
+  const handlePaymentSuccess = async () => {
+    // Après paiement réussi, inscrire l'utilisateur
     try {
       await trainingService.enrollInCourse(id);
       await fetchEnrollment();
-      
-      // Show success notifications
-      toast.success('Inscription réussie ! Bienvenue dans ce cours.');
+      toast.success('Paiement effectué et inscription confirmée !');
       addNotification({
         type: 'success',
         title: 'Inscription confirmée !',
         message: `Vous êtes maintenant inscrit au cours "${course?.title || 'cours'}". Bon apprentissage !`
       });
     } catch (error) {
+      console.error('Error enrolling after payment:', error);
       // Fallback simulation for demo purposes
       if (error.response && (error.response.status === 500 || error.response.status === 0)) {
         console.log('API unavailable, simulating enrollment...');
@@ -298,9 +354,63 @@ const CourseDetail = () => {
     setIsFavorite(!isFavorite);
   };
 
-  const handleLessonClick = (lesson) => {
-    setCurrentLesson(lesson);
+  const handleLessonClick = async (lesson) => {
+    // Vérifier si la leçon est accessible
+    if (!enrollment && !lesson.isPreview) {
+      toast.error('Cette leçon nécessite l\'achat du cours. Veuillez acheter le cours pour y accéder.');
+      setShowPaymentModal(true);
+      return;
+    }
+    
+    // Charger la leçon depuis le backend pour vérifier l'accès
+    try {
+      const lessonId = lesson._id?.toString() || lesson.title;
+      const response = await trainingService.getLesson(id, lessonId);
+      if (response.data?.lesson) {
+        setCurrentLesson(response.data.lesson);
+        
+        // Si l'utilisateur est inscrit, sauvegarder la progression
+        if (enrollment && response.data.lesson.videoUrl) {
+          // La progression vidéo sera sauvegardée par le VideoPlayer
+        }
+      }
+    } catch (error) {
+      // Si erreur 403, c'est normal - la leçon est verrouillée
+      if (error.response?.status === 403) {
+        toast.error('Cette leçon nécessite l\'achat du cours.');
+        setShowPaymentModal(true);
+      } else {
+        // Sinon, utiliser la leçon locale
+        setCurrentLesson(lesson);
+      }
+    }
   };
+
+  // Trouver la première leçon d'échantillon ou la première leçon si inscrit
+  const getPreviewLesson = () => {
+    if (!course?.curriculum) return null;
+    
+    for (const section of course.curriculum) {
+      if (section.lessons) {
+        for (const lesson of section.lessons) {
+          if (lesson.isPreview || enrollment) {
+            return lesson;
+          }
+        }
+      }
+    }
+    return null;
+  };
+
+  // Charger la leçon d'échantillon au chargement si non inscrit
+  useEffect(() => {
+    if (course && !enrollment && !currentLesson) {
+      const previewLesson = getPreviewLesson();
+      if (previewLesson) {
+        setCurrentLesson(previewLesson);
+      }
+    }
+  }, [course, enrollment]);
 
   const getDiscountPercentage = () => {
     if (course?.originalPrice && course.originalPrice > course.price) {
@@ -356,11 +466,18 @@ const CourseDetail = () => {
 
               <div className="flex items-center space-x-4">
                 <button
+                  onClick={() => setShowCurriculumSidebar(!showCurriculumSidebar)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+                  title="Afficher/Masquer le programme"
+                >
+                  <DocumentTextIcon className="w-5 h-5" />
+                </button>
+                <button
                   onClick={toggleFavorite}
                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   {isFavorite ? (
-                    <HeartSolidIcon className="w-5 h-5 text-red-500" />
+                    <HeartSolidIcon className="w-5 h-5 text-blue-500" />
                   ) : (
                     <HeartIcon className="w-5 h-5" />
                   )}
@@ -379,68 +496,176 @@ const CourseDetail = () => {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Curriculum Sidebar (Left) - Style Udemy */}
+            {showCurriculumSidebar && (
+              <div className="lg:col-span-3 order-2 lg:order-1">
+                <CourseCurriculumSidebar
+                  course={course}
+                  enrollment={enrollment}
+                  currentLesson={currentLesson}
+                  onLessonClick={handleLessonClick}
+                  completedLessons={completedLessons}
+                  onLessonComplete={async (lessonId) => {
+                    try {
+                      await trainingService.completeLesson(id, lessonId);
+                      setCompletedLessons(prev => new Set([...prev, lessonId]));
+                      toast.success('Leçon marquée comme complétée !');
+                    } catch (error) {
+                      console.error('Error completing lesson:', error);
+                    }
+                  }}
+                />
+              </div>
+            )}
+
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className={`${showCurriculumSidebar ? 'lg:col-span-6' : 'lg:col-span-9'} order-1 lg:order-2 space-y-8`}>
               {/* Course Header */}
               <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">
+                {/* Breadcrumb */}
+                <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
+                  <button onClick={() => navigate('/training')} className="hover:text-blue-600 transition-colors">Cours</button>
+                  <span>/</span>
+                  <span className="text-gray-400">{course.category}</span>
+                  <span>/</span>
+                  <span className="text-gray-900 font-medium">{course.title}</span>
+                </nav>
+
+                {/* Badges du cours - Style Mahrasoft */}
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1.5 rounded-full">
                     {course.category}
                   </span>
                   {course.isBestSeller && (
-                    <span className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded">
+                    <span className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1.5 rounded-full">
                       Best Seller
                     </span>
                   )}
                   {course.isNew && (
-                    <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">
+                    <span className="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1.5 rounded-full">
                       Nouveau
+                    </span>
+                  )}
+                  <span className="bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1.5 rounded-full">
+                    Accès à Vie
+                  </span>
+                  <span className="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1.5 rounded-full">
+                    Support 24/7
+                  </span>
+                  {course.isFeatured && (
+                    <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1.5 rounded-full">
+                      Cours Vedette
                     </span>
                   )}
                 </div>
 
-                <h1 className="text-3xl font-bold mb-4">{course.title}</h1>
+                <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{course.title}</h1>
                 
-                <div className="flex items-center space-x-6 text-sm text-gray-600 mb-4">
+                {/* Statistiques du cours - Style Mahrasoft */}
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
                   <div className="flex items-center">
-                    <StarSolidIcon className="w-4 h-4 text-yellow-400 mr-1" />
-                    {course.rating.average} ({course.rating.count} avis)
+                    <StarSolidIcon className="w-5 h-5 text-yellow-400 mr-1.5" />
+                    <span className="font-semibold text-gray-900">{course.rating?.average || 0}</span>
+                    <span className="text-gray-500 ml-1">({course.rating?.count || 0} avis)</span>
                   </div>
                   <div className="flex items-center">
-                    <UserIcon className="w-4 h-4 mr-1" />
-                    {course.studentsCount} étudiants
+                    <UserIcon className="w-5 h-5 text-gray-400 mr-1.5" />
+                    <span>{course.studentsCount || 0} Étudiants inscrits</span>
                   </div>
                   <div className="flex items-center">
-                    <ClockIcon className="w-4 h-4 mr-1" />
-                    {course.totalHours}h total
+                    <ClockIcon className="w-5 h-5 text-gray-400 mr-1.5" />
+                    <span>{course.totalHours || 0}h {course.totalHours ? 'de contenu' : '0m'}</span>
                   </div>
                   <div className="flex items-center">
-                    <VideoCameraIcon className="w-4 h-4 mr-1" />
-                    {course.lessons} leçons
+                    <BookOpenIcon className="w-5 h-5 text-gray-400 mr-1.5" />
+                    <span>{course.lessons || 0} Leçons</span>
+                  </div>
+                  <div className="flex items-center">
+                    <AcademicCapIcon className="w-5 h-5 text-gray-400 mr-1.5" />
+                    <span className="font-medium">{course.level || 'Tous niveaux'}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4">
+                {/* Tags du cours */}
+                {course.tags && course.tags.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2 mb-6">
+                    <span className="text-sm font-medium text-gray-700">Tags:</span>
+                    {course.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="bg-gray-100 text-gray-700 text-xs font-medium px-3 py-1 rounded-full hover:bg-gray-200 transition-colors"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Formateur - Style Mahrasoft */}
+                <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
                   <img
-                    src={course.instructor.image}
-                    alt={course.instructor.name}
-                    className="w-12 h-12 rounded-full"
+                    src={course.instructor?.image || '/images/default-instructor.jpg'}
+                    alt={course.instructor?.name || 'Formateur'}
+                    className="w-16 h-16 rounded-full border-2 border-white shadow-md"
                   />
-                  <div>
-                    <p className="font-semibold">{course.instructor.name}</p>
-                    <p className="text-sm text-gray-600">{course.instructor.experience}</p>
+                  <div className="flex-1">
+                    <p className="font-semibold text-gray-900">{course.instructor?.name || 'Formateur'}</p>
+                    <p className="text-sm text-gray-600 mb-1">{course.instructor?.experience || 'Instructor'}</p>
+                    <div className="flex items-center space-x-4 text-xs text-gray-500">
+                      <span>{course.studentsCount || 0} Étudiants</span>
+                      <span>•</span>
+                      <span className="flex items-center">
+                        <StarSolidIcon className="w-3 h-3 text-yellow-400 mr-1" />
+                        {course.instructor?.rating || 4.8} Note moyenne
+                      </span>
+                      <span>•</span>
+                      <span>{course.instructor?.coursesCount || 5}+ Cours</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Video Player */}
-              {currentLesson && (
-                <div className="bg-black rounded-lg overflow-hidden">
+              {currentLesson ? (
+                <div className="bg-black rounded-lg overflow-hidden relative">
+                  {!enrollment && !currentLesson.isPreview && (
+                    <div className="absolute inset-0 bg-black bg-opacity-75 flex items-center justify-center z-10">
+                      <div className="text-center text-white p-8">
+                        <LockClosedIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                        <h3 className="text-2xl font-bold mb-2">Cette leçon est verrouillée</h3>
+                        <p className="text-gray-300 mb-6">Achetez le cours pour accéder à toutes les leçons</p>
+                        <button
+                          onClick={() => setShowPaymentModal(true)}
+                          className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+                        >
+                          Acheter le cours
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {currentLesson.isPreview && !enrollment && (
+                    <div className="absolute top-4 right-4 z-10">
+                      <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        Échantillon gratuit
+                      </span>
+                    </div>
+                  )}
                   <VideoPlayer
-                    src={currentLesson.videoUrl}
+                    src={currentLesson.videoUrl || course.introVideo?.url}
                     title={currentLesson.title}
+                    courseId={id}
+                    lessonId={currentLesson._id?.toString() || currentLesson.title}
+                    onProgressSave={async (courseId, lessonId, videoTime) => {
+                      if (enrollment) {
+                        try {
+                          await trainingService.saveVideoProgress(courseId, lessonId, videoTime);
+                        } catch (error) {
+                          console.error('Error saving video progress:', error);
+                        }
+                      }
+                    }}
                     playbackRate={playbackRate}
                     volume={volume}
                     isMuted={isMuted}
@@ -450,6 +675,35 @@ const CourseDetail = () => {
                     onMuteToggle={setIsMuted}
                     onSubtitlesToggle={setShowSubtitles}
                   />
+                </div>
+              ) : course.introVideo?.url ? (
+                <div className="bg-black rounded-lg overflow-hidden relative">
+                  <div className="absolute top-4 right-4 z-10">
+                    <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      Vidéo d'introduction
+                    </span>
+                  </div>
+                  <VideoPlayer
+                    src={course.introVideo.url}
+                    title="Introduction au cours"
+                    courseId={id}
+                    lessonId="intro"
+                    playbackRate={playbackRate}
+                    volume={volume}
+                    isMuted={isMuted}
+                    showSubtitles={showSubtitles}
+                    onPlaybackRateChange={setPlaybackRate}
+                    onVolumeChange={setVolume}
+                    onMuteToggle={setIsMuted}
+                    onSubtitlesToggle={setShowSubtitles}
+                  />
+                </div>
+              ) : (
+                <div className="bg-gray-900 rounded-lg overflow-hidden aspect-video flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <PlayIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                    <p className="text-gray-400">Aucune vidéo disponible</p>
+                  </div>
                 </div>
               )}
 
@@ -489,15 +743,22 @@ const CourseDetail = () => {
                     </div>
 
                     <div>
-                      <h3 className="text-xl font-bold mb-3">Ce que vous apprendrez</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {course.whatYouWillLearn.map((item, index) => (
-                          <div key={index} className="flex items-start">
-                            <CheckCircleIcon className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                            <span className="text-gray-600">{item}</span>
-                          </div>
-                        ))}
-                      </div>
+                      <h3 className="text-xl font-bold mb-4 text-gray-900">Ce Que Vous Allez Apprendre</h3>
+                      {course.whatYouWillLearn && course.whatYouWillLearn.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {course.whatYouWillLearn.map((item, index) => (
+                            <div key={index} className="flex items-start p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                              <CheckCircleIcon className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700 font-medium">{item}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                          <AcademicCapIcon className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                          <p className="text-gray-600">Les compétences à acquérir seront bientôt disponibles.</p>
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -515,12 +776,30 @@ const CourseDetail = () => {
                 )}
 
                 {activeTab === 'curriculum' && (
-                  <CourseProgress
-                    course={course}
-                    enrollment={enrollment}
-                    onLessonClick={handleLessonClick}
-                    currentLesson={currentLesson}
-                  />
+                  <div>
+                    <div className="mb-6">
+                      <h3 className="text-xl font-bold mb-4 text-gray-900">Programme du Cours</h3>
+                      <p className="text-sm text-gray-600 mb-4">
+                        {course.curriculum?.reduce((total, section) => total + (section.lessons?.length || 0), 0) || 0} leçons • {course.totalHours || 0}h {course.totalHours ? '' : '0m'}
+                      </p>
+                      {!enrollment && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                          <p className="text-sm text-blue-800 text-center">
+                            <LockClosedIcon className="w-4 h-4 inline mr-2" />
+                            Inscrivez-vous pour accéder à toutes les leçons
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="lg:hidden">
+                      <CourseProgress
+                        course={course}
+                        enrollment={enrollment}
+                        onLessonClick={handleLessonClick}
+                        currentLesson={currentLesson}
+                      />
+                    </div>
+                  </div>
                 )}
 
                 {activeTab === 'discussions' && (
@@ -528,7 +807,24 @@ const CourseDetail = () => {
                 )}
 
                 {activeTab === 'reviews' && (
-                  <CourseReviews courseId={course._id} />
+                  <div>
+                    <CourseReviews courseId={course._id} />
+                    {!enrollment && (
+                      <div className="mt-6 bg-gray-50 border border-gray-200 rounded-xl p-6 text-center">
+                        <StarIcon className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                        <h4 className="font-semibold text-gray-900 mb-2">Inscrivez-vous pour donner votre avis</h4>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Rejoignez ce cours et partagez votre expérience avec la communauté.
+                        </p>
+                        <button
+                          onClick={handleEnroll}
+                          className="btn-modern-primary"
+                        >
+                          Rejoindre la Formation
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
 
                 {activeTab === 'materials' && (
@@ -537,112 +833,282 @@ const CourseDetail = () => {
               </div>
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {/* Course Card */}
-              <div className={`border rounded-lg p-6 ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                <div className="mb-4">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">
-                    {course.price.toLocaleString()} FCFA
-                  </div>
-                  {course.originalPrice && course.originalPrice > course.price && (
-                    <div className="flex items-center space-x-2">
-                      <span className="text-lg text-gray-500 line-through">
-                        {course.originalPrice.toLocaleString()} FCFA
-                      </span>
-                      <span className="bg-red-100 text-red-800 text-sm font-semibold px-2 py-1 rounded">
-                        -{getDiscountPercentage()}%
-                      </span>
-                    </div>
-                  )}
-                </div>
-
+            {/* Purchase Sidebar (Right) - Style Mahrasoft */}
+            <div className={`${showCurriculumSidebar ? 'lg:col-span-3' : 'lg:col-span-3'} order-3`}>
+              <div className="sticky top-24 space-y-6">
+              {/* Course Card - Style Mahrasoft */}
+              <div className="card-modern border-2 border-gray-200 shadow-xl">
                 {enrollment ? (
-                  <div className="space-y-3">
-                    <CourseProgress
-                      course={course}
-                      enrollment={enrollment}
-                      onLessonClick={handleLessonClick}
-                      currentLesson={currentLesson}
-                      compact={true}
-                    />
+                  <div className="p-6">
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-4 mb-4">
+                      <div className="flex items-center">
+                        <CheckCircleIcon className="w-6 h-6 text-green-600 mr-3" />
+                        <div>
+                          <p className="font-bold text-green-900 text-lg">Vous êtes inscrit à ce cours</p>
+                          <p className="text-sm text-green-700 mt-1">Accédez à toutes les leçons et ressources d'apprentissage.</p>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => navigate(`/my-courses`)}
+                      className="w-full btn-modern-primary py-3 text-base"
+                    >
+                      Accéder au Cours
+                    </button>
                   </div>
                 ) : (
-                  <button
-                    onClick={handleEnroll}
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-                  >
-                    S'inscrire maintenant
-                  </button>
+                  <div className="p-6">
+                    {/* Prix */}
+                    <div className="mb-6">
+                      <div className="flex items-baseline space-x-2 mb-2">
+                        <span className="text-4xl font-bold text-blue-600">
+                          {course.price.toLocaleString()}
+                        </span>
+                        <span className="text-xl text-gray-600">FCFA</span>
+                        <span className="text-sm text-gray-500">/ à vie</span>
+                      </div>
+                      {course.originalPrice && course.originalPrice > course.price && (
+                        <div className="flex items-center space-x-2">
+                          <span className="text-lg text-gray-500 line-through">
+                            {course.originalPrice.toLocaleString()} FCFA
+                          </span>
+                          <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full">
+                            -{getDiscountPercentage()}%
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Boutons d'action */}
+                    <div className="space-y-3 mb-6">
+                      <button
+                        onClick={handleEnroll}
+                        className="w-full btn-modern-primary py-3.5 text-base font-bold"
+                      >
+                        Rejoindre la Formation
+                      </button>
+                      <button
+                        onClick={() => {
+                          toast.success('Cours ajouté au panier');
+                        }}
+                        className="w-full btn-modern-outline py-3.5 text-base"
+                      >
+                        Ajouter au panier
+                      </button>
+                    </div>
+
+                    {/* Liste des avantages - Style Mahrasoft */}
+                    <div className="border-t border-gray-200 pt-6 mb-6">
+                      <h4 className="font-bold text-gray-900 mb-4">Ce cours comprend :</h4>
+                      <ul className="space-y-3">
+                        <li className="flex items-start">
+                          <CheckCircleIcon className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Accès à vie au cours</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircleIcon className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{course.lessons || 0} leçons complètes</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircleIcon className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Accès sur mobile et TV</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircleIcon className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Support de la communauté</span>
+                        </li>
+                        <li className="flex items-start">
+                          <CheckCircleIcon className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">Mises à jour gratuites</span>
+                        </li>
+                        {course.certificate && (
+                          <li className="flex items-start">
+                            <CheckCircleIcon className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                            <span className="text-sm text-gray-700">Certificat de fin de formation</span>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+
+                    {/* Garantie */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
+                      <p className="text-xs text-center text-blue-800 font-medium">
+                        <TrophyIcon className="w-4 h-4 inline mr-1" />
+                        Garantie de remboursement de 30 jours
+                      </p>
+                    </div>
+                  </div>
                 )}
 
-                <div className="mt-4 text-sm text-gray-600">
-                  <div className="flex items-center justify-between py-2">
-                    <span>Durée</span>
-                    <span>{course.duration}</span>
-                  </div>
-                  <div className="flex items-center justify-between py-2">
-                    <span>Niveau</span>
-                    <span>{course.level}</span>
-                  </div>
-                  <div className="flex items-center justify-between py-2">
-                    <span>Langue</span>
-                    <span>{course.language}</span>
-                  </div>
-                  <div className="flex items-center justify-between py-2">
-                    <span>Accès</span>
-                    <span>À vie</span>
+                {/* Informations du cours - Style Mahrasoft */}
+                <div className="border-t border-gray-200 p-6 bg-gray-50">
+                  <h4 className="font-bold text-gray-900 mb-4">Informations du Cours</h4>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 font-medium">Niveau:</span>
+                      <span className="text-gray-900 font-semibold">{course.level || 'Tous niveaux'}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 font-medium">Étudiants:</span>
+                      <span className="text-gray-900 font-semibold">{course.studentsCount || 0}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 font-medium">Langue:</span>
+                      <span className="text-gray-900 font-semibold">{course.language || 'Français'}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 font-medium">Leçons:</span>
+                      <span className="text-gray-900 font-semibold">{course.lessons || 0}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 font-medium">Durée:</span>
+                      <span className="text-gray-900 font-semibold">{course.totalHours || 0}h {course.totalHours ? '' : '0m'}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <h4 className="font-semibold mb-3">Ce cours comprend :</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-center">
-                      <VideoCameraIcon className="w-4 h-4 mr-2 text-green-500" />
-                      {course.totalHours}h de vidéo
-                    </li>
-                    <li className="flex items-center">
-                      <DocumentTextIcon className="w-4 h-4 mr-2 text-green-500" />
-                      {course.lessons} leçons
-                    </li>
-                    <li className="flex items-center">
-                      <DocumentArrowDownIcon className="w-4 h-4 mr-2 text-green-500" />
-                      Ressources téléchargeables
-                    </li>
-                    <li className="flex items-center">
-                      <TrophyIcon className="w-4 h-4 mr-2 text-green-500" />
-                      Certificat de fin
-                    </li>
-                    <li className="flex items-center">
-                      <GlobeAltIcon className="w-4 h-4 mr-2 text-green-500" />
-                      Accès mobile et desktop
-                    </li>
-                  </ul>
+                {/* Partage du cours */}
+                <div className="border-t border-gray-200 p-6">
+                  <h4 className="font-bold text-gray-900 mb-3">Partager ce Cours</h4>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({
+                            title: course.title,
+                            text: course.shortDescription,
+                            url: window.location.href
+                          });
+                        } else {
+                          navigator.clipboard.writeText(window.location.href);
+                          toast.success('Lien copié dans le presse-papier');
+                        }
+                      }}
+                      className="flex-1 btn-modern-secondary py-2 text-sm"
+                    >
+                      <ShareIcon className="w-4 h-4 inline mr-2" />
+                      Partager
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Instructor Card */}
-              <div className={`border rounded-lg p-6 ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                <h3 className="font-bold mb-4">Votre instructeur</h3>
-                <div className="flex items-start space-x-4">
-                  <img
-                    src={course.instructor.image}
-                    alt={course.instructor.name}
-                    className="w-16 h-16 rounded-full"
-                  />
-                  <div>
-                    <h4 className="font-semibold">{course.instructor.name}</h4>
-                    <p className="text-sm text-gray-600 mb-2">{course.instructor.experience}</p>
-                    <p className="text-sm text-gray-600">{course.instructor.bio}</p>
+              {/* Instructor Card - Style Mahrasoft */}
+              <div className="card-modern">
+                <div className="p-6">
+                  <h3 className="font-bold text-xl mb-4 text-gray-900">Votre Formateur</h3>
+                  <div className="flex items-start space-x-4 mb-4">
+                    <img
+                      src={course.instructor?.image || '/images/default-instructor.jpg'}
+                      alt={course.instructor?.name || 'Formateur'}
+                      className="w-20 h-20 rounded-full border-2 border-gray-200 shadow-md"
+                    />
+                    <div className="flex-1">
+                      <h4 className="font-bold text-lg text-gray-900">{course.instructor?.name || 'Formateur'}</h4>
+                      <p className="text-sm text-gray-600 mb-2">{course.instructor?.experience || 'Instructor'}</p>
+                      <div className="flex items-center space-x-4 text-xs text-gray-500 mb-2">
+                        <span className="flex items-center">
+                          <UserIcon className="w-3 h-3 mr-1" />
+                          {course.instructor?.studentsCount || course.studentsCount || 0} Étudiants
+                        </span>
+                        <span className="flex items-center">
+                          <StarSolidIcon className="w-3 h-3 text-yellow-400 mr-1" />
+                          {course.instructor?.rating || 4.8} Note Moyenne
+                        </span>
+                        <span>{course.instructor?.coursesCount || 5}+ Cours</span>
+                      </div>
+                    </div>
                   </div>
+                  {course.instructor?.bio && (
+                    <p className="text-sm text-gray-600 leading-relaxed border-t border-gray-200 pt-4">
+                      {course.instructor.bio}
+                    </p>
+                  )}
                 </div>
+              </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        course={course}
+        item={{
+          ...course,
+          type: 'course',
+          price: course?.price || 0,
+          title: course?.title || 'Formation'
+        }}
+        onPaymentSuccess={handlePaymentSuccess}
+      />
+
+      {/* Cours Similaires - Style Mahrasoft */}
+      {course && (
+        <SimilarCoursesSection 
+          courseId={course._id} 
+          category={course.category} 
+          currentCourseTitle={course.title} 
+        />
+      )}
     </>
+  );
+};
+
+// Composant pour les cours similaires
+const SimilarCoursesSection = ({ courseId, category, currentCourseTitle }) => {
+  const [similarCourses, setSimilarCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSimilarCourses = async () => {
+      try {
+        setLoading(true);
+        const response = await trainingService.getAllCourses({ category, limit: 4 });
+        if (response.data && response.data.courses) {
+          // Filtrer le cours actuel
+          const filtered = response.data.courses
+            .filter(c => c._id !== courseId && c.title !== currentCourseTitle)
+            .slice(0, 3);
+          setSimilarCourses(filtered);
+        }
+      } catch (error) {
+        console.error('Error fetching similar courses:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (category) {
+      fetchSimilarCourses();
+    }
+  }, [courseId, category, currentCourseTitle]);
+
+  if (loading || similarCourses.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="bg-gray-50 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold text-gray-900 mb-8">Cours Similaires</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {similarCourses.map((course) => (
+            <motion.div
+              key={course._id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <CourseCard course={course} />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

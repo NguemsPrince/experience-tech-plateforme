@@ -3,6 +3,46 @@
   position: relative;
 }
 
+/* Empêcher le défilement dans les menus déroulants - Styles très spécifiques */
+.dropdown-menu .absolute,
+.dropdown-menu [class*="absolute"],
+.dropdown-menu > div,
+.motion-div[class*="absolute"],
+.dropdown-menu [class*="motion"],
+.dropdown-menu div[class*="absolute"][class*="top-full"] {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  scroll-behavior: auto !important;
+  -webkit-overflow-scrolling: none !important;
+}
+
+/* Empêcher le scroll sur tous les éléments de menu déroulant */
+.dropdown-menu *,
+.dropdown-menu * * {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+}
+
+/* Cibler spécifiquement les divs motion dans les menus */
+div[class*="absolute"][class*="top-full"][class*="mt-2"] {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  max-height: none !important;
+}
+
+/* Cibler les menus déroulants avec z-index 60 */
+[class*="z-[60]"][class*="absolute"] {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  max-height: none !important;
+}
+
 .dropdown-menu .dropdown-content {
   position: absolute;
   top: 100%;

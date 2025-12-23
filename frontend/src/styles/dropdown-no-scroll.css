@@ -1,0 +1,136 @@
+/* Styles pour empêcher complètement le défilement dans les menus déroulants */
+
+/* S'assurer que le conteneur nav n'interfère pas */
+header nav,
+header nav > div {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+}
+
+/* Cibler tous les menus déroulants et leurs enfants */
+.dropdown-menu,
+.dropdown-menu *,
+.dropdown-menu * *,
+.dropdown-menu * * * {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  scroll-behavior: auto !important;
+  -webkit-overflow-scrolling: none !important;
+}
+
+/* Cibler spécifiquement les divs motion dans les menus déroulants */
+.dropdown-menu > div,
+.dropdown-menu > div > div,
+.dropdown-menu [class*="absolute"],
+.dropdown-menu div[class*="motion"],
+.dropdown-menu [class*="absolute"][class*="top-full"],
+div[class*="motion"][class*="absolute"][class*="top-full"] {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  max-height: none !important;
+  height: auto !important;
+  scroll-behavior: auto !important;
+  -webkit-overflow-scrolling: none !important;
+}
+
+/* Cibler les menus avec z-index 60 - sélecteurs très spécifiques */
+[class*="z-[60]"],
+div[class*="z-[60]"],
+[class*="z-[60]"][class*="absolute"],
+div[class*="z-[60]"][class*="absolute"],
+[class*="z-[60]"][class*="absolute"][class*="top-full"],
+div[class*="z-[60]"][class*="absolute"][class*="top-full"] {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  max-height: none !important;
+  height: auto !important;
+}
+
+/* Cibler les éléments avec les classes Tailwind spécifiques */
+.absolute.top-full.left-0,
+.absolute.top-full.left-0.mt-2 {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  max-height: none !important;
+  height: auto !important;
+}
+
+/* Cibler tous les éléments avec les classes de menu déroulant */
+.services-menu-trigger ~ div,
+.news-menu-trigger ~ div,
+.community-menu-trigger ~ div,
+.info-menu-trigger ~ div,
+.services-menu-trigger + div,
+.news-menu-trigger + div,
+.community-menu-trigger + div,
+.info-menu-trigger + div {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  max-height: none !important;
+  height: auto !important;
+}
+
+/* Cibler AnimatePresence et ses enfants */
+[class*="AnimatePresence"] > div,
+[class*="AnimatePresence"] > div > div {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  max-height: none !important;
+  height: auto !important;
+}
+
+/* Forcer les menus déroulants à utiliser position fixed si nécessaire */
+@media (min-width: 1024px) {
+  .dropdown-menu [class*="absolute"][class*="top-full"] {
+    position: absolute !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    contain: none !important;
+    clip: auto !important;
+    clip-path: none !important;
+  }
+  
+  /* S'assurer que le header ne limite pas les menus */
+  header {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    height: auto !important;
+    min-height: 4rem !important;
+  }
+  
+  header nav {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    height: auto !important;
+    min-height: 4rem !important;
+  }
+  
+  header nav > div {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    height: auto !important;
+    min-height: 4rem !important;
+  }
+  
+  /* Forcer les menus à s'afficher même s'ils dépassent */
+  .dropdown-menu {
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    clip: auto !important;
+    clip-path: none !important;
+  }
+}
+

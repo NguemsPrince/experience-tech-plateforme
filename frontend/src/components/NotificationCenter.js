@@ -35,7 +35,7 @@ const NotificationCenter = () => {
       case 'warning':
         return <ExclamationTriangleIcon className={`${iconClass} text-yellow-500`} />;
       case 'error':
-        return <ExclamationCircleIcon className={`${iconClass} text-red-500`} />;
+        return <ExclamationCircleIcon className={`${iconClass} text-blue-500`} />;
       case 'info':
       default:
         return <InformationCircleIcon className={`${iconClass} text-blue-500`} />;
@@ -61,7 +61,7 @@ const NotificationCenter = () => {
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
+            className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
           >
             {unreadCount > 9 ? '9+' : unreadCount}
           </motion.span>
@@ -113,7 +113,7 @@ const NotificationCenter = () => {
                       )}
                       <button
                         onClick={clearAll}
-                        className="text-sm text-red-600 dark:text-red-400 hover:underline"
+                        className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
                         title="Tout supprimer"
                       >
                         <TrashIcon className="w-5 h-5" />
@@ -180,7 +180,7 @@ const NotificationCenter = () => {
                                 )}
                                 <button
                                   onClick={() => deleteNotification(notification.id)}
-                                  className="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded"
+                                  className="p-1 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded"
                                   title="Supprimer"
                                 >
                                   <XMarkIcon className="w-4 h-4" />

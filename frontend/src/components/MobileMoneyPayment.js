@@ -28,7 +28,7 @@ const MobileMoneyPayment = ({ amount, currency = 'FCFA', onSuccess, onCancel }) 
       id: 'airtel',
       name: 'Airtel Money',
       logo: '📱',
-      color: 'bg-red-600',
+      color: 'bg-blue-600',
       pattern: /^(6[2-3]|7[7-9])/,
       prefix: '62, 63, 77, 78, 79',
       description: 'Airtel Money Tchad'
@@ -183,7 +183,7 @@ const MobileMoneyPayment = ({ amount, currency = 'FCFA', onSuccess, onCancel }) 
 
         {paymentStatus === 'failed' && (
           <>
-            <XCircleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <XCircleIcon className="w-16 h-16 text-blue-500 mx-auto mb-4" />
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
               Paiement échoué
             </h3>

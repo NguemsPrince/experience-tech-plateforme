@@ -91,7 +91,7 @@ const ForumNotifications = ({ compact = false }) => {
         return <ChatBubbleLeftIcon className={`${iconClass} text-blue-500`} />;
       case 'post_like':
       case 'comment_like':
-        return <HeartIcon className={`${iconClass} text-red-500`} />;
+        return <HeartIcon className={`${iconClass} text-blue-500`} />;
       case 'solution_marked':
         return <CheckCircleIcon className={`${iconClass} text-green-500`} />;
       case 'badge_earned':
@@ -146,7 +146,7 @@ const ForumNotifications = ({ compact = false }) => {
             <motion.span
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
+              className="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </motion.span>

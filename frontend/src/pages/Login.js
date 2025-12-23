@@ -3,7 +3,17 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
-import { EyeIcon, EyeSlashIcon, ArrowLeftIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { motion } from 'framer-motion';
+import { 
+  EyeIcon, 
+  EyeSlashIcon, 
+  ArrowLeftIcon, 
+  ExclamationTriangleIcon,
+  EnvelopeIcon,
+  LockClosedIcon,
+  CheckCircleIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
 import Logo from '../components/Logo';
 import { useAuth } from '../hooks/useAuth';
 import useCart from '../hooks/useCart';
@@ -102,7 +112,6 @@ const Login = () => {
         // Seuls admin, super_admin et moderator peuvent accéder au dashboard admin
         const allowedAdminRoles = ['admin', 'super_admin', 'moderator'];
         const isAdmin = allowedAdminRoles.includes(userRole);
-        const isClient = !isAdmin && (userRole === 'client' || userRole === 'student' || userRole === 'user');
         
         // Vérifier s'il y a une formation en attente à ajouter au panier
         const pendingCourseJson = localStorage.getItem('pendingCourseToAdd');
@@ -190,163 +199,166 @@ const Login = () => {
         <meta name="description" content="Connectez-vous à votre compte Expérience Tech pour accéder à vos services et formations." />
       </Helmet>
 
-      <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto">
-          {/* Bouton de retour */}
-          <div className="mb-6">
-            <button
-              onClick={handleBack}
-              className="flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200 font-medium"
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute -top-10 -right-10 w-72 h-72 bg-primary-500/20 blur-3xl rounded-full" />
+          <div className="absolute -bottom-16 -left-10 w-96 h-96 bg-indigo-500/20 blur-3xl rounded-full" />
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <button
+            onClick={handleBack}
+            className="inline-flex items-center text-slate-200 hover:text-white transition-colors duration-200 mb-6 text-sm font-medium"
+          >
+            <ArrowLeftIcon className="w-5 h-5 mr-2" />
+            Retour
+          </button>
+
+          <div className="max-w-xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+              className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-10"
             >
-              <ArrowLeftIcon className="w-5 h-5 mr-2" />
-              Retour
-            </button>
-          </div>
-
-          {/* Conteneur principal */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 sm:p-10">
-            {/* Header avec logo et titre */}
-            <div className="text-center mb-8">
-              <div className="flex justify-center mb-4">
-                <Logo size="large" showText={true} showTagline={true} />
+              <div className="flex flex-col items-center text-center mb-8">
+                <Logo size="large" showText showTagline className="mb-4" />
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                  {t('auth.login.title') || 'Connexion'}
+                </h1>
+                <p className="mt-2 text-slate-600">
+                  {t('auth.login.subtitle') || 'Accédez à votre compte en toute sécurité'}
+                </p>
               </div>
-              <h1 className="text-3xl font-extrabold text-gray-900 mt-6">
-                {t('auth.login.title') || 'Connexion à votre compte'}
-              </h1>
-              <p className="mt-3 text-base text-gray-600">
-                {t('auth.login.subtitle') || 'Connectez-vous à votre compte'}
-              </p>
-            </div>
 
-            {/* Avertissement si le backend n'est pas accessible */}
-            {backendStatus === false && (
-              <div className="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <ExclamationTriangleIcon className="h-5 w-5 text-yellow-400" />
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-yellow-800">
-                      Serveur backend non accessible
-                    </h3>
-                    <div className="mt-2 text-sm text-yellow-700">
-                      <p>Le serveur backend n'est pas démarré. Pour démarrer le backend :</p>
-                      <ul className="list-disc list-inside mt-2 space-y-1">
-                        <li>Ouvrez un terminal dans le dossier du projet</li>
-                        <li>Exécutez : <code className="bg-yellow-100 px-1 rounded">./demarrer-plateforme.sh</code></li>
-                        <li>Ou démarrez manuellement : <code className="bg-yellow-100 px-1 rounded">cd backend && npm start</code></li>
-                      </ul>
-                    </div>
+              {backendStatus === false && (
+                <div className="mb-6 flex items-start space-x-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                  <ExclamationTriangleIcon className="h-5 w-5 text-amber-500 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-amber-800">Serveur backend non accessible</p>
+                    <p className="mt-1 text-sm text-amber-700">
+                      Démarrez le backend :{' '}
+                      <code className="bg-amber-100 px-1 rounded">cd backend && npm start</code>
+                    </p>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
             
-            {/* Formulaire */}
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  {t('auth.login.email') || 'Adresse email'}
-                </label>
-                <input
-                  {...register('email', {
-                    required: 'L\'email est requis',
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: 'Email invalide'
-                    }
-                  })}
-                  type="email"
-                  className={`mt-1 input-field ${errors.email ? 'border-red-500' : ''}`}
-                  placeholder="votre@email.com"
-                />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  {t('auth.login.password') || 'Mot de passe'}
-                </label>
-                <div className="mt-1 relative">
-                  <input
-                    {...register('password', {
-                      required: 'Le mot de passe est requis'
-                    })}
-                    type={showPassword ? 'text' : 'password'}
-                    className={`input-field pr-10 ${errors.password ? 'border-red-500' : ''}`}
-                    placeholder="Votre mot de passe"
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <EyeSlashIcon className="h-5 w-5 text-gray-400" />
-                    ) : (
-                      <EyeIcon className="h-5 w-5 text-gray-400" />
+              <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+                <div className="space-y-4">
+                  <div className="relative">
+                    <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+                      {t('auth.login.email') || 'Adresse email'}
+                    </label>
+                    <div className="mt-2 relative">
+                      <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                        <EnvelopeIcon className="w-5 h-5" />
+                      </span>
+                      <input
+                        {...register('email', {
+                          required: 'L\'email est requis',
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            message: 'Email invalide'
+                          }
+                        })}
+                        type="email"
+                        className={`block w-full rounded-xl border px-10 py-3 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition ${
+                          errors.email ? 'border-blue-500 ring-blue-100' : 'border-slate-200'
+                        }`}
+                        placeholder="votre@email.com"
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-blue-600 flex items-center space-x-1">
+                        <XCircleIcon className="w-4 h-4" />
+                        <span>{errors.email.message}</span>
+                      </p>
                     )}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-                )}
-              </div>
-            </div>
+                  </div>
 
-            <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                    {t('auth.login.rememberMe')}
+                  <div className="relative">
+                    <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+                      {t('auth.login.password') || 'Mot de passe'}
+                    </label>
+                    <div className="mt-2 relative">
+                      <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                        <LockClosedIcon className="w-5 h-5" />
+                      </span>
+                      <input
+                        {...register('password', {
+                          required: 'Le mot de passe est requis'
+                        })}
+                        type={showPassword ? 'text' : 'password'}
+                        className={`block w-full rounded-xl border px-10 py-3 text-sm shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition pr-12 ${
+                          errors.password ? 'border-blue-500 ring-blue-100' : 'border-slate-200'
+                        }`}
+                        placeholder="Votre mot de passe"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-slate-600 transition"
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                      >
+                        {showPassword ? (
+                          <EyeSlashIcon className="h-5 w-5" />
+                        ) : (
+                          <EyeIcon className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
+                    {errors.password && (
+                      <p className="mt-1 text-sm text-blue-600 flex items-center space-x-1">
+                        <XCircleIcon className="w-4 h-4" />
+                        <span>{errors.password.message}</span>
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center space-x-2 text-sm text-slate-700">
+                    <input
+                      id="remember-me"
+                      name="remember-me"
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"
+                    />
+                    <span>{t('auth.login.rememberMe') || 'Se souvenir de moi'}</span>
                   </label>
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm font-medium text-primary-600 hover:text-primary-500"
+                  >
+                    Mot de passe oublié ?
+                  </Link>
                 </div>
 
-              <div className="text-sm">
-                <Link
-                  to="/forgot-password"
-                  className="font-medium text-primary-600 hover:text-primary-500"
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full inline-flex justify-center items-center rounded-xl bg-primary-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-500/30 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Mot de passe oublié ?
-                </Link>
-              </div>
-            </div>
+                  {isLoading ? (
+                    <div className="loading-spinner w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    'Se connecter'
+                  )}
+                </motion.button>
 
-            <div>
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? (
-                  <div className="loading-spinner w-5 h-5"></div>
-                ) : (
-                  'Se connecter'
-                )}
-              </button>
-            </div>
-
-            {/* Lien vers l'inscription */}
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Pas encore de compte ?{' '}
-                <Link
-                  to="/register"
-                  className="font-medium text-red-500 hover:text-red-600 transition-colors duration-200"
-                >
-                  Créer un compte
-                </Link>
-              </p>
-            </div>
-            </form>
+                <div className="text-center text-sm text-slate-600">
+                  <span>Pas encore de compte ? </span>
+                  <Link
+                    to="/register"
+                    className="font-semibold text-primary-600 hover:text-primary-500"
+                  >
+                    Créer un compte
+                  </Link>
+                </div>
+              </form>
+            </motion.div>
           </div>
         </div>
       </div>

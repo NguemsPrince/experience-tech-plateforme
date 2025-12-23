@@ -326,7 +326,7 @@ const AdminInventory = () => {
                           </button>
                           <button
                             onClick={() => handleDeleteProduct(product.id)}
-                            className="text-red-600 hover:text-red-900"
+                            className="text-blue-600 hover:text-blue-900"
                             title="Supprimer"
                           >
                             <TrashIcon className="w-5 h-5" />

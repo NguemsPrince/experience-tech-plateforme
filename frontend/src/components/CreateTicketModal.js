@@ -103,7 +103,7 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated }) => {
             {/* Sujet */}
             <div>
               <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                Sujet <span className="text-red-500">*</span>
+                Sujet <span className="text-blue-500">*</span>
               </label>
               <input
                 type="text"
@@ -120,7 +120,7 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated }) => {
             {/* Description */}
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-                Description <span className="text-red-500">*</span>
+                Description <span className="text-blue-500">*</span>
               </label>
               <textarea
                 id="description"

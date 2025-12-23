@@ -65,7 +65,7 @@ const RegisterEnhanced = () => {
     if (/[^A-Za-z0-9]/.test(password)) strength++;
     
     const labels = ['Très faible', 'Faible', 'Moyen', 'Bon', 'Fort', 'Très fort'];
-    const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-green-500', 'bg-green-600'];
+    const colors = ['bg-blue-500', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-green-500', 'bg-green-600'];
     
     return {
       strength: Math.min(strength, 5),
@@ -234,7 +234,7 @@ const RegisterEnhanced = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Mot de passe
-                    <span className="text-red-500 ml-1">*</span>
+                    <span className="text-blue-500 ml-1">*</span>
                   </label>
                   
                   <div className="relative">
@@ -251,7 +251,7 @@ const RegisterEnhanced = () => {
                         text-gray-900 placeholder-gray-400
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                         ${errors.password 
-                          ? 'border-red-300 focus:ring-red-500' 
+                          ? 'border-blue-300 focus:ring-blue-500' 
                           : 'border-gray-300'
                         }
                       `}
@@ -293,7 +293,7 @@ const RegisterEnhanced = () => {
                   )}
                   
                   {errors.password && (
-                    <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                    <p className="mt-1 text-sm text-blue-600">{errors.password.message}</p>
                   )}
                 </div>
 
@@ -301,7 +301,7 @@ const RegisterEnhanced = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Confirmer le mot de passe
-                    <span className="text-red-500 ml-1">*</span>
+                    <span className="text-blue-500 ml-1">*</span>
                   </label>
                   
                   <div className="relative">
@@ -318,7 +318,7 @@ const RegisterEnhanced = () => {
                         text-gray-900 placeholder-gray-400
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                         ${errors.confirmPassword 
-                          ? 'border-red-300 focus:ring-red-500' 
+                          ? 'border-blue-300 focus:ring-blue-500' 
                           : 'border-gray-300'
                         }
                       `}
@@ -339,7 +339,7 @@ const RegisterEnhanced = () => {
                   </div>
                   
                   {errors.confirmPassword && (
-                    <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                    <p className="mt-1 text-sm text-blue-600">{errors.confirmPassword.message}</p>
                   )}
                 </div>
 

@@ -358,6 +358,36 @@ const About = () => {
             </div>
           </div>
 
+          {/* Committed Management */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">Committed Management</h3>
+            <div className="flex justify-center">
+              <div className="card text-center max-w-sm">
+                <div className="p-6">
+                  <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-3 border-primary-300 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                    <img 
+                      src="/images/team/Djinguebeye-Ngarsandje-Magloireen.jpeg" 
+                      alt="Djinguebeye Ngarsandjé Magloireen - Committed Management"
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        const fallback = e.target.nextElementSibling;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                    <div className="w-full h-full bg-primary-100 flex items-center justify-center" style={{display: 'none'}}>
+                      <UserGroupIcon className="w-10 h-10 text-primary-600" />
+                    </div>
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">DJINGUEBEYE NGARSANDJÉ MAGLOIREEN</h4>
+                  <p className="text-primary-600 font-semibold mb-2">Committed Management</p>
+                  <p className="text-sm text-gray-600">Gestion et engagement managérial</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Formation & Technique */}
           <div className="mb-16">
             <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">Formation & Technique</h3>

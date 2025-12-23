@@ -140,10 +140,10 @@ const AdminStatsCards = ({ stats, darkMode = false }) => {
                 {stat.changeType === 'positive' ? (
                   <ArrowUpIcon className="w-4 h-4 text-green-500" />
                 ) : (
-                  <ArrowDownIcon className="w-4 h-4 text-red-500" />
+                  <ArrowDownIcon className="w-4 h-4 text-blue-500" />
                 )}
                 <span className={`text-sm font-medium ${
-                  stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
+                  stat.changeType === 'positive' ? 'text-green-600' : 'text-blue-600'
                 }`}>
                   {stat.change}
                 </span>

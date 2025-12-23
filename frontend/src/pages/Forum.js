@@ -518,7 +518,7 @@ const ForumPage = () => {
                           </span>
                         )}
                         {post.isLocked && (
-                          <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                          <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
                             🔒 Verrouillé
                           </span>
                         )}
@@ -584,7 +584,7 @@ const ForumPage = () => {
                           className="p-1 hover:bg-gray-100 rounded"
                           title="Like"
                         >
-                          <HeartIcon className="w-4 h-4 text-gray-400 hover:text-red-500" />
+                          <HeartIcon className="w-4 h-4 text-gray-400 hover:text-blue-500" />
                         </button>
                         <button
                           onClick={(e) => {
@@ -605,7 +605,7 @@ const ForumPage = () => {
                             className="p-1 hover:bg-gray-100 rounded"
                             title="Signaler"
                           >
-                            <FlagIcon className="w-4 h-4 text-gray-400 hover:text-red-500" />
+                            <FlagIcon className="w-4 h-4 text-gray-400 hover:text-blue-500" />
                           </button>
                         )}
                       </div>

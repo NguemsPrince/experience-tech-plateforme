@@ -133,7 +133,7 @@ const InteractiveMap = ({
         map: map,
         title: location.title,
         icon: {
-          url: location.icon || 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+          url: location.icon || 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
           scaledSize: new window.google.maps.Size(32, 32)
         }
       });
@@ -199,12 +199,12 @@ const InteractiveMap = ({
 
   if (error) {
     return (
-      <div className={`bg-red-50 border border-red-200 rounded-lg p-6 ${className}`}>
+      <div className={`bg-blue-50 border border-blue-200 rounded-lg p-6 ${className}`}>
         <div className="flex items-center">
-          <ExclamationTriangleIcon className="h-5 w-5 text-red-400 mr-2" />
+          <ExclamationTriangleIcon className="h-5 w-5 text-blue-400 mr-2" />
           <div>
-            <h3 className="text-sm font-medium text-red-800">Erreur de carte</h3>
-            <p className="text-sm text-red-600 mt-1">{error}</p>
+            <h3 className="text-sm font-medium text-blue-800">Erreur de carte</h3>
+            <p className="text-sm text-blue-600 mt-1">{error}</p>
           </div>
         </div>
       </div>

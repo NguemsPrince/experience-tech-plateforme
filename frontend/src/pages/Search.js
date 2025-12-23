@@ -1,99 +1,108 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import CourseCard from '../components/CourseCard';
 import ServiceCard from '../components/ServiceCard';
 
-const Search = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
-  const [searchResults, setSearchResults] = useState({
-    courses: [],
-    services: [],
-    news: [],
-    total: 0
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('all');
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
-
-  // Simulated search results
-  const mockResults = {
+// Simulated search results - Défini en dehors du composant pour éviter les problèmes de dépendances
+const mockResults = {
     courses: [
       {
+        _id: 1,
         id: 1,
         title: "Formation Développement Web",
         description: "Apprenez les bases du développement web avec HTML, CSS et JavaScript",
-        instructor: "Expérience Tech",
+        instructor: { name: "Expérience Tech" },
         duration: "40h",
         level: "Débutant",
         price: 150000,
-        rating: 4.8,
-        students: 120,
-        image: "/images/courses/web-dev.jpg"
+        originalPrice: null,
+        rating: { average: 4.8, count: 120 },
+        studentsCount: 120,
+        image: "/images/courses/web-dev.jpg",
+        category: "Développement Web",
+        tags: ["HTML", "CSS", "JavaScript", "Web"]
       },
       {
+        _id: 2,
         id: 2,
         title: "Formation React.js",
         description: "Maîtrisez React.js pour créer des applications web modernes",
-        instructor: "Expérience Tech",
+        instructor: { name: "Expérience Tech" },
         duration: "30h",
         level: "Intermédiaire",
         price: 200000,
-        rating: 4.9,
-        students: 85,
-        image: "/images/courses/react.jpg"
+        originalPrice: null,
+        rating: { average: 4.9, count: 85 },
+        studentsCount: 85,
+        image: "/images/courses/react.jpg",
+        category: "Développement Web",
+        tags: ["React", "JavaScript", "Frontend"]
       },
       {
+        _id: 3,
         id: 3,
         title: "Formation Node.js",
         description: "Développement backend avec Node.js et Express",
-        instructor: "Expérience Tech",
+        instructor: { name: "Expérience Tech" },
         duration: "35h",
         level: "Intermédiaire",
         price: 180000,
-        rating: 4.7,
-        students: 95,
-        image: "/images/courses/nodejs.jpg"
+        originalPrice: null,
+        rating: { average: 4.7, count: 95 },
+        studentsCount: 95,
+        image: "/images/courses/nodejs.jpg",
+        category: "Développement Web",
+        tags: ["Node.js", "Backend", "Express"]
       },
       {
+        _id: 4,
         id: 4,
         title: "Formation Python",
         description: "Programmation Python pour la data science et le web",
-        instructor: "Expérience Tech",
+        instructor: { name: "Expérience Tech" },
         duration: "45h",
         level: "Débutant",
         price: 160000,
-        rating: 4.6,
-        students: 110,
-        image: "/images/courses/python.jpg"
+        originalPrice: null,
+        rating: { average: 4.6, count: 110 },
+        studentsCount: 110,
+        image: "/images/courses/python.jpg",
+        category: "Programmation",
+        tags: ["Python", "Data Science", "Web"]
       },
       {
+        _id: 5,
         id: 5,
         title: "Formation DevOps",
         description: "Déploiement et gestion d'infrastructure avec Docker et Kubernetes",
-        instructor: "Expérience Tech",
+        instructor: { name: "Expérience Tech" },
         duration: "50h",
         level: "Avancé",
         price: 250000,
-        rating: 4.9,
-        students: 65,
-        image: "/images/courses/devops.jpg"
+        originalPrice: null,
+        rating: { average: 4.9, count: 65 },
+        studentsCount: 65,
+        image: "/images/courses/devops.jpg",
+        category: "DevOps",
+        tags: ["Docker", "Kubernetes", "DevOps"]
       },
       {
+        _id: 6,
         id: 6,
         title: "Formation Intelligence Artificielle",
         description: "Introduction à l'IA et au machine learning",
-        instructor: "Expérience Tech",
+        instructor: { name: "Expérience Tech" },
         duration: "60h",
         level: "Intermédiaire",
         price: 300000,
-        rating: 4.8,
-        students: 45,
-        image: "/images/courses/ai.jpg"
+        originalPrice: null,
+        rating: { average: 4.8, count: 45 },
+        studentsCount: 45,
+        image: "/images/courses/ai.jpg",
+        category: "Intelligence Artificielle",
+        tags: ["IA", "Machine Learning", "Python"]
       }
     ],
     services: [
@@ -180,13 +189,102 @@ const Search = () => {
         image: "/images/news/python-popular.jpg"
       }
     ]
-  };
+};
+
+const Search = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+  const [searchResults, setSearchResults] = useState({
+    courses: [],
+    services: [],
+    news: [],
+    total: 0
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('all');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+
+  const performSearch = useCallback(async (query) => {
+    if (!query || !query.trim()) {
+      setSearchResults({ courses: [], services: [], news: [], total: 0 });
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const searchTerm = query.toLowerCase().trim();
+    
+      // Enhanced search algorithm with multiple criteria
+      const filteredResults = {
+        courses: mockResults.courses.filter(item => {
+        const searchFields = [
+          item.title,
+          item.description,
+          item.instructor?.name || item.instructor,
+          item.level,
+          item.category,
+          ...(item.tags || [])
+        ].filter(Boolean); // Remove undefined/null values
+          return searchFields.some(field => 
+            field && typeof field === 'string' && field.toLowerCase().includes(searchTerm)
+          );
+        }),
+        services: mockResults.services.filter(item => {
+          const searchFields = [
+            item.title,
+            item.description,
+            ...(item.features || [])
+          ].filter(Boolean); // Remove undefined/null values
+          return searchFields.some(field => 
+            field && typeof field === 'string' && field.toLowerCase().includes(searchTerm)
+          );
+        }),
+        news: mockResults.news.filter(item => {
+          const searchFields = [
+            item.title,
+            item.description,
+            item.category
+          ].filter(Boolean); // Remove undefined/null values
+          return searchFields.some(field => 
+            field && typeof field === 'string' && field.toLowerCase().includes(searchTerm)
+          );
+        })
+      };
+      
+      const total = filteredResults.courses.length + 
+                   filteredResults.services.length + 
+                   filteredResults.news.length;
+      
+      setSearchResults({
+        ...filteredResults,
+        total
+      });
+    } catch (error) {
+      console.error('Search error:', error);
+      // En cas d'erreur, afficher des résultats vides plutôt que de crasher
+      setSearchResults({ courses: [], services: [], news: [], total: 0 });
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    if (searchQuery) {
-      performSearch(searchQuery);
+    const query = searchParams.get('q') || '';
+    if (query) {
+      setSearchQuery(query);
+      performSearch(query);
+    } else {
+      setSearchResults({ courses: [], services: [], news: [], total: 0 });
+      setIsLoading(false);
     }
-  }, [searchQuery]);
+  }, [searchParams, performSearch]);
 
   // Generate search suggestions
   useEffect(() => {
@@ -211,62 +309,6 @@ const Search = () => {
       setSuggestions([]);
     }
   }, [searchQuery]);
-
-  const performSearch = async (query) => {
-    setIsLoading(true);
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const searchTerm = query.toLowerCase().trim();
-    
-    // Enhanced search algorithm with multiple criteria
-    const filteredResults = {
-      courses: mockResults.courses.filter(item => {
-        const searchFields = [
-          item.title,
-          item.description,
-          item.instructor,
-          item.level,
-          ...item.features || []
-        ];
-        return searchFields.some(field => 
-          field && field.toLowerCase().includes(searchTerm)
-        );
-      }),
-      services: mockResults.services.filter(item => {
-        const searchFields = [
-          item.title,
-          item.description,
-          ...item.features || []
-        ];
-        return searchFields.some(field => 
-          field && field.toLowerCase().includes(searchTerm)
-        );
-      }),
-      news: mockResults.news.filter(item => {
-        const searchFields = [
-          item.title,
-          item.description,
-          item.category
-        ];
-        return searchFields.some(field => 
-          field && field.toLowerCase().includes(searchTerm)
-        );
-      })
-    };
-    
-    const total = filteredResults.courses.length + 
-                 filteredResults.services.length + 
-                 filteredResults.news.length;
-    
-    setSearchResults({
-      ...filteredResults,
-      total
-    });
-    
-    setIsLoading(false);
-  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -310,7 +352,7 @@ const Search = () => {
     if (isLoading) {
       return (
         <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
           <span className="ml-3 text-gray-600">Recherche en cours...</span>
         </div>
       );
@@ -355,7 +397,7 @@ const Search = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {searchResults.courses.map((course) => (
-                  <CourseCard key={course.id} course={course} />
+                  <CourseCard key={course._id || course.id} course={course} />
                 ))}
               </div>
             </div>

@@ -80,7 +80,7 @@ const MyCourses = () => {
       case 'completed':
         return 'bg-green-100 text-green-800';
       case 'cancelled':
-        return 'bg-red-100 text-red-800';
+        return 'bg-blue-100 text-blue-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -128,17 +128,17 @@ const MyCourses = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <div className="flex items-center">
-            <ExclamationTriangleIcon className="w-5 h-5 text-red-600 mr-2" />
+            <ExclamationTriangleIcon className="w-5 h-5 text-blue-600 mr-2" />
             <div>
-              <h3 className="text-sm font-semibold text-red-800 mb-1">
+              <h3 className="text-sm font-semibold text-blue-800 mb-1">
                 Erreur lors du chargement
               </h3>
-              <p className="text-sm text-red-700">{error}</p>
+              <p className="text-sm text-blue-700">{error}</p>
               <button
                 onClick={fetchMyCourses}
-                className="mt-2 text-sm text-red-800 hover:text-red-900 underline"
+                className="mt-2 text-sm text-blue-800 hover:text-blue-900 underline"
               >
                 Réessayer
               </button>

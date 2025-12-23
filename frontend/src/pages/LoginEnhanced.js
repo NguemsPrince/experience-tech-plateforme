@@ -117,7 +117,7 @@ const LoginEnhanced = () => {
               <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Mot de passe
-                  <span className="text-red-500 ml-1">*</span>
+                  <span className="text-blue-500 ml-1">*</span>
                 </label>
                 
                 <div className="relative">
@@ -134,7 +134,7 @@ const LoginEnhanced = () => {
                       text-gray-900 placeholder-gray-400
                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                       ${errors.password 
-                        ? 'border-red-300 focus:ring-red-500' 
+                        ? 'border-blue-300 focus:ring-blue-500' 
                         : 'border-gray-300'
                       }
                     `}
@@ -155,7 +155,7 @@ const LoginEnhanced = () => {
                 </div>
                 
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                  <p className="mt-1 text-sm text-blue-600">{errors.password.message}</p>
                 )}
               </div>
 

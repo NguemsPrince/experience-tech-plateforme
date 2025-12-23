@@ -68,9 +68,9 @@ const AnimatedIcon = ({
       animate: {
         scale: [1, 1.3, 1],
         filter: [
-          "brightness(1) drop-shadow(0 0 0px #ef4444)",
-          "brightness(1.5) drop-shadow(0 0 20px #ef4444)",
-          "brightness(1) drop-shadow(0 0 0px #ef4444)"
+          "brightness(1) drop-shadow(0 0 0px #3b82f6)",
+          "brightness(1.5) drop-shadow(0 0 20px #3b82f6)",
+          "brightness(1) drop-shadow(0 0 0px #3b82f6)"
         ]
       },
       transition: {

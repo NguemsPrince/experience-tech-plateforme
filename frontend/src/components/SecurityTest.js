@@ -124,7 +124,7 @@ const SecurityTest = () => {
                           result.status === 'PASS' 
                             ? 'bg-green-100 text-green-800' 
                             : result.status === 'FAIL'
-                            ? 'bg-red-100 text-red-800'
+                            ? 'bg-blue-100 text-blue-800'
                             : 'bg-blue-100 text-blue-800'
                         }`}>
                           {result.status}

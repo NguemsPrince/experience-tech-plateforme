@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   XMarkIcon, 
   CreditCardIcon, 
@@ -14,7 +15,6 @@ import paymentsService from '../services/payments';
 import prepaidCardsService from '../services/prepaidCards';
 import settingsService from '../services/settingsService';
 import LoadingSpinner from './LoadingSpinner';
-import MobileMoneyPaymentForm from './MobileMoneyPaymentForm';
 
 const PaymentModal = ({ 
   isOpen, 
@@ -23,6 +23,7 @@ const PaymentModal = ({
   item, // Generic item (course or product)
   onPaymentSuccess 
 }) => {
+  const navigate = useNavigate();
   // Use item if provided, otherwise fall back to course for backward compatibility
   const paymentItem = item || course;
   
@@ -154,34 +155,96 @@ const PaymentModal = ({
           // Payment completed immediately with prepaid card
           setSuccess(true);
           setTimeout(() => {
-            onPaymentSuccess();
+            // Redirect to confirmation page
+            navigate('/payment/confirmation', {
+              state: {
+                paymentData: {
+                  paymentMethod: 'prepaid_card',
+                  transactionId: paymentResponse.transactionId || paymentResponse.data?.transactionId,
+                  amount: itemPrice,
+                  itemName: itemTitle,
+                  itemType: itemType,
+                  ...paymentResponse
+                }
+              }
+            });
+            onPaymentSuccess?.();
             handleClose();
           }, 2000);
         } else if (paymentMethod === 'airtel_money' || paymentMethod === 'moov_money') {
-          // For mobile money, redirect to payment form
-          // paymentData is already set above
-        } else if (paymentMethod === 'bank_transfer') {
-          // For bank transfer, show instructions
+          // For mobile money, redirect to confirmation page with instructions
           setSuccess(true);
+          setTimeout(() => {
+            navigate('/payment/confirmation', {
+              state: {
+                paymentData: {
+                  paymentMethod: paymentMethod,
+                  transactionId: paymentResponse.transactionId || paymentResponse.data?.transactionId,
+                  amount: itemPrice,
+                  itemName: itemTitle,
+                  itemType: itemType,
+                  ...paymentResponse
+                }
+              }
+            });
+            handleClose();
+          }, 1500);
+        } else if (paymentMethod === 'bank_transfer') {
+          // For bank transfer, redirect to confirmation page with instructions
+          setSuccess(true);
+          setTimeout(() => {
+            navigate('/payment/confirmation', {
+              state: {
+                paymentData: {
+                  paymentMethod: 'bank_transfer',
+                  transactionId: paymentResponse.transactionId || paymentResponse.data?.transactionId,
+                  amount: itemPrice,
+                  itemName: itemTitle,
+                  itemType: itemType,
+                  ...paymentResponse
+                }
+              }
+            });
+            handleClose();
+          }, 1500);
         }
       } else {
         // For products, create a payment record for bank transfer
         if (paymentMethod === 'bank_transfer') {
-          // For products with bank transfer, we need to create an order first
-          // For now, we'll show success and let the user know to complete the order
+          // For products with bank transfer, redirect to confirmation
           setSuccess(true);
-          setPaymentData({
-            transactionId: `TXN-${Date.now()}`,
-            amount: itemPrice,
-            paymentMethod: 'bank_transfer'
-          });
+          setTimeout(() => {
+            navigate('/payment/confirmation', {
+              state: {
+                paymentData: {
+                  paymentMethod: 'bank_transfer',
+                  transactionId: `TXN-${Date.now()}`,
+                  amount: itemPrice,
+                  itemName: itemTitle,
+                  itemType: itemType
+                }
+              }
+            });
+            handleClose();
+          }, 1500);
         } else {
           // For other payment methods with products, handle through orders
-        setSuccess(true);
-        setTimeout(() => {
-          onPaymentSuccess();
-          handleClose();
-        }, 1000);
+          setSuccess(true);
+          setTimeout(() => {
+            navigate('/payment/confirmation', {
+              state: {
+                paymentData: {
+                  paymentMethod: paymentMethod,
+                  transactionId: `TXN-${Date.now()}`,
+                  amount: itemPrice,
+                  itemName: itemTitle,
+                  itemType: itemType
+                }
+              }
+            });
+            onPaymentSuccess?.();
+            handleClose();
+          }, 1000);
         }
       }
     } catch (error) {
@@ -231,7 +294,7 @@ const PaymentModal = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg max-w-full md:max-w-md w-full max-h-[90vh] overflow-y-auto modal-content">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-xl font-bold text-gray-900">
@@ -286,16 +349,16 @@ const PaymentModal = ({
                 
                 <div className="space-y-3">
                   {/* Airtel Money (Tchad) */}
-                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors min-h-[60px]">
                     <input
                       type="radio"
                       name="paymentMethod"
                       value="airtel_money"
                       checked={paymentMethod === 'airtel_money'}
                       onChange={(e) => handlePaymentMethodChange(e.target.value)}
-                      className="mr-3"
+                      className="mr-3 w-5 h-5 min-w-[20px] min-h-[20px]"
                     />
-                    <DevicePhoneMobileIcon className="w-6 h-6 text-red-600 mr-3" />
+                    <DevicePhoneMobileIcon className="w-6 h-6 text-blue-600 mr-3" />
                     <div className="flex-1">
                       <div className="font-medium text-gray-900">Airtel Money</div>
                       <div className="text-sm text-gray-600">Paiement via Airtel Money (Tchad)</div>
@@ -410,10 +473,10 @@ const PaymentModal = ({
 
               {/* Error Display */}
               {error && (
-                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                   <div className="flex items-center">
-                    <ExclamationTriangleIcon className="w-5 h-5 text-red-600 mr-2" />
-                    <span className="text-red-800">{error}</span>
+                    <ExclamationTriangleIcon className="w-5 h-5 text-blue-600 mr-2" />
+                    <span className="text-blue-800">{error}</span>
                   </div>
                 </div>
               )}
@@ -422,7 +485,8 @@ const PaymentModal = ({
               <button
                 onClick={handleCreatePayment}
                 disabled={isProcessing}
-                className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-h-[48px] touch-target"
+                aria-label={`Payer ${itemPrice.toLocaleString('fr-FR')} FCFA`}
               >
                 {isProcessing ? (
                   <>
@@ -436,26 +500,19 @@ const PaymentModal = ({
             </>
           )}
 
-          {/* Mobile Money Payment Options for Chad (Airtel Money, Moov Money) */}
+          {/* Mobile Money Payment - Redirect to confirmation page */}
           {paymentData && (paymentMethod === 'airtel_money' || paymentMethod === 'moov_money') && (
-            <MobileMoneyPaymentForm
-              items={[{
-                type: itemType === 'course' ? 'course' : 'product',
-                itemId: paymentItem._id || paymentItem.id,
-                quantity: 1
-              }]}
-              amount={itemPrice}
-              currency="FCFA"
-              onSuccess={(data) => {
-                setSuccess(true);
-                setTimeout(() => {
-                  onPaymentSuccess();
-                  handleClose();
-                }, 2000);
-              }}
-              onCancel={handleClose}
-              orderId={paymentData?.data?.paymentId || paymentData?.paymentId || null}
-            />
+            <div className="text-center">
+              <div className="mb-4">
+                <CheckCircleIcon className="w-12 h-12 text-green-600 mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Paiement créé avec succès
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Redirection vers les instructions de paiement...
+                </p>
+              </div>
+            </div>
           )}
 
           {/* Bank Transfer Instructions */}

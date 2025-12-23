@@ -274,7 +274,7 @@ const AdminUserManagement = () => {
 
   const getRoleColor = (role) => {
     switch (role) {
-      case 'admin': return 'bg-red-100 text-red-800';
+      case 'admin': return 'bg-blue-100 text-blue-800';
       case 'client': return 'bg-blue-100 text-blue-800';
       case 'student': return 'bg-green-100 text-green-800';
       default: return 'bg-gray-100 text-gray-800';
@@ -284,7 +284,7 @@ const AdminUserManagement = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800';
-      case 'inactive': return 'bg-red-100 text-red-800';
+      case 'inactive': return 'bg-blue-100 text-blue-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -582,7 +582,7 @@ const AdminUserManagement = () => {
                     onClick={handleExportPDF}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    <DocumentTextIcon className="w-4 h-4 mr-3 text-red-600" />
+                    <DocumentTextIcon className="w-4 h-4 mr-3 text-blue-600" />
                     Exporter en PDF
                   </button>
                   <button
@@ -623,7 +623,7 @@ const AdminUserManagement = () => {
         </div>
         <div className="bg-white p-4 rounded-lg shadow">
           <div className="flex items-center">
-            <XCircleIcon className="w-8 h-8 text-red-600" />
+            <XCircleIcon className="w-8 h-8 text-blue-600" />
             <div className="ml-3">
               <p className="text-sm text-gray-500">Inactifs</p>
               <p className="text-2xl font-bold text-gray-900">
@@ -704,7 +704,7 @@ const AdminUserManagement = () => {
               </button>
               <button
                 onClick={() => handleBulkAction('delete')}
-                className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700"
+                className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
               >
                 Supprimer
               </button>
@@ -837,7 +837,7 @@ const AdminUserManagement = () => {
                     )}
                     <button
                       onClick={() => handleUserAction('delete', user.id)}
-                      className="text-red-600 hover:text-red-900"
+                      className="text-blue-600 hover:text-blue-900"
                       title="Supprimer"
                     >
                       <TrashIcon className="w-4 h-4" />

@@ -54,9 +54,9 @@ const ChadPaymentOptions = ({ course, onPaymentSuccess, onClose }) => {
       case 'airtel':
         return {
           name: 'Airtel Money',
-          color: 'text-red-600',
-          bgColor: 'bg-red-50',
-          borderColor: 'border-red-200',
+          color: 'text-blue-600',
+          bgColor: 'bg-blue-50',
+          borderColor: 'border-blue-200',
           instructions: 'Composez *126# sur votre téléphone Airtel et suivez les instructions'
         };
       case 'tigo':
@@ -123,12 +123,12 @@ const ChadPaymentOptions = ({ course, onPaymentSuccess, onClose }) => {
             onClick={() => handleProviderSelect('airtel')}
             className={`w-full p-4 border-2 rounded-lg text-left transition-all ${
               selectedProvider === 'airtel'
-                ? 'border-red-500 bg-red-50'
+                ? 'border-blue-500 bg-blue-50'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
             <div className="flex items-center">
-              <DevicePhoneMobileIcon className="w-6 h-6 text-red-600 mr-3" />
+              <DevicePhoneMobileIcon className="w-6 h-6 text-blue-600 mr-3" />
               <div>
                 <div className="font-medium text-gray-900">Airtel Money</div>
                 <div className="text-sm text-gray-600">Composez *126# pour effectuer le paiement</div>
@@ -185,10 +185,10 @@ const ChadPaymentOptions = ({ course, onPaymentSuccess, onClose }) => {
 
       {/* Error Display */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <div className="flex items-center">
-            <ExclamationTriangleIcon className="w-5 h-5 text-red-600 mr-2" />
-            <span className="text-red-800">{error}</span>
+            <ExclamationTriangleIcon className="w-5 h-5 text-blue-600 mr-2" />
+            <span className="text-blue-800">{error}</span>
           </div>
         </div>
       )}

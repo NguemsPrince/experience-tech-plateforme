@@ -45,7 +45,7 @@ const MyTraining = () => {
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
       case 'failed':
-        return 'bg-red-100 text-red-800';
+        return 'bg-blue-100 text-blue-800';
       case 'cancelled':
         return 'bg-gray-100 text-gray-800';
       default:
@@ -203,10 +203,10 @@ const MyTraining = () => {
                         </div>
                         
                         {payment.status === 'failed' && payment.failureReason && (
-                          <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                             <div className="flex items-center">
-                              <ExclamationTriangleIcon className="w-5 h-5 text-red-600 mr-2" />
-                              <span className="text-sm text-red-800">
+                              <ExclamationTriangleIcon className="w-5 h-5 text-blue-600 mr-2" />
+                              <span className="text-sm text-blue-800">
                                 {payment.failureReason}
                               </span>
                             </div>

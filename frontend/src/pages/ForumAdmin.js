@@ -106,7 +106,7 @@ const ForumAdminPage = () => {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-              <ShieldCheckIcon className="w-8 h-8 mr-3 text-red-600" />
+              <ShieldCheckIcon className="w-8 h-8 mr-3 text-blue-600" />
               Administration du Forum
             </h1>
             <p className="text-gray-600 mt-2">
@@ -118,8 +118,8 @@ const ForumAdminPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="bg-white rounded-lg shadow-sm p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-red-100 rounded-lg">
-                  <FlagIcon className="w-6 h-6 text-red-600" />
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <FlagIcon className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Signalements en attente</p>
@@ -164,7 +164,7 @@ const ForumAdminPage = () => {
                   onClick={() => setActiveTab('posts')}
                   className={`py-4 px-1 border-b-2 font-medium text-sm ${
                     activeTab === 'posts'
-                      ? 'border-red-500 text-red-600'
+                      ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
@@ -174,7 +174,7 @@ const ForumAdminPage = () => {
                   onClick={() => setActiveTab('comments')}
                   className={`py-4 px-1 border-b-2 font-medium text-sm ${
                     activeTab === 'comments'
-                      ? 'border-red-500 text-red-600'
+                      ? 'border-blue-500 text-blue-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
@@ -224,7 +224,7 @@ const ForumAdminPage = () => {
                           <div className="flex gap-2 ml-4">
                             <button
                               onClick={() => handleDeleteContent('post', post._id)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                               title="Supprimer le post"
                             >
                               <TrashIcon className="w-5 h-5" />
@@ -233,8 +233,8 @@ const ForumAdminPage = () => {
                         </div>
 
                         {/* Signalements */}
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                          <h4 className="font-medium text-red-900 mb-3 flex items-center">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                          <h4 className="font-medium text-blue-900 mb-3 flex items-center">
                             <ExclamationTriangleIcon className="w-5 h-5 mr-2" />
                             Signalements ({post.reports.length})
                           </h4>
@@ -335,7 +335,7 @@ const ForumAdminPage = () => {
                           <div className="flex gap-2 ml-4">
                             <button
                               onClick={() => handleDeleteContent('comment', comment._id)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                               title="Supprimer le commentaire"
                             >
                               <TrashIcon className="w-5 h-5" />
@@ -344,8 +344,8 @@ const ForumAdminPage = () => {
                         </div>
 
                         {/* Signalements */}
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                          <h4 className="font-medium text-red-900 mb-3 flex items-center">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                          <h4 className="font-medium text-blue-900 mb-3 flex items-center">
                             <ExclamationTriangleIcon className="w-5 h-5 mr-2" />
                             Signalements ({comment.reports.length})
                           </h4>

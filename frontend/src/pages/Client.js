@@ -335,7 +335,7 @@ const Client = () => {
               <div className={`w-2 h-2 rounded-full mt-2 ${
                 notification.type === 'success' ? 'bg-green-500' :
                 notification.type === 'warning' ? 'bg-yellow-500' :
-                notification.type === 'error' ? 'bg-red-500' :
+                notification.type === 'error' ? 'bg-blue-500' :
                 'bg-blue-500'
               } ${!notification.read ? '' : 'opacity-50'}`} />
               <div className="flex-1">
@@ -403,7 +403,7 @@ const Client = () => {
           <Icon className={`w-6 h-6 ${color === 'yellow' ? 'text-yellow-600' : 'text-gray-600'}`} />
         </div>
         {trend && (
-          <div className={`flex items-center ${trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+          <div className={`flex items-center ${trend === 'up' ? 'text-green-600' : 'text-blue-600'}`}>
             {trend === 'up' ? <ArrowTrendingUpIcon className="w-4 h-4" /> : <ArrowTrendingDownIcon className="w-4 h-4" />}
             <span className="text-sm ml-1">{change}</span>
           </div>
@@ -796,7 +796,7 @@ const Client = () => {
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900 dark:text-white">React Avancé</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">8/15 participants • 899€</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">8/15 participants • 899 FCFA</p>
                     </div>
                     <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">
                       Avancé
@@ -808,7 +808,7 @@ const Client = () => {
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900 dark:text-white">UI/UX Design</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">12/12 participants • 649€</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">12/12 participants • 649 FCFA</p>
                     </div>
                     <span className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded-full">
                       Débutant
@@ -857,7 +857,7 @@ const Client = () => {
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900 dark:text-white">E-commerce Web</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">23 ventes • 2499€</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">23 ventes • 2499 FCFA</p>
                     </div>
                     <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">
                       Application
@@ -881,7 +881,7 @@ const Client = () => {
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900 dark:text-white">Template Admin</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">156 ventes • 299€</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">156 ventes • 299 FCFA</p>
                     </div>
                     <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs rounded-full">
                       Template
@@ -924,9 +924,9 @@ const Client = () => {
                       En attente
                     </span>
                   </div>
-                  <div className="flex items-center space-x-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <div className="p-2 bg-red-100 dark:bg-red-800 rounded-lg">
-                      <BugAntIcon className="w-4 h-4 text-red-600 dark:text-red-400" />
+                  <div className="flex items-center space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div className="p-2 bg-blue-100 dark:bg-blue-800 rounded-lg">
+                      <BugAntIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900 dark:text-white">Graphiques mobile</p>
@@ -1144,7 +1144,7 @@ const Client = () => {
                         <span className={`px-2 py-1 rounded-full text-xs ${
                           invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
                           invoice.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
+                          'bg-blue-100 text-blue-800'
                         }`}>
                           {invoice.status}
                         </span>
@@ -1431,7 +1431,7 @@ const Client = () => {
                   >
                     <BellIcon className="w-6 h-6" />
                     {unreadNotifications > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                         {unreadNotifications}
                       </span>
                     )}

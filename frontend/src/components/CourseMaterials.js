@@ -102,7 +102,7 @@ const CourseMaterials = ({ courseId }) => {
   const getFileIcon = (type) => {
     switch (type) {
       case 'pdf':
-        return <DocumentTextIcon className="w-6 h-6 text-red-500" />;
+        return <DocumentTextIcon className="w-6 h-6 text-blue-500" />;
       case 'zip':
       case 'rar':
         return <ArchiveBoxIcon className="w-6 h-6 text-yellow-500" />;

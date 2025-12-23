@@ -153,7 +153,7 @@ const TrainingsDashboard = ({ userRole = 'user' }) => {
       case 'débutant': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
       case 'intermédiaire': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
       case 'avancé': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
-      case 'expert': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      case 'expert': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
     }
   };
@@ -330,7 +330,7 @@ const TrainingsDashboard = ({ userRole = 'user' }) => {
                     </button>
                     <button
                       onClick={() => handleDelete(training.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                       title="Supprimer"
                     >
                       <TrashIcon className="w-4 h-4" />
@@ -368,7 +368,7 @@ const TrainingsDashboard = ({ userRole = 'user' }) => {
                   </div>
                   <div className="flex items-center space-x-1">
                     <CurrencyDollarIcon className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600 dark:text-gray-400">{training.price}€</span>
+                    <span className="text-gray-600 dark:text-gray-400">{training.price?.toLocaleString('fr-FR')} FCFA</span>
                   </div>
                 </div>
               </div>

@@ -182,9 +182,9 @@ const ServiceDetail = ({ service, onBack }) => {
               placeholder="Votre nom *"
               value={formData.name}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.name ? 'border-2 border-red-400' : ''}`}
+              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.name ? 'border-2 border-blue-400' : ''}`}
             />
-            {errors.name && <p className="text-red-200 text-xs">{errors.name}</p>}
+            {errors.name && <p className="text-blue-200 text-xs">{errors.name}</p>}
 
             <input
               type="email"
@@ -192,9 +192,9 @@ const ServiceDetail = ({ service, onBack }) => {
               placeholder="Votre email *"
               value={formData.email}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.email ? 'border-2 border-red-400' : ''}`}
+              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.email ? 'border-2 border-blue-400' : ''}`}
             />
-            {errors.email && <p className="text-red-200 text-xs">{errors.email}</p>}
+            {errors.email && <p className="text-blue-200 text-xs">{errors.email}</p>}
 
             <input
               type="tel"
@@ -202,9 +202,9 @@ const ServiceDetail = ({ service, onBack }) => {
               placeholder="+235XXXXXXXX (optionnel)"
               value={formData.phone}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.phone ? 'border-2 border-red-400' : ''}`}
+              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.phone ? 'border-2 border-blue-400' : ''}`}
             />
-            {errors.phone && <p className="text-red-200 text-xs">{errors.phone}</p>}
+            {errors.phone && <p className="text-blue-200 text-xs">{errors.phone}</p>}
             {!errors.phone && formData.phone && (
               <p className="text-white/70 text-xs">Format accepté: +235XXXXXXXX ou +225XXXXXXXX</p>
             )}
@@ -218,9 +218,9 @@ const ServiceDetail = ({ service, onBack }) => {
               value={formData.message}
               onChange={handleInputChange}
               rows={3}
-              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.message ? 'border-2 border-red-400' : ''}`}
+              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.message ? 'border-2 border-blue-400' : ''}`}
             />
-            {errors.message && <p className="text-red-200 text-xs">{errors.message}</p>}
+            {errors.message && <p className="text-blue-200 text-xs">{errors.message}</p>}
             {!errors.message && (
               <p className="text-white/70 text-xs">Décrivez vos besoins (optionnel mais recommandé)</p>
             )}
@@ -233,9 +233,9 @@ const ServiceDetail = ({ service, onBack }) => {
               onChange={handleInputChange}
               min="0"
               step="1000"
-              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.budget ? 'border-2 border-red-400' : ''}`}
+              className={`w-full px-3 py-2 rounded-lg text-gray-900 ${errors.budget ? 'border-2 border-blue-400' : ''}`}
             />
-            {errors.budget && <p className="text-red-200 text-xs">{errors.budget}</p>}
+            {errors.budget && <p className="text-blue-200 text-xs">{errors.budget}</p>}
             {!errors.budget && formData.budget && (
               <p className="text-white/70 text-xs">Budget: {parseFloat(formData.budget || 0).toLocaleString('fr-FR')} FCFA</p>
             )}

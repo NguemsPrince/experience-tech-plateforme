@@ -204,7 +204,7 @@ const AddTestimonial = ({ onSuccess }) => {
             {/* Rating */}
             <div className="mb-6">
               <label className="block text-gray-700 font-semibold mb-3">
-                Note globale <span className="text-red-500">*</span>
+                Note globale <span className="text-blue-500">*</span>
               </label>
               <div className="flex items-center space-x-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -234,7 +234,7 @@ const AddTestimonial = ({ onSuccess }) => {
             {/* Category */}
             <div className="mb-6">
               <label className="block text-gray-700 font-semibold mb-3">
-                Catégorie <span className="text-red-500">*</span>
+                Catégorie <span className="text-blue-500">*</span>
               </label>
               <select
                 value={formData.category}
@@ -253,7 +253,7 @@ const AddTestimonial = ({ onSuccess }) => {
             {/* Testimonial */}
             <div className="mb-6">
               <label className="block text-gray-700 font-semibold mb-3">
-                Votre témoignage <span className="text-red-500">*</span>
+                Votre témoignage <span className="text-blue-500">*</span>
               </label>
               <textarea
                 value={formData.testimonial}
@@ -276,7 +276,7 @@ const AddTestimonial = ({ onSuccess }) => {
               <div className={`mb-6 p-4 rounded-lg ${
                 message.type === 'success' 
                   ? 'bg-green-50 border border-green-200 text-green-800' 
-                  : 'bg-red-50 border border-red-200 text-red-800'
+                  : 'bg-blue-50 border border-blue-200 text-blue-800'
               }`}>
                 <div className="flex items-center">
                   {message.type === 'success' ? (

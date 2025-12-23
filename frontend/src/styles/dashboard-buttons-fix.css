@@ -1,0 +1,198 @@
+/* ============================================
+   CORRECTIONS DES BOUTONS DU DASHBOARD
+   ============================================ */
+
+/* Assurer que tous les boutons ont des touch targets appropriés */
+.dashboard button,
+.dashboard [role="button"],
+.dashboard .btn,
+.dashboard button[type="button"],
+.dashboard button[type="submit"] {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Boutons dans les cartes d'action */
+.dashboard .action-card button,
+.dashboard .quick-action button {
+  min-height: 48px;
+  padding: 0.75rem 1.5rem;
+}
+
+/* Boutons dans les modals */
+.dashboard .modal button,
+.dashboard [role="dialog"] button {
+  min-height: 44px;
+  padding: 0.625rem 1.25rem;
+}
+
+/* Boutons de navigation */
+.dashboard nav button,
+.dashboard .sidebar button {
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+}
+
+/* Floating Action Button */
+.dashboard .fab,
+.dashboard button.fab {
+  min-width: 56px;
+  min-height: 56px;
+  width: 56px;
+  height: 56px;
+}
+
+/* Empêcher les doubles clics */
+.dashboard button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Améliorer la visibilité des boutons sur mobile */
+@media (max-width: 767px) {
+  .dashboard button {
+    min-height: 48px;
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  /* Boutons dans les grilles */
+  .dashboard .grid button {
+    width: 100%;
+  }
+  
+  /* Espacement entre les boutons */
+  .dashboard .button-group button + button {
+    margin-top: 0.5rem;
+  }
+}
+
+/* Fix pour les boutons avec framer-motion */
+.dashboard motion.button,
+.dashboard [data-framer-component="motion.button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Fix pour les boutons dans les tableaux */
+.dashboard table button,
+.dashboard .table button {
+  min-height: 36px;
+  min-width: 36px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Fix pour les boutons d'icône uniquement */
+.dashboard button.icon-only,
+.dashboard button[aria-label] {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Améliorer le feedback visuel */
+.dashboard button:active {
+  transform: scale(0.98);
+}
+
+.dashboard button:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Fix pour les boutons avec loading state */
+.dashboard button.loading {
+  position: relative;
+  color: transparent;
+}
+
+.dashboard button.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Fix pour les boutons dans les dropdowns */
+.dashboard .dropdown button,
+.dashboard [role="menu"] button {
+  min-height: 44px;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+}
+
+/* Fix pour les boutons de pagination */
+.dashboard .pagination button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Fix pour les boutons de filtre */
+.dashboard .filter button,
+.dashboard .filter-toggle button {
+  min-height: 44px;
+  padding: 0.625rem 1.25rem;
+}
+
+/* Assurer que les boutons sont cliquables même avec z-index */
+.dashboard button {
+  position: relative;
+  z-index: 1;
+}
+
+/* Fix pour les boutons dans les overlays */
+.dashboard .overlay button,
+.dashboard .modal-overlay button {
+  z-index: 50;
+}
+
+/* Améliorer l'accessibilité */
+.dashboard button:not(:disabled):hover {
+  opacity: 0.9;
+}
+
+.dashboard button:not(:disabled):active {
+  opacity: 0.8;
+}
+
+/* Fix pour les boutons avec gradients */
+.dashboard button[class*="gradient"] {
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard button[class*="gradient"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.dashboard button[class*="gradient"]:hover::before {
+  left: 100%;
+}

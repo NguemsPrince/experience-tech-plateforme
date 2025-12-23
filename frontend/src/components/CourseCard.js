@@ -21,6 +21,26 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
   const [showHoverInfo, setShowHoverInfo] = useState(false);
   const [showAddNotification, setShowAddNotification] = useState(false);
 
+  // Protection contre les données manquantes
+  if (!course) {
+    return null;
+  }
+
+  // Normaliser les données du cours
+  const normalizedCourse = {
+    ...course,
+    _id: course._id || course.id,
+    title: course.title || 'Formation sans titre',
+    image: course.image || '/images/default-course.jpg',
+    price: course.price || 0,
+    originalPrice: course.originalPrice || null,
+    rating: course.rating || (typeof course.rating === 'object' ? course.rating : { average: 0, count: 0 }),
+    instructor: course.instructor || { name: 'Instructeur' },
+    level: course.level || 'Non défini',
+    duration: course.duration || 'N/A',
+    studentsCount: course.studentsCount || course.students || 0
+  };
+
   const toggleFavorite = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -31,7 +51,7 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
     e.preventDefault();
     e.stopPropagation();
     if (onAddToCart) {
-      onAddToCart(course);
+      onAddToCart(normalizedCourse);
       setShowAddNotification(true);
       setTimeout(() => setShowAddNotification(false), 2000);
     }
@@ -41,13 +61,16 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
     e.preventDefault();
     e.stopPropagation();
     if (onRateCourse) {
-      onRateCourse(course, rating);
+      onRateCourse(normalizedCourse, rating);
     }
   };
 
   const getDiscountPercentage = (originalPrice, currentPrice) => {
     return Math.round(((originalPrice - currentPrice) / originalPrice) * 100);
   };
+
+  // Utiliser le cours normalisé partout
+  const courseData = normalizedCourse;
 
   if (viewMode === 'list') {
     return (
@@ -63,14 +86,14 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
           }}
           whileTap={{ scale: 0.99 }}
         >
-        <Link to={`/course/${course._id}`} className="block">
+        <Link to={`/course/${courseData._id}`} className="block">
           <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover-solar border border-gray-100">
             <div className="flex">
               {/* Image */}
               <div className="relative w-48 h-32 flex-shrink-0 overflow-hidden">
                 <img
-                  src={course.image}
-                  alt={course.title}
+                  src={courseData.image}
+                  alt={courseData.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 
@@ -90,12 +113,12 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
 
                 {/* Badges */}
                 <div className="absolute top-2 left-2 flex flex-col gap-1">
-                  {course.isBestSeller && (
+                  {courseData.isBestSeller && (
                     <span className="bg-yellow-500 text-white px-2 py-1 rounded text-xs font-semibold">
                       Best Seller
                     </span>
                   )}
-                  {course.isNew && (
+                  {courseData.isNew && (
                     <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-semibold">
                       Nouveau
                     </span>
@@ -108,29 +131,29 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
                 <div className="flex justify-between items-start h-full">
                   <div className="flex-1">
                     {/* Category */}
-                    <div className="text-xs text-red-500 font-semibold mb-1 uppercase tracking-wide">
-                      {typeof course.category === 'string' ? course.category : (course.category?.name || 'Non défini')}
+                    <div className="text-xs text-blue-500 font-semibold mb-1 uppercase tracking-wide">
+                      {typeof courseData.category === 'string' ? courseData.category : (courseData.category?.name || 'Non défini')}
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-semibold text-gray-900 mb-2 text-lg group-hover:text-red-600 transition-colors duration-200">
-                      {course.title}
+                    <h3 className="font-semibold text-gray-900 mb-2 text-lg group-hover:text-blue-600 transition-colors duration-200">
+                      {courseData.title}
                     </h3>
 
                     {/* Description */}
                     <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                      {course.description}
+                      {courseData.description}
                     </p>
 
                     {/* Instructor */}
                     <div className="flex items-center mb-3">
                       <img
-                        src={course.instructorImage}
-                        alt={typeof course.instructor === 'object' ? course.instructor.name : course.instructor}
+                        src={courseData.instructorImage}
+                        alt={typeof courseData.instructor === 'object' ? courseData.instructor.name : courseData.instructor}
                         className="w-5 h-5 rounded-full mr-2"
                       />
                       <span className="text-xs text-gray-600">
-                        {typeof course.instructor === 'object' ? course.instructor.name : course.instructor}
+                        {typeof courseData.instructor === 'object' ? courseData.instructor.name : courseData.instructor}
                       </span>
                     </div>
 
@@ -139,14 +162,14 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center">
                           <span className="text-sm font-bold text-gray-900 mr-1">
-                            {typeof course.rating === 'object' ? course.rating.average : course.rating}
+                            {typeof courseData.rating === 'object' ? courseData.rating.average : courseData.rating}
                           </span>
                           <div className="flex">
                             {[...Array(5)].map((_, i) => (
                               <StarSolidIcon
                                 key={i}
                                 className={`w-3 h-3 ${
-                                  i < Math.floor(typeof course.rating === 'object' ? course.rating.average : course.rating)
+                                  i < Math.floor(typeof courseData.rating === 'object' ? courseData.rating.average : courseData.rating)
                                     ? 'text-yellow-400'
                                     : 'text-gray-300'
                                 }`}
@@ -154,18 +177,18 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
                             ))}
                           </div>
                           <span className="text-xs text-gray-500 ml-2">
-                            ({course.studentsCount})
+                            ({courseData.studentsCount})
                           </span>
                         </div>
 
                         <div className="flex items-center text-xs text-gray-600 space-x-3">
                           <div className="flex items-center">
                             <ClockIcon className="w-3 h-3 mr-1" />
-                            {course.totalHours}h
+                            {courseData.totalHours}h
                           </div>
                           <div className="flex items-center">
                             <BookOpenIcon className="w-3 h-3 mr-1" />
-                            {course.lessons} leçons
+                            {courseData.lessons} leçons
                           </div>
                         </div>
                       </div>
@@ -179,7 +202,7 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
                       className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white transition-colors duration-200"
                     >
                       {isFavorited ? (
-                        <HeartSolidIcon className="w-4 h-4 text-red-500" />
+                        <HeartSolidIcon className="w-4 h-4 text-blue-500" />
                       ) : (
                         <HeartIcon className="w-4 h-4 text-gray-600" />
                       )}
@@ -188,17 +211,17 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
                     <div className="text-right">
                       <div className="flex items-center space-x-2">
                         <span className="text-lg font-bold text-gray-900">
-                          {course.price.toLocaleString('fr-FR')} FCFA
+                          {courseData.price.toLocaleString('fr-FR')} FCFA
                         </span>
-                        {course.originalPrice && course.originalPrice > course.price && (
+                        {courseData.originalPrice && courseData.originalPrice > courseData.price && (
                           <span className="text-sm text-gray-500 line-through">
-                            {course.originalPrice.toLocaleString('fr-FR')} FCFA
+                            {courseData.originalPrice.toLocaleString('fr-FR')} FCFA
                           </span>
                         )}
                       </div>
-                      {course.originalPrice && course.originalPrice > course.price && (
-                        <div className="text-xs text-red-500 font-semibold">
-                          -{getDiscountPercentage(course.originalPrice, course.price)}%
+                      {courseData.originalPrice && courseData.originalPrice > courseData.price && (
+                        <div className="text-xs text-blue-500 font-semibold">
+                          -{getDiscountPercentage(courseData.originalPrice, courseData.price)}%
                         </div>
                       )}
                     </div>
@@ -232,14 +255,17 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
         }}
         whileTap={{ scale: 0.98 }}
       >
-      <Link to={`/course/${course._id}`} className="block">
+      <Link to={`/course/${course._id || course.id}`} className="block">
         <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover-solar border border-gray-100">
           {/* Image Container */}
           <div className="relative aspect-[4/3] overflow-hidden">
             <img
-              src={course.image}
-              alt={course.title}
+              src={course.image || '/images/default-course.jpg'}
+              alt={course.title || 'Formation'}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                e.target.src = '/images/default-course.jpg';
+              }}
             />
             
             {/* Overlay avec bouton play */}
@@ -277,7 +303,7 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
                 className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-white transition-colors duration-200"
               >
                 {isFavorited ? (
-                  <HeartSolidIcon className="w-4 h-4 text-red-500" />
+                  <HeartSolidIcon className="w-4 h-4 text-blue-500" />
                 ) : (
                   <HeartIcon className="w-4 h-4 text-gray-600" />
                 )}
@@ -304,7 +330,7 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
 
             {/* Discount Badge */}
             {course.originalPrice && course.originalPrice > course.price && (
-              <div className="absolute bottom-3 right-3 bg-red-500 text-white px-2 py-1 rounded-lg text-xs font-semibold">
+              <div className="absolute bottom-3 right-3 bg-blue-500 text-white px-2 py-1 rounded-lg text-xs font-semibold">
                 -{getDiscountPercentage(course.originalPrice, course.price)}%
               </div>
             )}
@@ -313,12 +339,12 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
           {/* Content */}
           <div className="p-4">
             {/* Category */}
-            <div className="text-xs text-red-500 font-semibold mb-2 uppercase tracking-wide">
+            <div className="text-xs text-blue-500 font-semibold mb-2 uppercase tracking-wide">
               {typeof course.category === 'string' ? course.category : (course.category?.name || 'Non défini')}
             </div>
 
             {/* Title */}
-            <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 text-sm leading-tight group-hover:text-red-600 transition-colors duration-200">
+            <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 text-sm leading-tight group-hover:text-blue-600 transition-colors duration-200">
               {course.title}
             </h3>
 
@@ -418,7 +444,7 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Description</h4>
               <p className="text-sm text-gray-600 line-clamp-3">
-                {course.description}
+                {courseData.description}
               </p>
             </div>
 
@@ -426,30 +452,30 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center text-sm text-gray-600">
                 <CalendarIcon className="w-4 h-4 mr-2" />
-                <span>Début: {new Date(course.startDate).toLocaleDateString('fr-FR')}</span>
+                <span>Début: {courseData.startDate ? new Date(courseData.startDate).toLocaleDateString('fr-FR') : 'N/A'}</span>
               </div>
               <div className="flex items-center text-sm text-gray-600">
                 <UserGroupIcon className="w-4 h-4 mr-2" />
-                <span>{course.currentStudents}/{course.maxStudents} étudiants</span>
+                <span>{courseData.currentStudents || courseData.studentsCount || 0}/{courseData.maxStudents || '∞'} étudiants</span>
               </div>
               <div className="flex items-center text-sm text-gray-600">
                 <CheckCircleIcon className="w-4 h-4 mr-2" />
-                <span>Niveau: {course.level}</span>
+                <span>Niveau: {courseData.level}</span>
               </div>
               <div className="flex items-center text-sm text-gray-600">
                 <BookOpenIcon className="w-4 h-4 mr-2" />
-                <span>Langue: {course.language}</span>
+                <span>Langue: {courseData.language || 'Français'}</span>
               </div>
             </div>
 
             {/* Prérequis */}
-            {course.requirements && course.requirements.length > 0 && (
+            {courseData.requirements && courseData.requirements.length > 0 && (
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">Prérequis</h4>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  {course.requirements.slice(0, 3).map((req, index) => (
+                  {courseData.requirements.slice(0, 3).map((req, index) => (
                     <li key={index} className="flex items-start">
-                      <span className="text-red-500 mr-2">•</span>
+                      <span className="text-blue-500 mr-2">•</span>
                       {req}
                     </li>
                   ))}
@@ -458,11 +484,11 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
             )}
 
             {/* Ce que vous apprendrez */}
-            {course.whatYouWillLearn && course.whatYouWillLearn.length > 0 && (
+            {courseData.whatYouWillLearn && courseData.whatYouWillLearn.length > 0 && (
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">Ce que vous apprendrez</h4>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  {course.whatYouWillLearn.slice(0, 3).map((item, index) => (
+                  {courseData.whatYouWillLearn.slice(0, 3).map((item, index) => (
                     <li key={index} className="flex items-start">
                       <CheckCircleIcon className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                       {item}
@@ -473,11 +499,11 @@ const CourseCard = ({ course, viewMode = 'grid', onAddToCart, onRateCourse }) =>
             )}
 
             {/* Tags */}
-            {course.tags && course.tags.length > 0 && (
+            {courseData.tags && courseData.tags.length > 0 && (
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">Tags</h4>
                 <div className="flex flex-wrap gap-2">
-                  {course.tags.slice(0, 5).map((tag, index) => (
+                  {courseData.tags.slice(0, 5).map((tag, index) => (
                     <span
                       key={index}
                       className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"

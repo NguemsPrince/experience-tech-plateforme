@@ -104,7 +104,7 @@ const Cart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, onCl
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl"
+          className="absolute right-0 top-0 h-full w-full max-w-full md:max-w-md bg-white shadow-xl modal-content"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -116,7 +116,8 @@ const Cart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, onCl
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              aria-label="Fermer le panier"
             >
               <XMarkIcon className="w-5 h-5 text-gray-600" />
             </button>
@@ -189,17 +190,19 @@ const Cart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, onCl
                               <div className="flex items-center space-x-2">
                                 <button
                                   onClick={() => onUpdateQuantity(item._id, item.quantity - 1)}
-                                  className="p-1 hover:bg-gray-200 rounded transition-colors duration-200"
+                                  className="p-2 hover:bg-gray-200 rounded transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
                                   disabled={item.quantity <= 1}
+                                  aria-label="Diminuer la quantité"
                                 >
                                   <MinusIcon className="w-4 h-4 text-gray-600" />
                                 </button>
-                                <span className="w-8 text-center font-medium">
+                                <span className="w-12 text-center font-medium flex items-center justify-center min-h-[44px]">
                                   {item.quantity}
                                 </span>
                                 <button
                                   onClick={() => onUpdateQuantity(item._id, item.quantity + 1)}
-                                  className="p-1 hover:bg-gray-200 rounded transition-colors duration-200"
+                                  className="p-2 hover:bg-gray-200 rounded transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                                  aria-label="Augmenter la quantité"
                                 >
                                   <PlusIcon className="w-4 h-4 text-gray-600" />
                                 </button>
@@ -207,9 +210,9 @@ const Cart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, onCl
 
                               <button
                                 onClick={() => onRemoveItem(item._id)}
-                                className="p-1 hover:bg-red-100 rounded transition-colors duration-200"
+                                className="p-1 hover:bg-blue-100 rounded transition-colors duration-200"
                               >
-                                <TrashIcon className="w-4 h-4 text-red-500" />
+                                <TrashIcon className="w-4 h-4 text-blue-500" />
                               </button>
                             </div>
                           </div>
@@ -225,7 +228,7 @@ const Cart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, onCl
                   <div className="mb-4">
                     <button
                       onClick={onClearCart}
-                      className="text-sm text-red-600 hover:text-red-700 transition-colors duration-200"
+                      className="text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200"
                     >
                       Vider le panier
                     </button>
@@ -251,7 +254,7 @@ const Cart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, onCl
                     
                     <div className="flex justify-between text-lg font-semibold border-t border-gray-200 pt-2">
                       <span>Total:</span>
-                      <span className="text-red-600">
+                      <span className="text-blue-600">
                         {calculateTotal().toLocaleString('fr-FR')} FCFA
                       </span>
                     </div>
@@ -260,7 +263,8 @@ const Cart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, onCl
                   {/* Checkout Button */}
                   <button
                     onClick={handleCheckout}
-                    className="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 flex items-center justify-center space-x-2"
+                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center space-x-2 min-h-[48px] touch-target"
+                    aria-label="Procéder au paiement"
                   >
                     <CreditCardIcon className="w-5 h-5" />
                     <span>Procéder au paiement</span>

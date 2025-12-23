@@ -189,13 +189,13 @@ const Register = () => {
                       value={formData.firstName}
                       onChange={handleChange}
                       className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                        errors.firstName ? 'border-red-300' : 'border-gray-300'
+                        errors.firstName ? 'border-blue-300' : 'border-gray-300'
                       }`}
                       placeholder="Votre prénom"
                     />
                   </div>
                   {errors.firstName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
+                    <p className="mt-1 text-sm text-blue-600">{errors.firstName}</p>
                   )}
                 </div>
 
@@ -214,13 +214,13 @@ const Register = () => {
                       value={formData.lastName}
                       onChange={handleChange}
                       className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                        errors.lastName ? 'border-red-300' : 'border-gray-300'
+                        errors.lastName ? 'border-blue-300' : 'border-gray-300'
                       }`}
                       placeholder="Votre nom"
                     />
                   </div>
                   {errors.lastName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
+                    <p className="mt-1 text-sm text-blue-600">{errors.lastName}</p>
                   )}
                 </div>
               </div>
@@ -240,13 +240,13 @@ const Register = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      errors.email ? 'border-red-300' : 'border-gray-300'
+                      errors.email ? 'border-blue-300' : 'border-gray-300'
                     }`}
                     placeholder="votre@email.com"
                   />
                 </div>
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                  <p className="mt-1 text-sm text-blue-600">{errors.email}</p>
                 )}
               </div>
 
@@ -265,7 +265,7 @@ const Register = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      errors.password ? 'border-red-300' : 'border-gray-300'
+                      errors.password ? 'border-blue-300' : 'border-gray-300'
                     }`}
                     placeholder="Votre mot de passe"
                   />
@@ -284,7 +284,7 @@ const Register = () => {
                   </div>
                 </div>
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                  <p className="mt-1 text-sm text-blue-600">{errors.password}</p>
                 )}
               </div>
 
@@ -303,7 +303,7 @@ const Register = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className={`appearance-none block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                      errors.confirmPassword ? 'border-blue-300' : 'border-gray-300'
                     }`}
                     placeholder="Confirmez votre mot de passe"
                   />
@@ -322,7 +322,7 @@ const Register = () => {
                   </div>
                 </div>
                 {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                  <p className="mt-1 text-sm text-blue-600">{errors.confirmPassword}</p>
                 )}
               </div>
 
@@ -347,7 +347,7 @@ const Register = () => {
                 </label>
               </div>
               {errors.acceptTerms && (
-                <p className="text-sm text-red-600">{errors.acceptTerms}</p>
+                <p className="text-sm text-blue-600">{errors.acceptTerms}</p>
               )}
 
               <div>

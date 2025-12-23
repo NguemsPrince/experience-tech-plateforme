@@ -17,7 +17,7 @@ const CartIcon = ({ onOpenCart, itemCount = 0 }) => {
         <motion.span
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold"
+          className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold"
         >
           {itemCount > 99 ? '99+' : itemCount}
         </motion.span>

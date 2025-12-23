@@ -296,16 +296,16 @@ const Services = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+      <section className="section-padding bg-gradient-to-br from-primary-600 to-primary-800 text-white">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
             <SolarAnimation variant="solar" delay={0.2}>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Nos Services
               </h1>
             </SolarAnimation>
             <SolarAnimation variant="energy" delay={0.4}>
-              <p className="text-xl md:text-2xl opacity-90">
+              <p className="text-xl md:text-2xl text-white opacity-95">
                 Des solutions technologiques complètes pour transformer votre entreprise
               </p>
             </SolarAnimation>

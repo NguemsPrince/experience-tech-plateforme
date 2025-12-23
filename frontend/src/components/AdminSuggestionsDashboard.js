@@ -197,7 +197,7 @@ const AdminSuggestionsDashboard = () => {
           <div className="text-sm text-gray-500 dark:text-gray-400">Terminées</div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-          <div className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.rejected || 0}</div>
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.rejected || 0}</div>
           <div className="text-sm text-gray-500 dark:text-gray-400">Rejetées</div>
         </div>
       </div>
@@ -328,7 +328,7 @@ const AdminSuggestionsDashboard = () => {
                         setSelectedSuggestion(suggestion);
                         setShowRejectModal(true);
                       }}
-                      className="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
+                      className="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors"
                       title="Rejeter"
                     >
                       <XCircleIcon className="w-5 h-5" />
@@ -411,7 +411,7 @@ const AdminSuggestionsDashboard = () => {
                 <button
                   onClick={() => selectedSuggestion && handleReject(selectedSuggestion.id)}
                   disabled={!rejectReason.trim()}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   Rejeter
                 </button>

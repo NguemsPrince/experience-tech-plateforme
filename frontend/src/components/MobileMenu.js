@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
  * Utilise uniquement des styles inline et JavaScript
  * Ne dépend pas de Tailwind pour la visibilité
  */
-const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
+const MobileMenu = ({ navigation, servicesMenu, newsMenu, communityMenu, infoMenu }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
@@ -263,20 +263,17 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          console.log('[MobileMenu] Button clicked, current isOpen:', isOpen);
-          console.log('[MobileMenu] Button element:', e.currentTarget);
           toggleMenu(e);
         }}
         onTouchStart={(e) => {
-          // Support tactile pour mobile
           e.stopPropagation();
         }}
         aria-label="Menu mobile"
         aria-expanded={isOpen}
+        aria-controls="mobile-menu-panel"
         type="button"
         data-mobile-only="true"
         style={{
-          // Styles inline pour garantir l'affichage même si CSS ne charge pas
           position: 'relative',
           zIndex: 10003,
           minWidth: '48px',
@@ -289,30 +286,49 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
           color: 'white',
           border: 'none',
           borderRadius: '0.5rem',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
           cursor: 'pointer',
           pointerEvents: 'auto',
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
-          // touch-action: manipulation améliore la réactivité tactile
           touchAction: 'manipulation',
-          WebkitTapHighlightColor: 'transparent',
-          // Forcer l'affichage sur mobile - le CSS avec !important prendra le dessus
+          WebkitTapHighlightColor: 'rgba(255, 255, 255, 0.2)',
           display: isMobile ? 'flex' : 'none',
           visibility: isMobile ? 'visible' : 'hidden',
           opacity: isMobile ? 1 : 0,
-          // Améliorer la réactivité
           userSelect: 'none',
           WebkitUserSelect: 'none',
-          // Empêcher le double-tap zoom sur mobile
-          touchAction: 'manipulation'
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+          willChange: 'transform, box-shadow'
+        }}
+        onMouseEnter={(e) => {
+          if (isMobile) {
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 6px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (isMobile) {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+          }
+        }}
+        onMouseDown={(e) => {
+          if (isMobile) {
+            e.currentTarget.style.transform = 'scale(0.95)';
+          }
+        }}
+        onMouseUp={(e) => {
+          if (isMobile) {
+            e.currentTarget.style.transform = 'scale(1.05)';
+          }
         }}
       >
         {isOpen ? (
-          <XMarkIcon style={{ width: '28px', height: '28px', color: 'white', pointerEvents: 'none' }} />
+          <XMarkIcon style={{ width: '28px', height: '28px', color: 'white', pointerEvents: 'none' }} aria-hidden="true" />
         ) : (
-          <Bars3Icon style={{ width: '28px', height: '28px', color: 'white', pointerEvents: 'none' }} />
+          <Bars3Icon style={{ width: '28px', height: '28px', color: 'white', pointerEvents: 'none' }} aria-hidden="true" />
         )}
       </button>
 
@@ -324,9 +340,15 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('[MobileMenu] Overlay clicked, closing menu');
             closeMenu();
           }}
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            closeMenu();
+          }}
+          role="button"
+          aria-label="Fermer le menu"
+          tabIndex={-1}
           style={{
             position: 'fixed',
             top: 0,
@@ -335,6 +357,8 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
             bottom: 0,
             zIndex: 10001,
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backdropFilter: 'blur(2px)',
+            WebkitBackdropFilter: 'blur(2px)',
             width: '100%',
             height: '100%',
             display: 'block',
@@ -342,7 +366,8 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
             opacity: 1,
             pointerEvents: 'auto',
             touchAction: 'manipulation',
-            transition: 'opacity 0.2s ease'
+            transition: 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            willChange: 'opacity'
           }}
         />
       )}
@@ -352,6 +377,8 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
         <div
           id="mobile-menu-panel"
           className="mobile-menu-panel"
+          role="navigation"
+          aria-label="Menu de navigation mobile"
           style={{
             position: 'fixed',
             top: '64px',
@@ -359,10 +386,11 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
             right: 0,
             bottom: 0,
             zIndex: 10002,
-            backgroundColor: 'white',
-            overflowY: 'auto',
+            backgroundColor: '#ffffff',
+            overflow: 'hidden',
+            overflowY: 'hidden',
             overflowX: 'hidden',
-            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.05)',
             borderTop: '1px solid #e5e7eb',
             width: '100%',
             height: 'calc(100vh - 64px)',
@@ -372,11 +400,12 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
             opacity: 1,
             pointerEvents: 'auto',
             transform: 'translateX(0)',
-            transition: 'transform 0.3s ease, opacity 0.3s ease'
+            transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            willChange: 'transform, opacity'
           }}
           onClick={(e) => e.stopPropagation()}
         >
-            <div style={{ padding: '1rem' }}>
+            <div style={{ padding: '1rem', height: '100%', overflow: 'hidden', overflowY: 'hidden', overflowX: 'hidden', display: 'flex', flexDirection: 'column' }}>
               {/* Navigation principale */}
               {navigation && navigation.length > 0 ? (
                 navigation.map((item, index) => (
@@ -387,18 +416,34 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                     e.preventDefault();
                     handleLinkClick(item.href);
                   }}
+                  aria-label={item.name}
+                  aria-current={location.pathname === item.href ? 'page' : undefined}
                   style={{
-                    display: 'block',
-                    padding: '12px 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '14px 16px',
                     marginBottom: '4px',
                     borderRadius: '8px',
-                    color: location.pathname === item.href ? '#111827' : '#374151',
-                    backgroundColor: location.pathname === item.href ? '#f3f4f6' : 'transparent',
+                    color: location.pathname === item.href ? '#2563eb' : '#1f2937',
+                    backgroundColor: location.pathname === item.href ? '#eff6ff' : 'transparent',
                     textDecoration: 'none',
-                    fontSize: '1rem',
-                    fontWeight: 500,
+                    fontSize: '16px',
+                    fontWeight: location.pathname === item.href ? 600 : 500,
                     minHeight: '48px',
-                    touchAction: 'manipulation'
+                    minWidth: '44px',
+                    lineHeight: '1.5',
+                    touchAction: 'manipulation',
+                        WebkitTapHighlightColor: 'rgba(37, 99, 235, 0.1)',
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    willChange: 'background-color, color'
+                  }}
+                  onTouchStart={(e) => {
+                    e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#dbeafe' : '#f3f4f6';
+                  }}
+                  onTouchEnd={(e) => {
+                    setTimeout(() => {
+                      e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#eff6ff' : 'transparent';
+                    }, 150);
                   }}
                 >
                   {item.name}
@@ -410,11 +455,61 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                 </div>
               )}
 
-              {/* Actualités */}
+              {/* Services */}
+              {servicesMenu && servicesMenu.length > 0 && (
+              <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
+                <div style={{ padding: '8px 12px', fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase' }}>
+                  Services
+                </div>
+                {servicesMenu.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleLinkClick(item.href);
+                    }}
+                    aria-label={item.name}
+                    aria-current={location.pathname === item.href ? 'page' : undefined}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '14px 16px',
+                      marginBottom: '4px',
+                      borderRadius: '8px',
+                      color: location.pathname === item.href ? '#2563eb' : '#1f2937',
+                      backgroundColor: location.pathname === item.href ? '#eff6ff' : 'transparent',
+                      textDecoration: 'none',
+                      fontSize: '16px',
+                      fontWeight: location.pathname === item.href ? 600 : 500,
+                      minHeight: '48px',
+                      minWidth: '44px',
+                      lineHeight: '1.5',
+                      touchAction: 'manipulation',
+                        WebkitTapHighlightColor: 'rgba(37, 99, 235, 0.1)',
+                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                      willChange: 'background-color, color'
+                    }}
+                    onTouchStart={(e) => {
+                      e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#dbeafe' : '#f3f4f6';
+                    }}
+                    onTouchEnd={(e) => {
+                      setTimeout(() => {
+                        e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#eff6ff' : 'transparent';
+                      }, 150);
+                    }}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+              )}
+
+              {/* Actualités - Blog et témoignages */}
               {newsMenu && newsMenu.length > 0 && (
               <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
                 <div style={{ padding: '8px 12px', fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase' }}>
-                  Actualités & Blog
+                  Actualités
                 </div>
                 {newsMenu.map((item) => (
                   <Link
@@ -424,18 +519,34 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                       e.preventDefault();
                       handleLinkClick(item.href);
                     }}
+                    aria-label={item.name}
+                    aria-current={location.pathname === item.href ? 'page' : undefined}
                     style={{
-                      display: 'block',
-                      padding: '12px 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '14px 16px',
                       marginBottom: '4px',
                       borderRadius: '8px',
-                      color: location.pathname === item.href ? '#111827' : '#374151',
-                      backgroundColor: location.pathname === item.href ? '#f3f4f6' : 'transparent',
+                      color: location.pathname === item.href ? '#2563eb' : '#1f2937',
+                      backgroundColor: location.pathname === item.href ? '#eff6ff' : 'transparent',
                       textDecoration: 'none',
-                      fontSize: '1rem',
-                      fontWeight: 500,
+                      fontSize: '16px',
+                      fontWeight: location.pathname === item.href ? 600 : 500,
                       minHeight: '48px',
-                      touchAction: 'manipulation'
+                      minWidth: '44px',
+                      lineHeight: '1.5',
+                      touchAction: 'manipulation',
+                        WebkitTapHighlightColor: 'rgba(37, 99, 235, 0.1)',
+                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                      willChange: 'background-color, color'
+                    }}
+                    onTouchStart={(e) => {
+                      e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#dbeafe' : '#f3f4f6';
+                    }}
+                    onTouchEnd={(e) => {
+                      setTimeout(() => {
+                        e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#eff6ff' : 'transparent';
+                      }, 150);
                     }}
                   >
                     {item.name}
@@ -444,7 +555,7 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
               </div>
               )}
 
-              {/* Communauté */}
+              {/* Communauté - Forum et carrières */}
               {communityMenu && communityMenu.length > 0 && (
               <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e5e7eb' }}>
                 <div style={{ padding: '8px 12px', fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase' }}>
@@ -458,18 +569,34 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                       e.preventDefault();
                       handleLinkClick(item.href);
                     }}
+                    aria-label={item.name}
+                    aria-current={location.pathname === item.href ? 'page' : undefined}
                     style={{
-                      display: 'block',
-                      padding: '12px 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '14px 16px',
                       marginBottom: '4px',
                       borderRadius: '8px',
-                      color: location.pathname === item.href ? '#111827' : '#374151',
-                      backgroundColor: location.pathname === item.href ? '#f3f4f6' : 'transparent',
+                      color: location.pathname === item.href ? '#2563eb' : '#1f2937',
+                      backgroundColor: location.pathname === item.href ? '#eff6ff' : 'transparent',
                       textDecoration: 'none',
-                      fontSize: '1rem',
-                      fontWeight: 500,
+                      fontSize: '16px',
+                      fontWeight: location.pathname === item.href ? 600 : 500,
                       minHeight: '48px',
-                      touchAction: 'manipulation'
+                      minWidth: '44px',
+                      lineHeight: '1.5',
+                      touchAction: 'manipulation',
+                        WebkitTapHighlightColor: 'rgba(37, 99, 235, 0.1)',
+                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                      willChange: 'background-color, color'
+                    }}
+                    onTouchStart={(e) => {
+                      e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#dbeafe' : '#f3f4f6';
+                    }}
+                    onTouchEnd={(e) => {
+                      setTimeout(() => {
+                        e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#eff6ff' : 'transparent';
+                      }, 150);
                     }}
                   >
                     {item.name}
@@ -492,18 +619,34 @@ const MobileMenu = ({ navigation, newsMenu, communityMenu, infoMenu }) => {
                       e.preventDefault();
                       handleLinkClick(item.href);
                     }}
+                    aria-label={item.name}
+                    aria-current={location.pathname === item.href ? 'page' : undefined}
                     style={{
-                      display: 'block',
-                      padding: '12px 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '14px 16px',
                       marginBottom: '4px',
                       borderRadius: '8px',
-                      color: location.pathname === item.href ? '#111827' : '#374151',
-                      backgroundColor: location.pathname === item.href ? '#f3f4f6' : 'transparent',
+                      color: location.pathname === item.href ? '#2563eb' : '#1f2937',
+                      backgroundColor: location.pathname === item.href ? '#eff6ff' : 'transparent',
                       textDecoration: 'none',
-                      fontSize: '1rem',
-                      fontWeight: 500,
+                      fontSize: '16px',
+                      fontWeight: location.pathname === item.href ? 600 : 500,
                       minHeight: '48px',
-                      touchAction: 'manipulation'
+                      minWidth: '44px',
+                      lineHeight: '1.5',
+                      touchAction: 'manipulation',
+                        WebkitTapHighlightColor: 'rgba(37, 99, 235, 0.1)',
+                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                      willChange: 'background-color, color'
+                    }}
+                    onTouchStart={(e) => {
+                      e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#dbeafe' : '#f3f4f6';
+                    }}
+                    onTouchEnd={(e) => {
+                      setTimeout(() => {
+                        e.currentTarget.style.backgroundColor = location.pathname === item.href ? '#eff6ff' : 'transparent';
+                      }, 150);
                     }}
                   >
                     {item.name}

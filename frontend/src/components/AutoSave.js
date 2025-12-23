@@ -70,7 +70,7 @@ const AutoSave = ({
       },
       error: {
         icon: ExclamationTriangleIcon,
-        color: 'text-red-500',
+        color: 'text-blue-500',
         message: 'Erreur de sauvegarde'
       }
     };
@@ -101,7 +101,7 @@ const AutoSave = ({
             </span>
           )}
           {error && status === 'error' && (
-            <span className="text-xs text-red-500">
+            <span className="text-xs text-blue-500">
               - {error}
             </span>
           )}

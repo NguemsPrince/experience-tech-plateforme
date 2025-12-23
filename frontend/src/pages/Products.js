@@ -214,7 +214,7 @@ const Products = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
+          <p className="text-blue-600 mb-4">{error}</p>
           <button
             onClick={loadProducts}
             className="btn-primary"
@@ -457,7 +457,7 @@ const Products = () => {
         <section className="section-padding bg-white">
           <div className="container-custom">
             <div className="flex items-center mb-6">
-              <TagIcon className="w-6 h-6 text-red-600 mr-2" />
+              <TagIcon className="w-6 h-6 text-blue-600 mr-2" />
               <h2 className="text-2xl font-bold text-gray-900">Promotions</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -510,7 +510,7 @@ const ProductCard = ({ product, onAddToCart, featured = false, promo = false, be
 
   const availabilityLabels = {
     in_stock: { label: 'En stock', color: 'bg-green-100 text-green-800' },
-    out_of_stock: { label: 'Rupture', color: 'bg-red-100 text-red-800' },
+    out_of_stock: { label: 'Rupture', color: 'bg-blue-100 text-blue-800' },
     pre_order: { label: 'Précommande', color: 'bg-blue-100 text-blue-800' },
   };
 
@@ -541,7 +541,7 @@ const ProductCard = ({ product, onAddToCart, featured = false, promo = false, be
             </span>
           )}
           {product.isPromo && discount > 0 && (
-            <span className="bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold">
+            <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-semibold">
               -{discount}%
             </span>
           )}

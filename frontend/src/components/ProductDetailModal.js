@@ -97,7 +97,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, onAddToCart, isInCart })
                     ✓ En stock ({product.stock} disponible{product.stock > 1 ? 's' : ''})
                   </p>
                 ) : (
-                  <p className="text-red-600 font-medium">✗ Rupture de stock</p>
+                  <p className="text-blue-600 font-medium">✗ Rupture de stock</p>
                 )}
               </div>
 
